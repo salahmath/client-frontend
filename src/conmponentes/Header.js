@@ -47,7 +47,7 @@ function Header() {
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
                   <Link
-                    to="/"
+                    to="/compare"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img
@@ -61,7 +61,7 @@ function Header() {
                 </div>
                 <div>
                   <Link
-                    to="/"
+                    to="/panier"
                     className="d-flex align-items-center gap-10  text-white"
                   >
                     <img src="images/wishlist.png" alt="wishlist" />
@@ -73,7 +73,7 @@ function Header() {
                 </div>
                 <div>
                   <Link
-                    to="/"
+                    to="/login"
                     className="d-flex align-items-center gap-10  text-white"
                   >
                     <img src="images/login.png" alt="login" />
@@ -84,7 +84,7 @@ function Header() {
                 </div>
                 <div>
                   <Link
-                    to="/"
+                    to="/carte"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src="images/panier.png" alt="panier" />
@@ -123,7 +123,7 @@ function Header() {
 
     <NavLink to="/">Home</NavLink>
     <NavLink to="/store">Store</NavLink>
-    <NavLink to="/">blogs</NavLink>
+    <NavLink to="/blogs">blogs</NavLink>
     <NavLink to="/contact">contact</NavLink>
 </div>
 

@@ -4,7 +4,7 @@ import { Card, Button } from 'antd';
 
 const { Meta } = Card;
 
-const Blogcard = ({ src, title, description }) => (
+const Blogcard = ({ src, title, description,date,id }) => (
   <Card
     hoverable
     style={{
@@ -12,10 +12,11 @@ const Blogcard = ({ src, title, description }) => (
     }}
     cover={<img alt="title" src={src} />}
   >
-    <h4>7 October 2002</h4>
+    
     <Meta title={title} description={description} />
     <br />
-    <Link to="/">
+    <p>{date}</p>
+    <Link to={`/blog/${id}`}>
       <Button type="dashed">Consulter</Button> 
     </Link>
   </Card>

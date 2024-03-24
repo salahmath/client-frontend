@@ -1,0 +1,99 @@
+import React from "react";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import BreadCump from "../conmponentes/BreadCump";
+import PageHelmet from "../conmponentes/Helmet";
+import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+
+import { object, string } from "yup";
+import { LoginUser } from "../features/User/UserSlice";
+const Login = () => {
+  const dispatch = useDispatch();
+  const LoginSchema = object({
+
+    email: string()
+      .email("L'email doit être valide")
+      .required("L'email doit être obligatoire"),
+   
+    password: string().required("Le mot de passe est obligatoire"),
+  });
+  const formik = useFormik({
+    initialValues: {
+      lastname: "",
+      Secondname: "",
+      email: "",
+      mobile: "",
+      password: "",
+    },
+    validationSchema: LoginSchema,
+    onSubmit: (values) => {
+      dispatch(LoginUser(values))
+    },
+  });
+
+  return (
+    <>
+      <PageHelmet title="Login" />
+      <BreadCump title="Login" />
+      <div className="login-wrapper py-5 home-wrapper-2">
+        <div className="row">
+          <div className="col-12">
+            <div className="login-card ">
+            <h3 className="text-center">Se connecter</h3>
+
+              <form action="" onSubmit={formik.handleSubmit}>
+              <div>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      placeholder="Email"
+                      type="email"
+                      name="email"
+                      aria-label="Email"
+                      aria-describedby="basic-addon1"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.email}
+                    />
+                  </InputGroup>
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="error">{formik.errors.email}</div>
+                  ) : null}
+                </div>
+
+                <div>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      placeholder="mot de passe"
+                      type="Password"
+                      aria-label="Password"
+                      name="password"
+                      aria-describedby="basic-addon1"
+                      onChange={formik.handleChange("password")}
+                      onBlur={formik.handleBlur("password")}
+                      value={formik.values.password}
+                    />
+                  </InputGroup>
+                  <div className="error">
+                    {formik.touched.password && formik.errors.password}
+                  </div>
+                </div>
+               
+                <br/>
+
+                <div className="d-flex justify-content-center gap-15 align-items-center">
+                  <button type="submit" className="button border-0">Se connecter</button>
+                  <Link to="/register" className="button signup">S'inscrire</Link>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Login;

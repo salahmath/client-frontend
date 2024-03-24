@@ -1,19 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaShippingFast } from "react-icons/fa";
-import { MdExpandMore, MdLocalOffer } from "react-icons/md";
+import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { GiPriceTag } from "react-icons/gi";
 import Marquee from "react-fast-marquee";
 import Blogcard from "../conmponentes/Blogcart";
 import Productcart from "../conmponentes/Productcart";
 import Special from "../conmponentes/Special";
-import PageHelmet from '../conmponentes/Helmet';
+import PageHelmet from "../conmponentes/Helmet";
 
+import { useDispatch, useSelector } from "react-redux";
+import { getBlogs } from "../features/Blogs/BlogSlice";
+import moment from "moment";
+import { AddToLoves, getproductss } from "../features/Product/productSlice";
+import ImgMediaCard from "../conmponentes/Cards";
 const Homepages = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getBlogs());
+  }, [dispatch]);
+  const blogState = useSelector((state) => state.Blog.Blogs);
+  function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    } else {
+      return text;
+    }
+  }
+  function RenderHTML({ htmlContent }) {
+    return (
+      <div
+        style={{
+          display: "-webkit-box",
+          overflow: "hidden",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 3,
+        }}
+        dangerouslySetInnerHTML={{ __html: truncateText(htmlContent, 100) }}
+      />
+    );
+  }
+  function getRandomBlogs(blogState) {
+    const randomIndices = [];
+    while (randomIndices.length < 4) {
+      const randomIndex = Math.floor(Math.random() * blogState.length);
+      if (!randomIndices.includes(randomIndex)) {
+        randomIndices.push(randomIndex);
+      }
+    }
+    const selectedBlogs = randomIndices.map((index) => blogState[index]);
+    return selectedBlogs;
+  }
+  const [selectedBlogs, setSelectedBlogs] = useState([]);
+  useEffect(() => {
+    if (blogState.length > 0) {
+      setSelectedBlogs(getRandomBlogs(blogState));
+    }
+  }, [blogState]);
+
+  useEffect(() => {
+    dispatch(getproductss());
+  }, [dispatch]);
+  const Productstate = useSelector((state) => state.Product.Products);
+
   return (
     <>
-    <PageHelmet title="Home"/>
+      <PageHelmet title="Home" />
       <section className="home-wrapper1 py-5">
         <div className="container-xxl">
           <div className="row">
@@ -272,49 +325,34 @@ const Homepages = () => {
           <h1>famous product</h1>
           <div className="row">
             <div className="col-3">
-              <div className="famous-card position-relative">
-                <img className="img13" src="https://www.flbsolutions.com/media/catalog/product/cache/0e69c0a3af4a1191f674ab68a277fd4f/1/5/1590102_BL_fr_CA_1_f633.png"alt="famous" />
-                <div className="famous-content position-absolute">
-                  <h5>Big screen</h5>
-                  <h6>Smart watch series 7</h6>
-                  <p>from 500dt </p>
-
-                </div>
-              </div>
+              <div className=" d-flex">
+              {Productstate.map((product, key) => {
+              if (product.tags === "mis en avant") {
+                return (
+                  <div className="col">
+              <div className=" d-flex">
+                  <ImgMediaCard
+                    title={product.title}
+                    src={product.images[0].url}
+                    price={product.price}
+                    solde={product.solde}
+                    brand={product.brand}
+                    totalrating={product.totalrating}
+                    quatite={product.quantite}
+                    id={product._id}
+                    key={key} // Don't forget to add a unique key prop when rendering components in a list
+                  />
+                  </div>
             </div>
-            <div className="col-3">
-              <div className="famous-card position-relative">
-                <img className="img13" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPnpS6bx1rnogeNGUGYTm3YrbIrIVwdsrG0Q&usqp=CAU"alt="famous" />
-                <div className="famous-content position-absolute">
-                  <h5>Big screen</h5>
-                  <h6>Smart watch series 7</h6>
-                  <p>from 500dt </p>
-
-                </div>
+                );
+              } else {
+                return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
+              }
+              
+            })}
               </div>
             </div>
             
-            <div className="col-3">
-              <div className="famous-card position-relative">
-                <img className="img13" src="https://previews.123rf.com/images/ctrlh/ctrlh1611/ctrlh161100299/66524325-best-seller-le-produit-le-plus-populaire-de-l-ann%C3%A9e-ruban-de-r%C3%A9compense.jpg"alt="famous" />
-                <div className="famous-content position-absolute">
-                  <h5>Big screen</h5>
-                  <h6>Smart watch series 7</h6>
-                  <p>from 500dt </p>
-
-                </div>
-              </div>
-            </div> <div className="col-3">
-              <div className="famous-card position-relative">
-                <img className="img13" src="https://www.flbsolutions.com/media/catalog/product/cache/0e69c0a3af4a1191f674ab68a277fd4f/1/5/1590102_BL_fr_CA_1_f633.png"alt="famous" />
-                <div className="famous-content position-absolute">
-                  <h5>Big screen</h5>
-                  <h6>Smart watch series 7</h6>
-                  <p>from 500dt </p>
-
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -325,10 +363,27 @@ const Homepages = () => {
               <h3 className="section-heading">special product</h3>
             </div>
           </div>
-          <div className="row ">
-            <Special />
-            <Special />
-            <Special />
+          <div className="row">
+            {Productstate.map((product, key) => {
+              if (product.tags === "spécial") {
+                return (
+                  <ImgMediaCard
+                    title={product.title}
+                    src={product.images[0].url}
+
+                    price={product.price}
+                    solde={product.solde}
+                    brand={product.brand}
+                    totalrating={product.totalrating}
+                    quatite={product.quantite}
+                    id={product._id}
+                    key={key} // Don't forget to add a unique key prop when rendering components in a list
+                  />
+                );
+              } else {
+                return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
+              }
+            })}
           </div>
         </div>
       </section>
@@ -339,11 +394,28 @@ const Homepages = () => {
               <h3 className="section-heading">populaire produit</h3>
             </div>
           </div>
-          <div className="row ">
-            <Special />
-            <Special />
-            <Special />
-          </div>
+
+          {Productstate.map((product, key) => {
+            if (product.tags === "populair") {
+              return (
+                <ImgMediaCard
+                  title={product.title}
+                  src={product.images[0].url}
+                  price={product.price}
+                  solde={product.solde}
+                  brand={product.brand}
+                  totalrating={product.totalrating}
+                  quatite={product.quantite}
+                  key={key}
+                  id={product._id}
+
+                  // Don't forget to add a unique key prop when rendering components in a list
+                />
+              );
+            } else {
+              return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
+            }
+          })}
         </div>
       </section>
       <section className="marque-warpper py-5">
@@ -427,38 +499,20 @@ const Homepages = () => {
             <h1>Liste de nouveaux blogs</h1>
             <br />
             <br />
-            <div className="col-3">
-              <Blogcard
-                src="https://mailrelay.com/wp-content/uploads/2018/03/que-es-un-blog-1.png"
-                title="Product 5"
-                description="Description of Product 5."
-              />
-            </div>
-            <div className="col-3">
-              <Blogcard
-                src="https://mailrelay.com/wp-content/uploads/2018/03/que-es-un-blog-1.png"
-                title="Product 6"
-                description="Description of Product 6."
-              />
-            </div>
-            <div className="col-3">
-              <Blogcard
-                src="https://mailrelay.com/wp-content/uploads/2018/03/que-es-un-blog-1.png"
-                title="Product 7"
-                description="Description of Product 7."
-              />
-            </div>
-            <div className="col-3">
-              <Blogcard
-                src="https://mailrelay.com/wp-content/uploads/2018/03/que-es-un-blog-1.png"
-                title="Product 8"
-                description="Description of Product 8."
-              />
-            </div>
+            {selectedBlogs.map((blog, key) => (
+              <div className="col-3" key={key}>
+                <Blogcard
+                  src={blog.image.map((image) => image.url)}
+                  description={<RenderHTML htmlContent={blog.description} />}
+                  date={moment(blog.createdAt).format("MMMM Do YYYY")}
+                  title={blog.title}
+                  id={blog._id}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
-      
     </>
   );
 };

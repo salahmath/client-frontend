@@ -1,12 +1,15 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-const container = document.getElementById('root');
-const root = createRoot(container);
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import App from "./App";
+import { store } from "./app/store";
 
+// Création de la racine avec ReactDOM.createRoot
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Rendu de l'application à l'intérieur de la racine avec le fournisseur Redux
 root.render(
-      <App />
-   
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
-
-

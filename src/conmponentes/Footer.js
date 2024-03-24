@@ -25,10 +25,10 @@ function Footer() {
                 <Link to="/">Profile</Link>
               </li>
               <li className='list-unstyled mb-2 text-white'>
-                <Link to="/">Career</Link>
+                <Link to="/store">Store</Link>
               </li>
               <li className='list-unstyled mb-2 text-white'>
-                <Link to="/">Privacy</Link>
+                <Link to="/blogs">Blogs</Link>
               </li>
               
               
@@ -42,13 +42,16 @@ function Footer() {
                 <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3'>Find us</h5>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-instagram"></i> company</Link>
+                <Link to="/terme_et_condition"><i className="bi bi-instagram"></i>termes et conditions</Link>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-twitter"></i> company_id</Link>
+                <Link to="/politique_dexpédition"><i className="bi bi-twitter"></i>politique d'expédition</Link>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-facebook"></i> company</Link>
+                <Link to="/politique_de_remboursement"><i className="bi bi-facebook"></i>politique de remboursement</Link>
+              </li>
+              <li className='list-unstyled mb-2'>
+                <Link to="/politique_de_confidentialité"><i className="bi bi-facebook"></i>politique de confidentialité</Link>
               </li>
             </ul>
           </Col>
@@ -58,19 +61,26 @@ function Footer() {
                 <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3'>Contact</h5>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-geo-alt-fill"></i> Jl. Letjen abc, Malang, Jawa Timur</Link>
+                <Link to="/"><i className="bi bi-geo-alt-fill"></i> Centre Urbain ICC II C2-05. 1004 TUNIS</Link>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-telephone-fill"></i> +9898279387</Link>
+                <Link > <a href="tel:+21628896143"><i className="bi bi-telephone-fill"></i> +21628896143</a></Link>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-envelope-at-fill"></i> company@gmail.com</Link>
+                <Link to="/"><i className="bi bi-envelope-at-fill"></i>sami.g3@hotmail.fr</Link>
               </li>
               <li className='list-unstyled'>
                 <div className="map mt-4">
-                  <Iframe className='rounded-3' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.8835255288836!2d107.65409548775703!3d-6.904529470979882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e7930d4629e1%3A0x37d531c82707fa9f!2sJl.%20A.%20Yani%20No.756%2C%20Padasuka%2C%20Kec.%20Kiaracondong%2C%20Kota%20Bandung%2C%20Jawa%20Barat%2040125!5e0!3m2!1sid!2sid!4v1668694705539!5m2!1sid!2sid" 
-                  allowfullscreen="" loading="lazy"></Iframe>
-                </div>
+                <iframe 
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.49256315092!2d10.184356675352609!3d36.8546271646305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd34b46e3bb0f3%3A0xa0b1fa32a7138952!2sMSI%20Consultants!5e0!3m2!1sfr!2stn!4v1710503476156!5m2!1sfr!2stn" 
+  width={600} 
+  height={450} 
+  style={{ border: '0' }} 
+  allowFullScreen="" 
+  loading="lazy" 
+  referrerPolicy="no-referrer-when-downgrade"
+></iframe>
+ </div>
               </li>
               
             </ul>

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
 import { Rate, Select } from "antd";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import Productcart from "../conmponentes/Productcart";
+import Color from "../conmponentes/Color";
+import { useDispatch, useSelector } from "react-redux";
+import { getproductss } from "../features/Product/productSlice";
 
 const Store = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getproductss());
+  }, [dispatch]);
+
   const customIcons = {
     1: <FrownOutlined />,
     2: <FrownOutlined />,
@@ -13,6 +22,28 @@ const Store = () => {
     4: <SmileOutlined />,
     5: <SmileOutlined />,
   };
+  function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    } else {
+      return text;
+    }
+  }
+  function RenderHTML({ htmlContent }) {
+    return (
+      <div
+        style={{
+          display: "-webkit-box",
+          overflow: "hidden",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 3,
+        }}
+        dangerouslySetInnerHTML={{ __html: truncateText(htmlContent, 100) }}
+      />
+    );
+  }
+
+  const Productstate = useSelector((state) => state.Product.Products);
 
   return (
     <>
@@ -92,17 +123,7 @@ const Store = () => {
 
                   <div>
                     <div>
-                      <ul className="colors ps-0">
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                      </ul>
+                      <Color />
                     </div>
                   </div>
                 </div>
@@ -261,50 +282,22 @@ const Store = () => {
               </div>
               <div className="products-list gap-10 d-flex pb-5 mt-3">
                 <div className="row row-cols-1 row-cols-md-3 g-4">
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      prix="55 DT"
-                      description="the best product in the word"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>{" "}
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>{" "}
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>{" "}
-                  <div className="col">
-                    <Productcart
-                      title="card 1"
-                      src="https://img-0.journaldunet.com/JgOAEEaKp00acGdrktPUB8Y2__8=/1500x/smart/32d90de13a5f411c86709152f70fc67c/ccmcms-jdn/10861192.jpg"
-                    />
-                  </div>
+                  {Productstate.map((product, key) => {
+                    return (
+                      <div key={key} className="col">
+                        <Productcart
+                          title={product.title}
+                          src={product.images[0].url}
+                          prix={product.price}
+                          description={
+                            <RenderHTML htmlContent={product.description} />
+                          }
+                          totalrating={product.totalrating}
+                          id={product._id}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

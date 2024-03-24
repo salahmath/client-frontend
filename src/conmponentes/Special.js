@@ -1,8 +1,14 @@
 import React from "react";
-import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  FrownOutlined,
+  MehOutlined,
+  SmileOutlined,
+  brand,
+  totalrating,
+} from "@ant-design/icons";
 import { Flex, Rate } from "antd";
-import {Link}  from "react-router-dom"
-const customIcons= {
+import { Link } from "react-router-dom";
+const customIcons = {
   1: <FrownOutlined />,
   2: <FrownOutlined />,
   3: <MehOutlined />,
@@ -10,30 +16,36 @@ const customIcons= {
   5: <SmileOutlined />,
 };
 
-const Special = () => {
+const Special = ({
+  solde,
+  price,
+  brand,
+  totalrating,
+  title,
+  src,
+  key,
+  quatite,
+}) => {
   return (
     <div className="col-6   m-t-20 ">
       <div className="special-product-card">
         <div className="d-flex justify-content-between">
           <div>
-            <img
-              className="img12 img-fluid"
-              src="https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/wearables/watch-ultimate/images/sea/huawei-watch-ultimate-hover-timer-for-free-diving.png"
-              alt="watch"
-            />
+            <img className="img12 img-fluid" src={src} alt={key} />
           </div>
           <div className="special-product-content">
-            <h5 className="brand">brand</h5>
-            <h6 className="title">tv laptop mobile etc...</h6>
+            <h5 className="brand">{brand}</h5>
+            <h6 className="title">{title}</h6>
             <Flex gap="middle" vertical>
               <Rate
-                defaultValue={3}
+                value={totalrating}
                 character={({ index = 0 }) => customIcons[index + 1]}
               />
             </Flex>
             <p className="price">
               <span className="red-p">
-                100 DT <strike>200 DT</strike>
+                {price - solde}
+                <strike> {price}</strike>
               </span>
             </p>
             <div className="discount-till d-flex align-items-center gap-10">
@@ -50,12 +62,11 @@ const Special = () => {
               <div
                 class="progress-bar"
                 role="progressbar"
-                style={{ width: "25%" }}
-                aria-valuenow="25"
-                aria-valuemin="0"
-                aria-valuemax="100"
+                style={{ width: `${(quatite / (quatite + solde)) * 100}%` }}
+                aria-valuenow={(quatite / (quatite + solde)) * 100}
+                aria-valuemin={0}
+                aria-valuemax={100}
               ></div>
-             
             </div>
             <Link className="button">Add to cart</Link>
           </div>
