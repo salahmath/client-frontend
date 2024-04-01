@@ -857,4 +857,11 @@ font-size: 14px;
     .colores > span:nth-child(1) {
       color: #777777;
     }
-    
+    .error1{
+      color: red;
+    }
+    .profile_card{
+      padding: 20px 15px;
+      background-color: rgb(236, 233, 233);
+    border-radius: 10px;
+    }

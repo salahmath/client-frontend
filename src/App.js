@@ -21,7 +21,12 @@ import Singleproduit from './pages/Singleproduit';
 import Store from './pages/Store';
 import Termconditions from './pages/Termconditions';
 import Cartes from './pages/cartes';
-
+import Error from './pages/Error';
+import Success from './pages/Success';
+import { PrivateRoutes } from './pages/routing/privateRoutes';
+import { OpenRoutes } from './pages/routing/OpenRoutes';
+import Order from './pages/Order';
+import Profil from './pages/Profil';
 function App() {
   return (
     <div className="">
@@ -30,13 +35,13 @@ function App() {
           <Route element={<Mainlyout />}>
             <Route path='/' element={<Homepages />} />
             <Route path='about' element={<About />} />
-            <Route path='contact' element={<Contact />} />
+            <Route path='contact' element={<PrivateRoutes><Contact /></PrivateRoutes>} />
             <Route path='store' element={<Store />} />
             <Route path='blogs' element={<Blogs />} />
             <Route path='compare' element={<Compareproduct />} />
-            <Route path='Panier' element={<ListLove />} />
+            <Route path='Panier' element={<PrivateRoutes><ListLove /></PrivateRoutes>} />
             <Route path='Login' element={<Login />} />
-            <Route path='reset-password' element={<Resetpassword />} />
+            <Route path='reset-password/:token' element={<Resetpassword />} />
             <Route path='register' element={<Register />} />
             <Route path='terme_et_condition' element={<Termconditions />} />
             <Route path='politique_de_confidentialité' element={<Privcepolicy />} />
@@ -45,9 +50,16 @@ function App() {
             <Route path='blog/:id' element={<Blogpage />} />
             <Route path='chekout' element={<Chekout />} />
             <Route path='forgot-password' element={<Forgotpassword />} />
-            <Route path='produit/:id' element={<Singleproduit />} />
-            <Route path='carte' element={<Cartes />} />
+            <Route path='produit/:id' element={<Singleproduit />} />{/* 
+            <Route path='carte' element={<PrivateRoutes><Cartes /></PrivateRoutes>} /> */}
+            <Route path="carte" element={<PrivateRoutes><Cartes /></PrivateRoutes>} />
+            <Route path="order" element={<PrivateRoutes><Order /></PrivateRoutes>} />
+            <Route path="profil" element={<PrivateRoutes><Profil /></PrivateRoutes>} />
+
           </Route>
+          <Route path='erreur' element={<Error />} />
+          <Route path='success' element={<Success />} />
+
         </Routes>
       </BrowserRouter>
     </div>

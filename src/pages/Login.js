@@ -4,9 +4,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { setIn, useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
 
 import { object, string } from "yup";
 import { LoginUser } from "../features/User/UserSlice";
@@ -20,6 +20,8 @@ const Login = () => {
    
     password: string().required("Le mot de passe est obligatoire"),
   });
+  const authState=useSelector((state)=>state.auth)
+  const navigate=useNavigate()
   const formik = useFormik({
     initialValues: {
       lastname: "",
@@ -31,6 +33,15 @@ const Login = () => {
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       dispatch(LoginUser(values))
+      .then(() => {
+        if (authState.isSuccess && authState.user.length !== 0) {
+          setTimeout(() => {
+          }, 100);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la connexion:", error);
+      });
     },
   });
 
@@ -79,6 +90,8 @@ const Login = () => {
                   <div className="error">
                     {formik.touched.password && formik.errors.password}
                   </div>
+                <a href="http://localhost:3000/forgot-password">oublier votre mot de passe?</a>
+
                 </div>
                
                 <br/>

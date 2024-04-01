@@ -9,31 +9,39 @@ import BreadCump from "../conmponentes/BreadCump";
 import Color from "../conmponentes/Color";
 import PageHelmet from "../conmponentes/Helmet";
 import Productcart from "../conmponentes/Productcart";
+import { message } from 'antd';
 
 import { DiGitCompare } from "react-icons/di";
 import { useDispatch, useSelector } from "react-redux";
-import { AddToLoves, GETproduct } from "../features/Product/productSlice";
+import {
+  AddToLoves,
+  CommenteRproduct,
+  GETproduct,
+  getproductss,
+} from "../features/Product/productSlice";
+import { toast } from "react-toastify";
+import { CreeCart, GetCart } from "../features/User/UserSlice";
 
 const { TextArea } = Input;
 const Singleproduit = () => {
   const [orderdproduct, setorderproduct] = useState(true);
   const [keyboard, setKeyboard] = useState(true);
-  const [color, setcolor] = useState(true);
   const [quantity, setQuantity] = useState(1);
-
-  const handleQuantityChange = (value) => {
-    setQuantity(value);
-    console.log(value);
-  };
+  const [colors, setcolors] = useState(null);
+  const [ProductPresent, SetProductPresent] = useState(false);
 
   const dispatch = useDispatch();
   const location = useLocation();
+  useEffect(() => {
+    dispatch(GetCart());
+  }, [dispatch]);
+  const cartstate = useSelector((state) => state?.auth?.Panier);
 
   const ProdId = location.pathname.split("/")[2];
   useEffect(() => {
     dispatch(GETproduct(ProdId));
   }, [dispatch, ProdId]);
-  const ProdState = useSelector((state) => state.Product.produit);
+  const ProdState = useSelector((state) => state?.Product?.produit);
   const image = ProdState?.images?.[0]?.url;
 
   const props = {
@@ -55,8 +63,58 @@ const Singleproduit = () => {
     dispatch(AddToLoves(ProdId));
   };
   const Addtocart = () => {
-    alert("cart");
+    if (colors === null) {
+      toast.error("Please set colors");
+    } else {
+      dispatch(
+        CreeCart({
+          productId: ProdState?._id,
+          quantite: quantity || "",
+          color: colors || "",
+          price: ProdState?.price,
+        })
+      );
+    }
   };
+  useEffect(() => {
+    if (cartstate && cartstate.length > 0) {
+      // Add null check here
+      for (let i = 0; i < cartstate.length; i++) {
+        if (cartstate[i].productId._id === ProdId) {
+        SetProductPresent(true);
+
+        }
+      }
+    }
+  }, [ProdId,cartstate]);
+  useEffect(() => {
+    dispatch(getproductss());
+  }, [dispatch]);
+  // Include cartstate and ProdId in the dependency array to trigger the effect on changes in these variables
+  const Productstate = useSelector((state) => state?.Product?.Products);
+
+  function RenderHTML({ htmlContent }) {
+    return (
+      <div
+        style={{
+          display: "-webkit-box",
+          overflow: "hidden",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 3,
+        }}
+        dangerouslySetInnerHTML={{ __html: htmlContent }}
+      />
+    );
+  }
+  
+
+ const [comment, setComment] = useState("");
+  const [rate, setRate] = useState(null);
+  const Rating = () => {
+   
+    dispatch(CommenteRproduct({ ProdId, rate, comment }))
+      
+  }; 
   return (
     <>
       <PageHelmet title=" produit" />
@@ -100,59 +158,63 @@ const Singleproduit = () => {
             <div className="col-6">
               <div className="main-product-detail">
                 <div className="border-bottom">
-                  <h3 className="title">{ProdState.title}</h3>
+                  <h3 className="title">{ProdState?.title}</h3>
                 </div>
                 <div className="border-bottom">
-                  <p className="price">{ProdState.price}DT</p>
+                  <p className="price">{ProdState?.price}DT</p>
                 </div>
                 <div className="d-flex">
                   <Rate allowHalf defaultValue={2.5} />
-                  <p className="mb-0">({ProdState.rating})</p>
+                  <p className="mb-0">({ProdState?.rating})</p>
                 </div>
                 <a href="#review">Ecriver un revoir</a>
                 <div className="border-bottom py-3">
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Type : </h3>
-                    <p className="product-data">{ProdState.category}</p>
+                    <p className="product-data">{ProdState?.category}</p>
                     <br />
                     <br />
                   </div>
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Marque : </h3>
-                    <p className="product-data">{ProdState.brand}</p>
+                    <p className="product-data">{ProdState?.brand}</p>
                     <br />
                     <br />
                   </div>
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Categorie : </h3>
-                    <p className="product-data">{ProdState.category}</p>
+                    <p className="product-data">{ProdState?.category}</p>
                     <br />
                     <br />
                   </div>
 
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Tags : </h3>
-                    <p className="product-data">{ProdState.tags}</p>
+                    <p className="product-data">{ProdState?.tags}</p>
                     <br />
                     <br />
                   </div>
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">disponibilité : </h3>
                     <p className="product-data">
-                      {ProdState.quantite > 0 ? "En stock" : "hors stock"}
+                      {ProdState?.quantite > 0 ? "En stock" : "hors stock"}
                     </p>
                     <br />
                     <br />
                   </div>
-                  <div className="d-flex gap-10 align-items-center">
-                    <h3 className="product-heading">coleur : </h3>
-                    <p className="product-data mt-3">
-                    <Color color={ProdState && ProdState.color} />
-
-                    </p>
-                    <br />
-                    <br />
-                  </div>
+                  {ProductPresent !== true && (
+                    <div className="d-flex gap-10 align-items-center">
+                      <h3 className="product-heading">coleur : </h3>
+                      <p className="product-data mt-3">
+                        <Color
+                          color={ProdState && ProdState.color}
+                          setcolor={setcolors}
+                        />
+                      </p>
+                      <br />
+                      <br />
+                    </div>
+                  )}
 
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Taille : </h3>
@@ -208,34 +270,37 @@ const Singleproduit = () => {
                     <br />
                     <br />
                   </div>
-                  <div className="d-flex gap-10 align-items-center">
-                    <h3 className="product-heading">Quantite : </h3>
-                    <p className="product-data ">
-                      <InputNumber
-                        type="number"
-                        min={1}
-                        max={10}
-                        onChange={(value) => {
-                          setQuantity(value);
-                          console.log(value);
-                        }}
-                        value={quantity}
-                      />
-                    </p>
-                    <br />
-                    <br />
-                  </div>
+
+                  {ProductPresent !== true && (
+                    <div className="d-flex gap-10 align-items-center">
+                      <h3 className="product-heading">Quantite : </h3>
+                      <p className="product-data ">
+                        <InputNumber
+                          type="number"
+                          min={1}
+                          max={10}
+                          onChange={(value) => {
+                            setQuantity(value);
+                          }}
+                          value={quantity}
+                        />
+                      </p>
+                      <br />
+                      <br />
+                    </div>
+                  )}
                   <div className="text-center justify-content-between">
-                    <Link
+                    <Link 
                       className="button signup"
                       style={{ marginRight: "10px" }}
                       onClick={() => {
                         Addtocart();
                       }}
                     >
-                      {" "}
+                      {ProductPresent === true
+                        ? "Passer au panier"
+                        : "Ajouter au panier"}
                       {/* Ajoutez une marge droite en utilisant des styles en ligne */}
-                      Ajouter au panier
                     </Link>
                   </div>
                   <br />
@@ -253,7 +318,7 @@ const Singleproduit = () => {
 
                   <div className="d-flex gap-10 flex-column my-3">
                     <h3 className="product-heading">shipping & returns </h3>
-                    <p className="product-data">{ProdState.description}</p>
+                    <p className="product-data">{ProdState?.description}</p>
                     <br />
                     <br />
                   </div>
@@ -282,10 +347,9 @@ const Singleproduit = () => {
                 <div className="col-12">
                   <h3>Description</h3>
                   <p>
-                    escription-product-wrapper py-5
-                    home-wrappeescription-product-wrapper py-5
-                    home-wrappeescription-product-wrapper py-5
-                    home-wrappeescription-product-wrapper py-5 home-wrappe
+                    {Productstate?.map((i) => (
+                      <RenderHTML htmlContent={i.description} />
+                    ))}
                   </p>
                 </div>
               </div>
@@ -319,56 +383,29 @@ const Singleproduit = () => {
                   </div>
                   <br />
 
-                  <form action="">
-                    <h3>Ecriver un review</h3>
-                    <br />
-                    <div>
-                      <InputGroup className="mb-3">
-                        <Form.Control
-                          placeholder="Entrer votre nom "
-                          type="text"
-                          aria-label="Nom"
-                          aria-describedby="basic-addon1"
-                        />
-                      </InputGroup>
-                    </div>
-
-                    <br />
-
-                    <div>
-                      <InputGroup className="mb-3">
-                        <Form.Control
-                          placeholder="Email"
-                          type="email"
-                          aria-label="Email"
-                          aria-describedby="basic-addon1"
-                        />
-                      </InputGroup>
-                    </div>
-
-                    <br />
-                    <Rate className="fs-2" allowHalf defaultValue={2.5} />
-                    <br />
-                    <br />
-
-                    <div>
-                      <InputGroup className="mb-3">
-                        <TextArea
-                          placeholder="Commentaire"
-                          type="TextArea"
-                          aria-label="Commentaire"
-                          aria-describedby="basic-addon1"
-                        />
-                      </InputGroup>
-                    </div>
-                    <br />
-
-                    <div className="d-flex gap-15 align-items-center">
-                      <Link to="/home" className="button signup">
-                        soumettre
-                      </Link>
-                    </div>
-                  </form>
+                  
+                    <h3>Ecrire une revue</h3>
+                     <Rate
+    allowHalf
+    value={rate}
+    onChange={(value) => setRate(value)}
+  />
+  <TextArea
+    placeholder="Commentaire"
+    value={comment}
+    onChange={(e) => setComment(e.target.value)}
+  />
+  <button type="primary" onClick={Rating}>Soumettre</button>
+  <div className="col-12">
+  <h3>Commentaires des utilisateurs</h3>
+  {ProdState?.rating?.map((ratingItem, index) => (
+    <div key={index}>
+      <p>Étoiles: {ratingItem.star}</p>
+      <p>Commentaire: {ratingItem.comment}</p>
+      {/* Vous pouvez afficher d'autres informations telles que l'identifiant de l'utilisateur si nécessaire */}
+    </div>
+  ))}
+</div>
                 </div>
               </div>
             </div>
@@ -379,86 +416,37 @@ const Singleproduit = () => {
                 <h1>Collection vedette</h1>
                 <br />
                 <br />
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="iPhone 14 Pro Max"
-                    description="The iPhone 14 Pro Max is theSuper Retina XDR display, powerful A15 Bionic chip, and advanced camera system."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 2"
-                    description="Description of Product 2."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 4"
-                    description="Description of Product 4."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
-                <div className="col-3">
-                  <Productcart
-                    src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                    title="Product 3"
-                    description="Description of Product 3."
-                    prix="100dt"
-                  />
-                </div>
+                {Productstate?.map((product, key) => {
+                  if (product?.tags === "populair") {
+                    return (
+                      <div className="col-3">
+                        <Productcart
+                          title={product?.title}
+                          src={product?.images[0].url}
+                          prix={product?.price}
+                          solde={product?.solde}
+                          description=<RenderHTML
+                            htmlContent={product?.description}
+                          />
+                          id={product._id}
+                        />
+                      </div>
+                    );
+                  } else {
+                    return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
+                  }
+                })}
+                {/* {selectedBlogs.map((blog, key) => (
+              <div className="col-3" key={key}>
+                <Blogcard
+                  src={blog.image.map((image) => image.url)}
+                  description={<RenderHTML htmlContent={blog.description} />}
+                  date={moment(blog.createdAt).format("MMMM Do YYYY")}
+                  title={blog.title}
+                  id={blog._id}
+                />
+              </div>
+            ))} */}
               </div>
             </div>
           </section>

@@ -1,12 +1,13 @@
 // authSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Productservice } from "./ProductService";
+import { toast } from "react-toastify";
 
 export const getproductss = createAsyncThunk(
   "product/getallproduct",
-  async (thunkAPI) => {
+  async (data,thunkAPI) => {
     try {
-      return await Productservice.GetAllProduct();
+      return await Productservice.GetAllProduct(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -39,6 +40,17 @@ export const GetLoves = createAsyncThunk(
   async (thunkAPI) => {
     try {
       const response = await Productservice.GetLove(); // Call AddtoLove method
+      return response; // Return response data
+    } catch (error) {
+      console.log(error); // Reject with error value
+    }
+  }
+);
+export const CommenteRproduct = createAsyncThunk(
+  "product/Rating",
+  async (data,thunkAPI) => {
+    try {
+      const response = await Productservice.CommenterProduct(data); // Call AddtoLove method
       return response; // Return response data
     } catch (error) {
       console.log(error); // Reject with error value
@@ -134,6 +146,28 @@ export const ProductSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.message = action.error;
+    });
+
+    builder.addCase(CommenteRproduct.pending, (state) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
+    });
+    builder.addCase(CommenteRproduct.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.produit = action.payload;
+      toast.success('Merci de votre Commentaire')
+
+    });
+    builder.addCase(CommenteRproduct.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = true;
+      state.message = action.error;
+      toast.error("Desoler ilya un probleme")
     });
   },
 });
