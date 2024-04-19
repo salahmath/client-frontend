@@ -99,7 +99,7 @@ export const ProductSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.AddToLoves = action.payload;
-      state.message = "Product added successfully";
+
     });
     builder.addCase(AddToLoves.rejected, (state, action) => {
       state.isLoading = false;
@@ -159,7 +159,7 @@ export const ProductSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.produit = action.payload;
-      toast.success('Merci de votre Commentaire')
+      toast.success('Merci pour votre Commentaire')
 
     });
     builder.addCase(CommenteRproduct.rejected, (state, action) => {
@@ -167,7 +167,7 @@ export const ProductSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.message = action.error;
-      toast.error("Desoler ilya un probleme")
+      toast.error("Désolée ilya un probleme")
     });
   },
 });

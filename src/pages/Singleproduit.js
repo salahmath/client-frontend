@@ -1,22 +1,28 @@
-import { Input, InputNumber, Rate } from "antd";
+import { Button, Input, InputNumber, Rate } from "antd";
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { CiHeart } from "react-icons/ci";
 import ReactImageZoom from "react-image-zoom";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import BreadCump from "../conmponentes/BreadCump";
 import Color from "../conmponentes/Color";
 import PageHelmet from "../conmponentes/Helmet";
 import Productcart from "../conmponentes/Productcart";
-import { message } from 'antd';
-
+import { message } from "antd";
+import Skeleton from "@mui/material/Skeleton";
 import { DiGitCompare } from "react-icons/di";
 import { useDispatch, useSelector } from "react-redux";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { CommentSection } from "react-comments-section";
+import { Radio } from "antd";
+
 import {
   AddToLoves,
   CommenteRproduct,
   GETproduct,
+  GetLoves,
   getproductss,
 } from "../features/Product/productSlice";
 import { toast } from "react-toastify";
@@ -81,16 +87,53 @@ const Singleproduit = () => {
       // Add null check here
       for (let i = 0; i < cartstate.length; i++) {
         if (cartstate[i].productId._id === ProdId) {
-        SetProductPresent(true);
-
+          SetProductPresent(true);
         }
       }
     }
-  }, [ProdId,cartstate]);
+  }, [ProdId, cartstate]);
+
+  const [lovesPresent, setLovesPresent] = useState(false);
+  const Panierstate = useSelector((state) => state?.Product?.Loves);
+  const userstate = useSelector((state) => state?.auth.user);
+  useEffect(() => {
+    dispatch(GetLoves());
+  }, [dispatch]);
+
+  // Checking if the product is in the cart
+  useEffect(() => {
+    if (Panierstate && Panierstate.length > 0) {
+      for (let i = 0; i < Panierstate.length; i++) {
+        if (Panierstate[i]?._id === ProdId) {
+          setLovesPresent(true);
+          return; // Exit the loop early once the product is found
+        }
+      }
+      // If the loop finishes without finding the product
+      setLovesPresent(false);
+    } else {
+      setLovesPresent(false); // If the cart is empty
+    }
+  }, [ProdId, Panierstate]);
+
+  // Toggle loves
+  const handleToggleLove = () => {
+    // Add/remove from wishlist logic here
+    if (lovesPresent) {
+      // Remove from wishlist logic
+      setLovesPresent(false);
+      addtowishlist(ProdId);
+      toast.success("Ce produit est effacé de la liste");
+    } else {
+      // Add to wishlist logic
+      setLovesPresent(true);
+      addtowishlist(ProdId);
+      toast.success("Ce produit est ajouté à la liste");
+    }
+  };
   useEffect(() => {
     dispatch(getproductss());
   }, [dispatch]);
-  // Include cartstate and ProdId in the dependency array to trigger the effect on changes in these variables
   const Productstate = useSelector((state) => state?.Product?.Products);
 
   function RenderHTML({ htmlContent }) {
@@ -106,15 +149,38 @@ const Singleproduit = () => {
       />
     );
   }
-  
 
- const [comment, setComment] = useState("");
-  const [rate, setRate] = useState(null);
+  const [comment, setComment] = useState("");
+  const [rate, setRate] = useState(0);
   const Rating = () => {
-   
-    dispatch(CommenteRproduct({ ProdId, rate, comment }))
-      
-  }; 
+    setTimeout(async () => {
+      await dispatch(CommenteRproduct({ ProdId, rate, comment }));
+
+      dispatch(GETproduct(ProdId));
+    }, 300);
+  };
+const navigate=useNavigate()
+function getRandomoulair2(Productstate) {
+  const selectedProduct2 = [];
+  const availableProducts = Productstate?.filter((product) => product?.tags === "populair");
+
+  while (selectedProduct2.length < 4 && availableProducts.length > 0) {
+    const randomIndex = Math.floor(Math.random() * availableProducts.length);
+    const randomProduct = availableProducts[randomIndex];
+    selectedProduct2.push(randomProduct);
+    availableProducts.splice(randomIndex, 1);
+  }
+
+  return selectedProduct2;
+}
+
+const [selectedProduct2, setSelectedProduct2] = useState([]);
+useEffect(() => {
+  if (Productstate.length > 0) {
+    setSelectedProduct2(getRandomoulair2(Productstate));
+  }
+}, [Productstate]);
+
   return (
     <>
       <PageHelmet title=" produit" />
@@ -128,30 +194,30 @@ const Singleproduit = () => {
               </div>
 
               <div className="other-product-images d-flex flex-wrap gap-15">
-                <div>
-                  <img
-                    src={ProdState ? ProdState?.images?.[0]?.url : null}
-                    alt="img111"
-                  />
-                </div>
-                <div>
-                  <img
-                    src={ProdState ? ProdState?.images?.[1]?.url : null}
-                    alt="img111"
-                  />
-                </div>
-                <div>
-                  <img
-                    src={ProdState ? ProdState?.images?.[2]?.url : null}
-                    alt="img111"
-                  />
-                </div>
-                <div>
-                  <img
-                    src={ProdState ? ProdState?.images?.[3]?.url : null}
-                    alt="img111"
-                  />
-                </div>
+                {[0, 1, 2, 3].map((index) => (
+                  <div key={index}>
+                    {ProdState &&
+                    ProdState.images &&
+                    ProdState.images[index] ? (
+                      <img
+                        src={ProdState.images[index].url}
+                        alt={`img${index}`}
+                      />
+                    ) : (
+                      <>
+                        <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+
+                        <Skeleton variant="circular" width={40} height={40} />
+                        <Skeleton
+                          variant="rectangular"
+                          width={210}
+                          height={60}
+                        />
+                        <Skeleton variant="rounded" width={210} height={60} />
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -164,17 +230,13 @@ const Singleproduit = () => {
                   <p className="price">{ProdState?.price}DT</p>
                 </div>
                 <div className="d-flex">
-                  <Rate allowHalf defaultValue={2.5} />
-                  <p className="mb-0">({ProdState?.rating})</p>
+                  <Rate allowHalf value={ProdState?.totalrating} />
+                  <div className="spacer"></div>
+                  <span>  {ProdState?.rating?.length} avis</span>
                 </div>
+
                 <a href="#review">Ecriver un revoir</a>
                 <div className="border-bottom py-3">
-                  <div className="d-flex gap-10 align-items-center">
-                    <h3 className="product-heading">Type : </h3>
-                    <p className="product-data">{ProdState?.category}</p>
-                    <br />
-                    <br />
-                  </div>
                   <div className="d-flex gap-10 align-items-center">
                     <h3 className="product-heading">Marque : </h3>
                     <p className="product-data">{ProdState?.brand}</p>
@@ -205,6 +267,7 @@ const Singleproduit = () => {
                   {ProductPresent !== true && (
                     <div className="d-flex gap-10 align-items-center">
                       <h3 className="product-heading">coleur : </h3>
+                      <br />
                       <p className="product-data mt-3">
                         <Color
                           color={ProdState && ProdState.color}
@@ -216,66 +279,11 @@ const Singleproduit = () => {
                     </div>
                   )}
 
-                  <div className="d-flex gap-10 align-items-center">
-                    <h3 className="product-heading">Taille : </h3>
-                    <p className="product-data d-flex mt-2 ">
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label
-                          class="form-check-label form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          s (1)
-                        </label>
-                      </div>
-                      <div class="form-check form-check-label">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckChecked"
-                        />
-                        <label class="form-check-label" for="flexCheckChecked">
-                          ms (12)
-                        </label>
-                      </div>
-                      <div class="form-check form-check-label">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckChecked"
-                        />
-                        <label class="form-check-label" for="flexCheckChecked">
-                          m (12)
-                        </label>
-                      </div>
-                      <div class="form-check form-check-label">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckChecked"
-                        />
-                        <label class="form-check-label" for="flexCheckChecked">
-                          l (12)
-                        </label>
-                      </div>
-                    </p>
-                    <br />
-                    <br />
-                  </div>
-
                   {ProductPresent !== true && (
                     <div className="d-flex gap-10 align-items-center">
                       <h3 className="product-heading">Quantite : </h3>
                       <p className="product-data ">
-                        <InputNumber
+                       {/*  <InputNumber
                           type="number"
                           min={1}
                           max={10}
@@ -283,42 +291,78 @@ const Singleproduit = () => {
                             setQuantity(value);
                           }}
                           value={quantity}
-                        />
+                        /> */}
+                        <Radio.Group
+                            onChange={(e) =>
+                              setQuantity(e.target.value)
+                            }
+                            
+                          >
+                            {ProdState?.quantite > 0 ? (
+                              Array.from(
+                                {
+                                  length: Math.min(ProdState?.quantite, 10),
+                                },
+                                (_, i) => (
+                                  <Radio.Button key={i} value={i + 1}>
+                                    {i + 1}
+                                  </Radio.Button>
+                                )
+                              )
+                            ) : (
+                              <Radio.Button value="0" disabled>
+                                Hors de stock
+                              </Radio.Button>
+                            )}
+                          </Radio.Group>
                       </p>
                       <br />
                       <br />
                     </div>
                   )}
                   <div className="text-center justify-content-between">
-                    <Link 
+                    
+                      {ProductPresent === true
+                        ? <button
                       className="button signup"
                       style={{ marginRight: "10px" }}
                       onClick={() => {
+                        navigate("/panier")
+                      }}
+                    >Passer au panier
+                       </button> : <button
+                      className="button signup"
+                      style={{ marginRight: "10px" }}
+                      onClick={() => {
+                        
                         Addtocart();
                       }}
-                    >
-                      {ProductPresent === true
-                        ? "Passer au panier"
-                        : "Ajouter au panier"}
+                    >Ajouter au panier
+                       </button>}
                       {/* Ajoutez une marge droite en utilisant des styles en ligne */}
-                    </Link>
+                    
+
+                    <Button
+                      className="links bg-transparent border-0"
+                      onClick={handleToggleLove}
+                    >
+                      {lovesPresent ? (
+                        <FaHeart className="icon" />
+                      ) : (
+                        <FaRegHeart className="icon" />
+                      )}
+                    </Button>
                   </div>
                   <br />
-                  <div className="d-flex">
-                    <Link className="links" style={{ marginRight: "30px" }}>
-                      <DiGitCompare className="icon" /> comparer ce produit{" "}
-                    </Link>
-                    <Link
-                      className="links"
-                      onClick={() => addtowishlist(ProdId)}
-                    >
-                      <CiHeart className="icon" /> aime ce produit
-                    </Link>
-                  </div>
+                  <div className="d-flex"></div>
 
                   <div className="d-flex gap-10 flex-column my-3">
                     <h3 className="product-heading">shipping & returns </h3>
-                    <p className="product-data">{ProdState?.description}</p>
+                    <p className="product-data">
+                      {Productstate?.map((i) => (
+                        <RenderHTML htmlContent={i.description} />
+                      ))}
+                    </p>
                     <br />
                     <br />
                   </div>
@@ -366,8 +410,14 @@ const Singleproduit = () => {
                     <div>
                       <h3 className="mb-2 ">Revoir</h3>
                       <div className="d-flex align-items-center gap-10">
-                        <Rate className="fs-2" allowHalf defaultValue={2.5} />
-                        <p className="mb-0 fs-4">Basé sur 2 avis</p>
+                        <Rate
+                          className="fs-2"
+                          allowHalf
+                          value={ProdState?.totalrating}
+                        />
+                        <p className="mb-0 fs-4">
+                          Basé sur {ProdState?.rating?.length} avis
+                        </p>
                       </div>
                     </div>
 
@@ -382,30 +432,32 @@ const Singleproduit = () => {
                     )}
                   </div>
                   <br />
+                  <Rate
+                    allowHalf
+                    value={rate}
+                    onChange={(value) => setRate(value)}
+                  />
+                  <br />
+                  <br />
+                  <TextArea
+                    placeholder="Commentaire"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                  <br />
+                  <br />
 
-                  
-                    <h3>Ecrire une revue</h3>
-                     <Rate
-    allowHalf
-    value={rate}
-    onChange={(value) => setRate(value)}
-  />
-  <TextArea
-    placeholder="Commentaire"
-    value={comment}
-    onChange={(e) => setComment(e.target.value)}
-  />
-  <button type="primary" onClick={Rating}>Soumettre</button>
-  <div className="col-12">
-  <h3>Commentaires des utilisateurs</h3>
-  {ProdState?.rating?.map((ratingItem, index) => (
-    <div key={index}>
-      <p>Étoiles: {ratingItem.star}</p>
-      <p>Commentaire: {ratingItem.comment}</p>
-      {/* Vous pouvez afficher d'autres informations telles que l'identifiant de l'utilisateur si nécessaire */}
-    </div>
-  ))}
-</div>
+                  <button type="primary" className="button" onClick={Rating}>
+                    Soumettre
+                  </button>
+                  <div className="col-12">
+                    <h3>Commentaires des utilisateurs</h3>
+                    {ProdState?.rating?.map((product, key) => (
+                      <div key={key}>
+                        <p>{product?.comment}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -416,10 +468,8 @@ const Singleproduit = () => {
                 <h1>Collection vedette</h1>
                 <br />
                 <br />
-                {Productstate?.map((product, key) => {
-                  if (product?.tags === "populair") {
-                    return (
-                      <div className="col-3">
+                {selectedProduct2.map((product, key) => (
+                  <div className="col-3">
                         <Productcart
                           title={product?.title}
                           src={product?.images[0].url}
@@ -431,22 +481,8 @@ const Singleproduit = () => {
                           id={product._id}
                         />
                       </div>
-                    );
-                  } else {
-                    return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
-                  }
-                })}
-                {/* {selectedBlogs.map((blog, key) => (
-              <div className="col-3" key={key}>
-                <Blogcard
-                  src={blog.image.map((image) => image.url)}
-                  description={<RenderHTML htmlContent={blog.description} />}
-                  date={moment(blog.createdAt).format("MMMM Do YYYY")}
-                  title={blog.title}
-                  id={blog._id}
-                />
-              </div>
-            ))} */}
+    ))}
+                
               </div>
             </div>
           </section>

@@ -27,6 +27,8 @@ import { PrivateRoutes } from './pages/routing/privateRoutes';
 import { OpenRoutes } from './pages/routing/OpenRoutes';
 import Order from './pages/Order';
 import Profil from './pages/Profil';
+import GameComponent from './pages/Jeu';
+import Enquirymessage from './pages/enq+';
 function App() {
   return (
     <div className="">
@@ -55,7 +57,9 @@ function App() {
             <Route path="carte" element={<PrivateRoutes><Cartes /></PrivateRoutes>} />
             <Route path="order" element={<PrivateRoutes><Order /></PrivateRoutes>} />
             <Route path="profil" element={<PrivateRoutes><Profil /></PrivateRoutes>} />
-
+            <Route path="game" element={<GameComponent/>} />
+            <Route path="Enquirymessage" element={<Enquirymessage/>} />
+            
           </Route>
           <Route path='erreur' element={<Error />} />
           <Route path='success' element={<Success />} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaShippingFast } from "react-icons/fa";
 import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineSupportAgent } from "react-icons/md";
@@ -9,12 +9,17 @@ import Blogcard from "../conmponentes/Blogcart";
 import Productcart from "../conmponentes/Productcart";
 import Special from "../conmponentes/Special";
 import PageHelmet from "../conmponentes/Helmet";
-
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs } from "../features/Blogs/BlogSlice";
 import moment from "moment";
 import { AddToLoves, getproductss } from "../features/Product/productSlice";
 import ImgMediaCard from "../conmponentes/Cards";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import ButtonBase from "@mui/material/ButtonBase";
+import Typography from "@mui/material/Typography";
+import Skeleton from '@mui/material/Skeleton'
+
 const Homepages = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,8 +67,173 @@ const Homepages = () => {
   useEffect(() => {
     dispatch(getproductss());
   }, [dispatch]);
-  const Productstate = useSelector((state) => state.Product.Products);
+  const Productstate = useSelector((state) => state?.Product?.Products);
+  const getRandomItems = (arr, numItems) => {
+    if (!arr) return [];
+    const shuffled = [...arr].sort(() => 0.5 - Math.random()); // Copier le tableau avec [...arr] pour ne pas modifier l'original
+    return shuffled.slice(0, numItems);
+  };
 
+  const onSaleProducts = Productstate?.filter(
+    (product) => product?.tags === "En solde"
+  );
+  const randomOnSaleProduct = getRandomItems(onSaleProducts, 1)[0];
+  const navigate = useNavigate();
+  // Fonction pour mélanger aléatoirement un tableau
+  function shuffleArray(array) {
+    for (let i = array?.length - 1; i > 0; i--) {
+      const j = Math?.floor(Math?.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+  const mutableProductState = [...Productstate];
+  const shuffledProductState = shuffleArray(mutableProductState);
+
+  // Récupérer les trois premiers éléments mélangés pour les images
+  const images = shuffledProductState.slice(0, 3).map((item) => ({
+    url: item?.images[0]?.url, // Supposons que chaque élément de Productstate a un tableau d'images et vous prenez la première image de chaque élément
+    title: item?.title, // Utilisez un titre approprié pour chaque image
+    width: "30%", // Largeur fixe ou ajustez selon vos besoins
+    id: item?._id, //
+  }));
+  const images1 = Productstate.slice(0, 3).map((item) => ({
+    url: item?.images[0]?.url, // Suppose que chaque élément de Productstate a un tableau d'images et vous prenez la première image de chaque élément
+    title: item?.title, // Utilisez un titre approprié pour chaque image
+    width: "30%", // Largeur fixe ou ajustez selon vos besoins
+    id: item?._id, //
+  }));
+
+  const ImageButton = styled(ButtonBase)(({ theme }) => ({
+    position: "relative",
+    height: 200,
+    [theme.breakpoints.down("sm")]: {
+      width: "100% !important", // Overrides inline-style
+      height: 100,
+    },
+    "&:hover, &.Mui-focusVisible": {
+      zIndex: 1,
+      "& .MuiImageBackdrop-root": {
+        opacity: 0.15,
+      },
+      "& .MuiImageMarked-root": {
+        opacity: 0,
+      },
+      "& .MuiTypography-root": {
+        border: "4px solid currentColor",
+      },
+    },
+  }));
+
+  const ImageSrc = styled("span")({
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundSize: "cover",
+    backgroundPosition: "center 40%",
+  });
+
+  const Image = styled("span")(({ theme }) => ({
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: theme.palette.common.white,
+  }));
+
+  const ImageBackdrop = styled("span")(({ theme }) => ({
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: theme.palette.common.black,
+    opacity: 0.4,
+    transition: theme.transitions.create("opacity"),
+  }));
+
+  const ImageMarked = styled("span")(({ theme }) => ({
+    height: 3,
+    width: 18,
+    backgroundColor: theme.palette.common.white,
+    position: "absolute",
+    bottom: -2,
+    left: "calc(50% - 9px)",
+    transition: theme.transitions.create("opacity"),
+  }));
+
+  function getRandomoulair(Productstate) {
+    const selectedProduct = [];
+    const availableProducts = Productstate?.filter((product) => product?.tags === "mis en avant");
+  
+    while (selectedProduct.length < 4 && availableProducts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableProducts.length);
+      const randomProduct = availableProducts[randomIndex];
+      selectedProduct.push(randomProduct);
+      availableProducts.splice(randomIndex, 1);
+    }
+  
+    return selectedProduct;
+  }
+  
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  
+  useEffect(() => {
+    if (Productstate.length > 0) {
+      setSelectedProduct(getRandomoulair(Productstate));
+    }
+  }, [Productstate]);
+
+
+  function getRandomoulair1(Productstate) {
+    const selectedProduct1 = [];
+    const availableProducts = Productstate?.filter((product) => product?.tags === "spécial");
+  
+    while (selectedProduct1.length < 4 && availableProducts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableProducts.length);
+      const randomProduct = availableProducts[randomIndex];
+      selectedProduct1.push(randomProduct);
+      availableProducts.splice(randomIndex, 1);
+    }
+  
+    return selectedProduct1;
+  }
+  
+  const [selectedProduct1, setSelectedProduct1] = useState([]);
+  useEffect(() => {
+    if (Productstate.length > 0) {
+      setSelectedProduct2(getRandomoulair2(Productstate));
+    }
+  }, [Productstate]);
+
+
+  function getRandomoulair2(Productstate) {
+    const selectedProduct2 = [];
+    const availableProducts = Productstate?.filter((product) => product?.tags === "populair");
+  
+    while (selectedProduct2.length < 4 && availableProducts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableProducts.length);
+      const randomProduct = availableProducts[randomIndex];
+      selectedProduct2.push(randomProduct);
+      availableProducts.splice(randomIndex, 1);
+    }
+  
+    return selectedProduct2;
+  }
+  
+  const [selectedProduct2, setSelectedProduct2] = useState([]);
+  
+  useEffect(() => {
+    if (Productstate.length > 0) {
+      setSelectedProduct2(getRandomoulair2(Productstate));
+    }
+  }, [Productstate]);
   return (
     <>
       <PageHelmet title="Home" />
@@ -72,17 +242,32 @@ const Homepages = () => {
           <div className="row">
             <div className="col-6">
               <div className="main-banner position-relative p-3">
-                <img
-                  src="https://assets-fr.imgfoot.com/media/cache/1200x1200/lionel-messi-2223-4.jpg"
-                  className="img10 img-flud rounded-3"
-                  alt="main binner"
-                />
-                <div className="main-banner-content position-absolute">
-                  <h4>charger</h4>
-                  <h5>super charge</h5>
-                  <p>from 1000 a 200</p>
-                  <Link className="button">buy now</Link>
-                </div>
+                {randomOnSaleProduct ? (
+                  <>
+                    <img
+                      onClick={() => {
+                        navigate(`/produit/${randomOnSaleProduct?._id}`);
+                      }}
+                      src={randomOnSaleProduct.images[0].url} // Utiliser la première image du produit
+                      className="img10 img-flud rounded-3"
+                      alt={randomOnSaleProduct.title}
+                    />
+                    <div className="main-banner-content position-absolute">
+                      <p onClick={() => {
+                        navigate(`/produit/${randomOnSaleProduct?._id}`);
+                      }} className="dangerous">
+                        -{randomOnSaleProduct.solde}DT
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="card-body">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width={210} height={60} />
+            <Skeleton variant="rounded" width={210} height={60} />
+          </div>
+                )}
               </div>
             </div>
             <div className="col-6">
@@ -124,6 +309,7 @@ const Homepages = () => {
           </div>
         </div>
       </section>
+
       <section className="home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
@@ -163,259 +349,6 @@ const Homepages = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section className="home-wrapper-2 py-5">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12">
-              <div className="categories d-flex justify-content-between align-items-center">
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">camera</h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://s.alicdn.com/@sc04/kf/HTB13c6cy25TBuNjSspmq6yDRVXai.jpg_300x300.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">
-                      Music &<br />
-                      gaming
-                    </h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://image.jeuxvideo.com/medias-md/158227/1582271131-3532-card.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">Smart TV</h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://mk-media.mytek.tn/media/catalog/product/cache/8be3f98b14227a82112b46963246dfe1/t/v/tv-samsung-50-smart-cu7000-crystal-uhd-4k-20232.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border ">
-                  <div>
-                    <h4 className="h60">
-                      Smart
-                      <br />
-                      watches
-                    </h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://tn.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/29/4586/1.jpg?0214"
-                    alt="camera"
-                  />
-                </div>
-              </div>
-              <div className="categories d-flex justify-content-between align-items-center">
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">camera</h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://s.alicdn.com/@sc04/kf/HTB13c6cy25TBuNjSspmq6yDRVXai.jpg_300x300.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">
-                      Music &<br />
-                      gaming
-                    </h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://image.jeuxvideo.com/medias-md/158227/1582271131-3532-card.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border">
-                  <div>
-                    <h4 className="h60">Smart TV</h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://mk-media.mytek.tn/media/catalog/product/cache/8be3f98b14227a82112b46963246dfe1/t/v/tv-samsung-50-smart-cu7000-crystal-uhd-4k-20232.jpg"
-                    alt="camera"
-                  />
-                </div>
-                <div className="d-flex gap-30 align-items-center border ">
-                  <div>
-                    <h4 className="h60">
-                      Smart
-                      <br />
-                      watches
-                    </h4>
-                    <p className="para">10 items</p>
-                  </div>
-                  <img
-                    className="img12"
-                    src="https://tn.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/29/4586/1.jpg?0214"
-                    alt="camera"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="collection-wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row">
-            <h1>Collection vedette</h1>
-            <br />
-            <br />
-            <div className="col-3">
-              <Productcart
-                src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                title="iPhone 14 Pro Max"
-                description="The iPhone 14 Pro Max is the latest flagship smartphone from Apple, featuring a stunning Super Retina XDR display, powerful A15 Bionic chip, and advanced camera system."
-                prix="100dt"
-              />
-            </div>
-            <div className="col-3">
-              <Productcart
-                src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                title="Product 2"
-                description="Description of Product 2."
-                prix="100dt"
-              />
-            </div>
-            <div className="col-3">
-              <Productcart
-                src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                title="Product 3"
-                description="Description of Product 3."
-                prix="100dt"
-              />
-            </div>
-            <div className="col-3">
-              <Productcart
-                src="https://files.refurbed.com/ii/iphone-14-pro-max-1662628210.jpg"
-                title="Product 4"
-                description="Description of Product 4."
-                prix="100dt"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="famous-wrapper py-5 home-wrapper-2">
-        <div className="containner-xxl">
-          <h1>famous product</h1>
-          <div className="row">
-            <div className="col-3">
-              <div className=" d-flex">
-              {Productstate.map((product, key) => {
-              if (product.tags === "mis en avant") {
-                return (
-                  <div className="col">
-              <div className=" d-flex">
-                  <ImgMediaCard
-                    title={product.title}
-                    src={product.images[0].url}
-                    price={product.price}
-                    solde={product.solde}
-                    brand={product.brand}
-                    totalrating={product.totalrating}
-                    quatite={product.quantite}
-                    id={product._id}
-                    key={key} // Don't forget to add a unique key prop when rendering components in a list
-                  />
-                  </div>
-            </div>
-                );
-              } else {
-                return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
-              }
-              
-            })}
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </section>
-      <section className="special-wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12">
-              <h3 className="section-heading">special product</h3>
-            </div>
-          </div>
-          <div className="row">
-            {Productstate.map((product, key) => {
-              if (product.tags === "spécial") {
-                return (
-                  <ImgMediaCard
-                    title={product.title}
-                    src={product.images[0].url}
-
-                    price={product.price}
-                    solde={product.solde}
-                    brand={product.brand}
-                    totalrating={product.totalrating}
-                    quatite={product.quantite}
-                    id={product._id}
-                    key={key} // Don't forget to add a unique key prop when rendering components in a list
-                  />
-                );
-              } else {
-                return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
-              }
-            })}
-          </div>
-        </div>
-      </section>
-      <section className="populair-wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12">
-              <h3 className="section-heading">populaire produit</h3>
-            </div>
-          </div>
-
-          {Productstate.map((product, key) => {
-            if (product.tags === "populair") {
-              return (
-                <ImgMediaCard
-                  title={product.title}
-                  src={product.images[0].url}
-                  price={product.price}
-                  solde={product.solde}
-                  brand={product.brand}
-                  totalrating={product.totalrating}
-                  quatite={product.quantite}
-                  key={key}
-                  id={product._id}
-
-                  // Don't forget to add a unique key prop when rendering components in a list
-                />
-              );
-            } else {
-              return null; // If the product doesn't have the 'special' tag, return null or an empty fragment
-            }
-          })}
         </div>
       </section>
       <section className="marque-warpper py-5">
@@ -493,16 +426,188 @@ const Homepages = () => {
           </div>
         </div>
       </section>
+      <section className="home-wrapper-2 py-5">
+        <div className="container-xxl">
+          
+          <div className="row">
+            <div className="col-12">
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  minWidth: 300,
+                  width: "100%",
+                }}
+              >
+                {images.map((image) => (
+                  <ImageButton
+                    focusRipple
+                    key={image?.title}
+                    style={{
+                      width: image.width,
+                    }}
+                    onClick={() => {
+                      navigate(`/produit/${image?.id}`);
+                    }}
+                  >
+                    <ImageSrc
+                      style={{ backgroundImage: `url(${image?.url})` }}
+                    />
+                    <ImageBackdrop className="MuiImageBackdrop-root" />
+                    <Image>
+                      <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        sx={{
+                          position: "relative",
+                          p: 4,
+                          pt: 2,
+                          pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                        }}
+                      >
+                        {image?.title}
+                        <ImageMarked className="MuiImageMarked-root" />
+                      </Typography>
+                    </Image>
+                  </ImageButton>
+                ))}
+              </Box>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="special-wrapper py-5 home-wrapper-2">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">produit célèbre</h3>
+            </div>
+          </div>
+          <div className="row">
+    {selectedProduct.map((product, key) => (
+      <div className="col-3" key={key}>
+        <ImgMediaCard
+          title={product.title}
+          src={product?.images[0]?.url}
+          price={product.price}
+          description={<RenderHTML htmlContent={product.description} />}
+          brand={product.brand}
+          totalrating={product.totalrating}
+          quatite={product.quantite}
+          id={product._id}
+        />
+      </div>
+    ))}
+    {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
+      <div className="col-3" key={`skeleton-${index}`}>
+        <div className="card">
+          <div className="card-body">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width={210} height={60} />
+            <Skeleton variant="rounded" width={210} height={60} />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+        </div>
+      </section>
+      <section className="special-wrapper py-5 home-wrapper-2">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">produit special</h3>
+            </div>
+          </div>
+          <div className="row">
+    {selectedProduct1.map((product, key) => (
+      <div className="col-3" key={key}>
+        <ImgMediaCard
+          title={product.title}
+          src={product?.images[0]?.url}
+          price={product.price}
+          description={<RenderHTML htmlContent={product.description} />}
+          brand={product.brand}
+          totalrating={product.totalrating}
+          quatite={product.quantite}
+          id={product._id}
+        />
+      </div>
+    ))}
+    {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
+      <div className="col-3" key={`skeleton-${index}`}>
+        <div className="card">
+          <div className="card-body">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width={210} height={60} />
+            <Skeleton variant="rounded" width={210} height={60} />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+
+
+        </div>
+      </section>
+      <section className="populair-wrapper py-5 home-wrapper-2">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">produit populaire</h3>
+            </div>
+          
+
+            <div className="row">
+    {selectedProduct2.map((product, key) => (
+      <div className="col-3" key={key}>
+        <ImgMediaCard
+          title={product.title}
+          src={product?.images[0]?.url}
+          price={product.price}
+          description={<RenderHTML htmlContent={product.description} />}
+          brand={product.brand}
+          totalrating={product.totalrating}
+          quatite={product.quantite}
+          id={product._id}
+          
+        />
+      </div>
+    ))}
+    {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
+      <div className="col-3" key={`skeleton-${index}`}>
+        <div className="card">
+          <div className="card-body">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width={210} height={60} />
+            <Skeleton variant="rounded" width={210} height={60} />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+        </div>
+        </div>
+      </section>
+
       <section className="blog-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
             <h1>Liste de nouveaux blogs</h1>
             <br />
             <br />
-            {selectedBlogs.map((blog, key) => (
+            {selectedBlogs?.map((blog, key) => (
               <div className="col-3" key={key}>
                 <Blogcard
-                  src={blog.image.map((image) => image.url)}
+                  src={blog?.image?.map((image) => image?.url)}
                   description={<RenderHTML htmlContent={blog.description} />}
                   date={moment(blog.createdAt).format("MMMM Do YYYY")}
                   title={blog.title}

@@ -1,26 +1,51 @@
-import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 
+import { RiCoupon3Fill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { CreatOrder, Deleteaproduitpanier, GetCart } from "../features/User/UserSlice";
-import { object, string, number, date, InferType } from "yup";
+import {
+  Applycoupon,
+  CreatOrder,
+  Deleteaproduitpanier,
+  GetCart,
+  Up2,
+  payer,
+} from "../features/User/UserSlice";
+
+import { number, object, string } from "yup";
 import { getClient } from "../utils/URL"; // Import des modules exportés depuis le fichier URL.js
 
 import axios from "axios";
+import { toast } from "react-toastify";
 const headers = getClient();
 
-const Chekout  = () => {
+const Chekout = (props) => {
+  const cartstate = useSelector((state) => state.auth.Panier);
+
+  const [initials, setInitial] = useState(calculateTotal(cartstate));
+  const [valeur, setvaleur] = useState("");
+  const [array, setarray] = useState([]);
+  const [apparait, setapparait] = useState(false);
+  const initial = props.location?.state?.initial;
   const [countries, setCountries] = useState([]);
   const [idayent, setidayent] = useState("");
+  useEffect(() => {
+    if (valeur === "") {
+      setInitial(calculateTotal(cartstate));
+    } else {
+      setInitial(valeur);
+    }
+  }, [valeur, cartstate]);
 
   const [Shippinginfo, setShippinginfo] = useState([]);
-  const [Idpayment, setpaymentInfo] = useState({Paymentid :""});
+  const [Idpayment, setpaymentInfo] = useState({ Paymentid: "" });
   const [tot, settot] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [states, setStates] = useState([]);
+  const [salah, setSalah] = useState("");
   const [Cardproduct, setCardproduct] = useState();
   let orderSchema = object({
     firstName: string().required("Il faut écrire votre prénom."),
@@ -42,64 +67,37 @@ const Chekout  = () => {
       CodePin: "",
       Other: "",
     },
-     validationSchema: orderSchema, 
-   // validationSchema: orderSchema,
-
-   onSubmit: async (values) => {
-/*     try {
-      setShippinginfo(values);
-      const [orderResult] = await Promise.all([
-        dispatch(CreatOrder({
-          totalPrice: tot,
-          totalPriceAfterdiscount: tot,
-          orderItems: Cardproduct,
-          Shippinginfo,
-          IdPayment: idayent
-        })),
-        dispatch(Deleteaproduitpanier())
-      ]);
+    validationSchema: orderSchema,
+    onSubmit: async (values) => {
+      try {
+        // Exécuter handlePayment en premier pour obtenir l'ID de paiement
+        const idPayment = await handlePayment(initials);
     
-      handlePayment(tot);
+        // Exécuter setShippinginfo
+        setShippinginfo(values);
     
-    } catch (error) {
-      console.error('Error during form submission:', error);
-      // Handle error here
-    }
-     */
-    try {
-      setShippinginfo(values);
-      const [orderResult] = await Promise.all([
-        dispatch(CreatOrder({
-          totalPrice: tot,
-          totalPriceAfterdiscount: tot,
-          orderItems: Cardproduct,
-          Shippinginfo,
-          IdPayment: idayent
-        })),
-        // Ne pas exécuter immédiatement DeleteProductFromCart() ici
-      ]);
-      handlePayment(tot);
-    
-      if (orderResult && handlePayment) {
-        await dispatch(Deleteaproduitpanier());
-        
-      } else {
-     }
-    } catch (error) {
-      console.error('Erreur lors de la soumission du formulaire :', error);
-      // Gérer l'erreur ici
+        // Appeler CreatOrder avec les valeurs mises à jour
+        dispatch(
+          CreatOrder({
+            totalPrice: initials,
+            totalPriceAfterdiscount: initials,
+            orderItems: Cardproduct,
+            Shippinginfo: values,
+            IdPayment: idPayment, 
+          })
+        );
+       
+      } catch (err) {
+        console.log(err);
+      }
     }
     
-    
-  }
-  
-  });
-  const navigate=useNavigate()
+    })
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetCart());
   }, [dispatch]);
-  const cartstate = useSelector((state) => state.auth.Panier);
   function calculateTotal(cartstate) {
     let total = 0;
     if (cartstate && cartstate.length > 0) {
@@ -110,7 +108,6 @@ const Chekout  = () => {
 
     return total;
   }
-  console.log(idayent);
 
   useEffect(() => {
     // Appelez calculateTotal et mettez à jour l'état tot
@@ -186,29 +183,47 @@ const Chekout  = () => {
     }
   };
   const [paymentResult, setPaymentResult] = useState(null);
-  const orderstate=useSelector((state)=>state.auth)
+  const orderstate = useSelector((state) => state?.auth);
+  const loginstate = useSelector((state) => state?.auth?.user);
+  const paystate = useSelector((state) => state?.auth?.payer?.responseData?.result?.payment_id);
+  const link = useSelector((state) => state?.auth?.payer?.responseData?.result?.link);
+  const createorder = useSelector((state) => state?.auth?.CreatOrder.order);
+console.log(paystate);
+const handlePayment = async (total) => {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:5000/api/user/paymentsuccess",
+      { amount: total * 1000 },
+      headers
+    );
+    
 
-  const handlePayment = async (total) => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/api/user/paymentsuccess",
-        { amount: total * 1000 },
-        headers
-      );
+    setPaymentResult(response.data);
+    const paymentId = response.data.responseData.result.payment_id;
+    setidayent(paymentId);
 
-      // Mise à jour de l'état paymentResult
-      setPaymentResult(response.data);
-      setidayent(response.data.responseData.result.payment_id  )
-     if(Shippinginfo.length !== 0 && orderstate){
-        window.location.href = response.data.responseData.result.link;
-
-     }
-    } catch (error) {
-      console.error("Error during payment:", error);
-      setPaymentResult(null);
+    
+      setSalah(response.data.responseData.result.link)
+     if(paymentId !=="" && salah !=="" ){
+      window.location.href=response.data.responseData.result.link
     }
-  };
- 
+     
+    // Retourne l'ID de paiement
+    return paymentId;
+  } catch (error) {
+    console.error("Error during payment:", error);
+    setPaymentResult(null);
+    throw error; // Re-lancez l'erreur pour qu'elle soit gérée par l'appelant
+  }
+};
+useEffect(()=>{
+
+    if( createorder){
+      window.location.href=salah
+    }
+
+  
+},[salah,createorder]) 
   useEffect(() => {
     let items = [];
     for (let index = 0; index < cartstate?.length; index++) {
@@ -221,26 +236,33 @@ const Chekout  = () => {
     }
     setCardproduct(items);
   }, [cartstate]);
- 
   const location = useLocation();
   const locationId = location.search.split("?payment_id=")[1];
   const handlePayments = async () => {
     try {
       const response = await axios.post(
         `http://127.0.0.1:5000/api/user/paymentverif/${locationId}`, // Utilisez backticks pour incorporer la variable locationId
-        null, // Passer null comme corps de la requête si vous n'avez pas besoin de données supplémentaires
-        headers // Passer les en-têtes en tant qu'option de la requête
+        null, 
+        headers 
       );
       const data = response.data;
-      // Vérifiez si le statut est "success"
       if (data.data.result.status === "SUCCESS") {
-        // Affichez une alerte de succès
         setTimeout(() => {
-         alert("Payment succeeded!"); 
+          toast.success("Payment succeeded!");
+          navigate("/order");
+          const data1 = {
+            type: data.data.result.type,
+            id: locationId
+          };
           
-        navigate("/chekout ") 
+          // Dispatch de l'action Up2 avec l'objet contenant à la fois l'id et le type
+          dispatch(Up2(data1));
+          
+          // Dispatch de l'action Deleteaproduitpanier
+          dispatch(Deleteaproduitpanier());
         }, 300);
       }
+      
     } catch (error) {
       console.error("Error during payment:", error);
     }
@@ -249,6 +271,22 @@ const Chekout  = () => {
     // Utilisez useEffect pour exécuter handlePayment lorsque le composant est monté
     handlePayments();
   }, []);
+
+  const utiliserCoupon = () => {
+    const data = { coupon: array, total: calculateTotal(cartstate) };
+    dispatch(Applycoupon(data))
+      .then((response) => {
+        const couponAppliedValue = response.payload;
+        if (couponAppliedValue) {
+          setvaleur(couponAppliedValue);
+        } else {
+          console.error("Error: Empty payload received.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error applying coupon:", error);
+      });
+  };
   return (
     <>
       <PageHelmet title=" Chekout " />
@@ -257,7 +295,9 @@ const Chekout  = () => {
         <div className="container-xxl">
           <div className="row">
             <div className="col-7">
+              
               <h3 className="website-name">Odoo Expert</h3>
+
               <nav
                 style={{ "--bs-breadcrumb-divider": "'>'" }} // Correction ici
                 aria-label="breadcrumb"
@@ -279,7 +319,7 @@ const Chekout  = () => {
               </nav>
               <h4 className="title">Information de client</h4>
               <p className="user-details total">
-                Salah mathlouthi (salah@gmail.com)
+              {loginstate?.lastname}{loginstate?.Secondname}({loginstate?.email}) vous avais une coupon! <RiCoupon3Fill onClick={() => setapparait(true)} />
               </p>
               <form
                 onSubmit={formik.handleSubmit}
@@ -287,7 +327,6 @@ const Chekout  = () => {
               >
                 <div className="w-100">
                   <select
-                   
                     onChange={(event) => {
                       handleCountryChange(event);
                     }}
@@ -306,7 +345,6 @@ const Chekout  = () => {
                       </option>
                     ))}
                   </select>
-                  
                 </div>
                 <div className="flex-grow-1">
                   <input
@@ -391,7 +429,7 @@ const Chekout  = () => {
                     className="form-control form-select"
                     id=""
                   >
-                    <option disabled>Choisissez votre état</option>
+                    <option selected>Choisissez votre état</option>
                     {states.map((state) => (
                       <option key={state.state_name} value={state.state_name}>
                         {state.state_name}
@@ -444,9 +482,9 @@ const Chekout  = () => {
                               alt="imig"
                             />
                           </div>
-                           <div>
+                          <div>
                             <h5 className="title">
-                              {cart.productId.quantite}* {cart.productId.title}
+                              {cart?.quantite}* {cart.productId.title}
                             </h5>
                             <p>{cart.productId.brand}</p>
                             <p>
@@ -477,14 +515,30 @@ const Chekout  = () => {
                     <p className="total">shipping</p>
                   </div>
                   <div>
-                    <p className="total-rice">{calculateTotal(cartstate)}DT</p>
+                    <p className="total-rice">Total :{initials}DT</p>
                     <p className="total-rice">Free</p>
+                    {apparait ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="ecriver votre id coupon"
+                          value={array}
+                          onChange={(e) => setarray(e.target.value)}
+                        />
+                        <button className="button" onClick={utiliserCoupon}>
+                          utiliser coupon
+                        </button>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    <div></div>
                   </div>
                 </div>
               </div>
               <div className="d-flex justify-content-between align-items-center border-bottom py-4">
                 <h3 className="total">Total</h3>
-                <p className="total-price">{calculateTotal(cartstate)}DT</p>
+                <p className="total-price">{initials}DT</p>
               </div>
             </div>
           </div>
@@ -494,4 +548,4 @@ const Chekout  = () => {
   );
 };
 
-export default Chekout ;
+export default Chekout;

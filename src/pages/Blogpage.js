@@ -13,9 +13,8 @@ function RenderHTML({ htmlContent }) {
         display: "-webkit-box",
         overflow: "hidden",
         WebkitBoxOrient: "vertical",
-        
       }}
-      dangerouslySetInnerHTML={{ __html:htmlContent }}
+      dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );
 }
@@ -54,21 +53,28 @@ const Blogpage = () => {
                       className="img-fluid w-100 my-4"
                     />
                     <div className="row">
-  <div className="col-md">
-    <h3>Nobre de vues:{BlogState.numViews} </h3>
-  </div>
-  <div className="col-md">
-    <h3>crée ar:{BlogState.author} </h3>
-  </div>
-  <div className="col-md">
-    <h3>crée a:{moment(BlogState.createdAt).format('MMMM Do YYYY')} Views</h3>
-  </div>
-</div>
+                      <div className="col-md">
+                        <h3>Nombre de vues:{BlogState.numViews} </h3>
+                      </div>
+                      <div className="col-md">
+                        <h3>crée par:{BlogState.author} </h3>
+                      </div>
+                      <div className="col-md">
+                        <h3>categorie:{BlogState.category} </h3>
+                      </div>
+                      <div className="col-md">
+                        <h3>
+                          crée a:
+                          {moment(BlogState.createdAt).format(
+                            "MMMM Do YYYY"
+                          )}{" "}
+                          Views
+                        </h3>
+                      </div>
+                    </div>
 
-                    <br/>
-                    <p>
-                      {<RenderHTML htmlContent={BlogState.description} />}
-                    </p>
+                    <br />
+                    <p>{<RenderHTML htmlContent={BlogState.description} />}</p>
                   </>
                 }
 

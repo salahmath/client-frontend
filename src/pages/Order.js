@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { GetOrder } from "../features/User/UserSlice";
+import { QRCode } from 'antd';
 
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
+import { Tag } from 'antd';
+
 const Order = () => {
   const dispatch = useDispatch();
   const orderState = useSelector((state) => state.auth);
@@ -35,6 +38,13 @@ const Order = () => {
         title: 'color',
         dataIndex: 'color',
         key: 'color',
+      },{
+        title: "QR Code",
+        dataIndex: "qrValue",
+        key: "qrCode",
+        render: (qrValue) => (
+          <QRCode value={qrValue || "-"} />
+        ),
       },
     ];
 
@@ -45,46 +55,79 @@ const Order = () => {
 
     return <Table columns={columns1} dataSource={data1} pagination={false} />;
   };
-
+  const generateQRValue = (order) => {
+    const productNames = order?.orderItems?.map((item) => item?.product?.title);
+    const totalPrice = order?.totalPriceAfterdiscount;
+    const createdAt = order?.createdAt;
+    const id = order?._id;
+    const status = order?.orderStatus;
+    const quantite = order?.orderItems?.map((item) => item?.quantity);
+    const url = `https://say123.netlify.app/facture?num_de_commande=${id}&produits=${quantite +""+"+"+""+ encodeURIComponent(productNames.join(','))}&Prix_total=${totalPrice}&commander_Le=${createdAt}&status_de_commande=${status}`;
+    return url;
+  };
   const columns = [
     {
-      title: "OrderId",
+      title: "Id de commande",
       dataIndex: "OrderId",
       key: "OrderId",
     },
+   
     {
-      title: "Total Price",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-    },
-    {
-      title: "Total Price After Discount",
+      title: "Prix ​​total après remise",
       dataIndex: "totalPriceAfterdiscount",
       key: "totalPriceAfterdiscount",
     },
     {
-      title: "Date",
+      title: "Date de commande",
       dataIndex: "Date",
       key: "Date",
     },
     {
-      title: "Order Status",
+      title: "Statut de commande",
       dataIndex: "orderStatus",
       key: "orderStatus",
-    },
+      render: (_, { orderStatus }) => {
+        let color; // Couleur par défaut
+        switch (orderStatus.toUpperCase()) {
+          case 'EN ATTENTE':
+            color = 'volcano';
+            break;
+          case 'EN COURS DE TRAITEMENT':
+            color = 'blue';
+            break;
+          case 'TERMINÉ':
+            color = 'green';
+            break;
+          case 'ANNULÉ':
+            color = 'grey';
+            break;
+          default:
+            color = 'default';
+        }
+        return (
+          <Tag color={color} key={orderStatus}>
+            {orderStatus.toUpperCase()}
+          </Tag>
+        );
+      },
+    }
+    
+    
+    
+    
   ];
 
-  const data = orderState.orders.map((order) => ({
+  const data = orderState?.orders?.map((order) => ({
     OrderId: order?._id,
-    totalPrice: order?.totalPrice,
-    totalPriceAfterdiscount: order?.totalPriceAfterdiscount,
+    totalPriceAfterdiscount: order?.totalPriceAfterdiscount+"DT",
     Date: order?.createdAt,
     orderStatus: order?.orderStatus,
     key: order?._id,
     shippingInfo: order?.orderItems.map((item) => ({
-      name: item.product.title,
-      quantity: item.quantity,
-      color: item.color.name,
+      name: item?.product?.title,
+      quantity: item?.quantity,
+      color: item?.color?.name,
+      qrValue: generateQRValue(order),
     }))
   }));
 

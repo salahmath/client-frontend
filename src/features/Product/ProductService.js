@@ -35,11 +35,9 @@ const CommenterProduct = async (data) => {
       comment: data.comment,
       star: data.rate
     },client);
-    // Traitez la réponse ici si nécessaire
-    console.log(response.data); // Par exemple, afficher les données de réponse dans la console
   } catch (error) {
     console.error("Une erreur s'est produite:", error);
-    // Gérer les erreurs ici
+    
   }
 };
 

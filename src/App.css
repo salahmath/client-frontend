@@ -23,6 +23,7 @@
     text-decoration: none;
     display: inline-block;
   }
+  main-banner-content
   
   /* Styles spécifiques à la bande supérieure de l'en-tête */
   .header-top-strip {
@@ -864,4 +865,16 @@ font-size: 14px;
       padding: 20px 15px;
       background-color: rgb(236, 233, 233);
     border-radius: 10px;
+    }
+
+    .main-banner-content .dangerous {
+      text-shadow: -5px 6px 7px rgba(206,89,55,0.88);
+      font-size: 12em; /* Ajuster la taille de la police selon vos besoins */
+      text-align: center; /* Centrer le texte horizontalement */
+      margin-top: 50%; /* Ajuster la marge vers le bas selon vos besoins */
+    }
+     
+    
+    .spacer {
+      width: 10px; /* Ajustez la largeur de l'espace selon vos besoins */
     }

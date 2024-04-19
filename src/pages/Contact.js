@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-
+import { useDispatch, useSelector } from "react-redux";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
+import { Addenq } from "../features/User/UserSlice";
+import { toast } from "react-toastify";
 const Contact = () => {
+  const [name, setNom] = useState("");
+  const [email, setemail] = useState("");
+  const [mobile, setmobile] = useState("");
+  const [message, setmessage] = useState("");
+console.log();
+const dispatch=useDispatch()
+const ajouter = () => {
+  if (mobile.length === 8) {
+    if (name !== "" && email !== "" && mobile !== "" && message !== "") {
+      dispatch(Addenq({ name, email, mobile, message }));
+    } else {
+      toast.error("Merci de remplir tous les champs.");
+    }
+  } else {
+    toast.error("Merci de vérifier votre numéro de mobile.");
+  }
+};
+
+  
+
   return (
     <>
       <PageHelmet title="Contact" />
@@ -34,26 +56,35 @@ const Contact = () => {
                       <input
                         type="text"
                         class="form-control"
-                        placeholder="Nom"
+                        placeholder="name"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
+                        onChange={(e) => {
+                          setNom(e.target.value);
+                        }}
                       />
                       <br />
                       <input
-                        type="text"
+                        type="email"
                         class="form-control"
                         placeholder="Email"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
+                        onChange={(e) => {
+                          setemail(e.target.value);
+                        }}
                       />
                       <br />
 
                       <input
-                        type="text"
+                        type="Number"
                         class="form-control"
                         placeholder="Mobile"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
+                        onChange={(e) => {
+                          setmobile(e.target.value);
+                        }}
                       />
                       <br />
 
@@ -61,10 +92,13 @@ const Contact = () => {
                         class="form-control"
                         placeholder="Commentaires"
                         aria-label="With textarea"
+                        onChange={(e) => {
+                          setmessage(e.target.value);
+                        }}
                       ></textarea>
                       <br />
-                      <button type="button" class="btn btn-outline-dark">
-                        Dark
+                      <button type="button" class="btn btn-outline-dark" onClick={ajouter}>
+                        Envoyer
                       </button>
                     </div>
                   </form>
@@ -72,28 +106,46 @@ const Contact = () => {
                 <div>
                   <h3 className="contact-title">Prenez contact avec nous</h3>
                   <div>
-                  <ul className="uls ps-0">
-  <li className="mb-4">
-    <IoHomeOutline style={{ marginRight: '10px', fontSize: '24px' }} />
-    <span style={{ marginLeft: '10px' }}>MSI Consultants</span>
-  </li>
+                    <ul className="uls ps-0">
+                      <li className="mb-4">
+                        <IoHomeOutline
+                          style={{ marginRight: "10px", fontSize: "24px" }}
+                        />
+                        <span style={{ marginLeft: "10px" }}>
+                          MSI Consultants
+                        </span>
+                      </li>
 
-  <li className="mb-4">
-    <IoCallOutline style={{ marginRight: '10px', fontSize: '24px' }} />
-    <span style={{ marginLeft: '10px' }}><a href="tel:+216 28 896 143">+216 28 896 143</a></span>
-  </li>
+                      <li className="mb-4">
+                        <IoCallOutline
+                          style={{ marginRight: "10px", fontSize: "24px" }}
+                        />
+                        <span style={{ marginLeft: "10px" }}>
+                          <a href="tel:+216 28 896 143">+216 28 896 143</a>
+                        </span>
+                      </li>
 
-  <li className="mb-4">
-    <IoMailOutline style={{ marginRight: '10px', fontSize: '24px' }} />
-    <span style={{ marginLeft: '10px' }}> <a href="mailto:Salahmathlouthi@gmail.com">Salahmathlouthi@gmail.com</a></span>
-  </li>
+                      <li className="mb-4">
+                        <IoMailOutline
+                          style={{ marginRight: "10px", fontSize: "24px" }}
+                        />
+                        <span style={{ marginLeft: "10px" }}>
+                          {" "}
+                          <a href="mailto:sami.g3@hotmail.fr">
+                            sami.g3@hotmail.fr
+                          </a>
+                        </span>
+                      </li>
 
-  <li className="mb-4">
-    <IoIosInformationCircleOutline style={{ marginRight: '10px', fontSize: '24px' }} />
-    <span style={{ marginLeft: '10px' }}>Disponibilité : 7 jours sur 7, 24 heures sur 24</span>
-  </li>
-</ul>
-
+                      <li className="mb-4">
+                        <IoIosInformationCircleOutline
+                          style={{ marginRight: "10px", fontSize: "24px" }}
+                        />
+                        <span style={{ marginLeft: "10px" }}>
+                          Disponibilité : 7 jours sur 7, 24 heures sur 24
+                        </span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>

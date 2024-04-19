@@ -19,13 +19,13 @@ function Footer() {
           <Col className='col col-lg-2 col-md-3 col-12'>
             <ul>
               <li className='list-unstyled'>
-                <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3 '>About</h5>
+                <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3 '>À propos</h5>
               </li>
               <li className='list-unstyled mb-2 text-white'>
-                <Link to="/">Profile</Link>
+                <Link to="/profil">Profile</Link>
               </li>
               <li className='list-unstyled mb-2 text-white'>
-                <Link to="/store">Store</Link>
+                <Link to="/store">Boutique</Link>
               </li>
               <li className='list-unstyled mb-2 text-white'>
                 <Link to="/blogs">Blogs</Link>
@@ -39,7 +39,7 @@ function Footer() {
           <Col className='col col-lg-2 col-md-3 col-12'>
             <ul>
               <li className='list-unstyled'>
-                <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3'>Find us</h5>
+                <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3'>Trouver nous</h5>
               </li>
               <li className='list-unstyled mb-2'>
                 <Link to="/terme_et_condition"><i className="bi bi-instagram"></i>termes et conditions</Link>
@@ -61,13 +61,13 @@ function Footer() {
                 <h5 className='mt-lg-0 mt-md-0 mt-4 mb-3'>Contact</h5>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-geo-alt-fill"></i> Centre Urbain ICC II C2-05. 1004 TUNIS</Link>
+                <Link to="/contact"><i className="bi bi-geo-alt-fill"></i> Centre Urbain ICC II C2-05. 1004 TUNIS</Link>
               </li>
               <li className='list-unstyled mb-2'>
                 <Link > <a href="tel:+21628896143"><i className="bi bi-telephone-fill"></i> +21628896143</a></Link>
               </li>
               <li className='list-unstyled mb-2'>
-                <Link to="/"><i className="bi bi-envelope-at-fill"></i>sami.g3@hotmail.fr</Link>
+                <Link ><i href="mailto:sami.g3@hotmail.fr" className="bi bi-envelope-at-fill"></i>sami.g3@hotmail.fr</Link>
               </li>
               <li className='list-unstyled'>
                 <div className="map mt-4">
@@ -86,10 +86,7 @@ function Footer() {
             </ul>
             
           </Col>
-          <div className="input-group mb-3 ">
-  <input type="text" className="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" />
-  <span className="input-group-text" id="basic-addon2">Subscribe</span>
-</div>
+         
         </Row>
       </Container>
    </div></footer>

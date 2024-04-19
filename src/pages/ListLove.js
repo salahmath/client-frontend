@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
 import { AddToLoves, GetLoves } from "../features/Product/productSlice";
+import { useNavigate } from "react-router-dom";
 const ListLove = () => {
 
   const dispatch = useDispatch()
@@ -21,7 +22,7 @@ dispatch(GetLoves())
   }
   
 
-  const Panierstate=useSelector((state)=>state.Product.Loves)
+  const Panierstate=useSelector((state)=>state?.Product?.Loves)
   
   function RenderHTML({ htmlContent }) {
     return (
@@ -36,17 +37,18 @@ dispatch(GetLoves())
       />
     );
   }
+  const navigate=useNavigate()
   return (
     <>
-      <PageHelmet title="Panier" />
-      <BreadCump title="Panier" />
+      <PageHelmet title="Favorite" />
+      <BreadCump title="Favorite" />
       <div className="wishlist-product-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
             <div className="col-3">
               <div className="wishlist-product-card">
                 <Row gutter={16}>
-                {Panierstate  && Panierstate.wishlist.map((i,key)=>{
+                {Panierstate  && Panierstate?.wishlist?.map((i,key)=>{
                   return (
                     <Col span={8}>
                     <Card title={i.title} bordered={false}>
@@ -55,6 +57,9 @@ dispatch(GetLoves())
                           className="img-fluid"
                           src={i.images[0].url}
                           alt={key}
+                          onClick={()=>{
+                            navigate(`/produit/${i._id}`)
+                          }}
                         />
                         <div className="panier-detail">
                         <br/>

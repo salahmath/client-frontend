@@ -26,6 +26,17 @@ export const LoginUser = createAsyncThunk(
     }
   }
 );
+export const payer = createAsyncThunk(
+  "auth/payer",
+  async (userData, thunkApi) => {
+    try {
+      const response = await authservice.pay(userData);
+      return response;
+    } catch (err) {
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
 
 export const CreeCart = createAsyncThunk(
   "auth/cree-cart",
@@ -74,7 +85,40 @@ export const Deleteaproduitpanier = createAsyncThunk(
     }
   }
 );
+export const Applycoupon = createAsyncThunk(
+  "auth/Applycoupon",
+  async (data, thunkApi) => {
+    try {
+      const response = await authservice.apllycoupon(data);
+      return response;
+    } catch (err) {
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+export const Getacoupon = createAsyncThunk(
+  "auth/Getacoupon",
+  async (data, thunkApi) => {
+    try {
+      const response = await authservice.getacoupon(data);
+      return response;
+    } catch (err) {
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
 
+export const GetAllcoupon = createAsyncThunk(
+  "auth/Getallcoupon",
+  async ( thunkApi) => {
+    try {
+      const response = await authservice.getAllcoupon();
+      return response;
+    } catch (err) {
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
 export const Updatequantite = createAsyncThunk(
   "auth/upd-cart",
   async (Cart_detail, thunkApi) => {
@@ -162,6 +206,41 @@ export const Reset_password = createAsyncThunk(
     }
   }
 );
+
+export const Addenq = createAsyncThunk(
+  "auth/Ajouter_enquiry",
+
+  async (enqdata, thunkApi) => {
+    try {
+      const response = await authservice.addenq(enqdata);
+      return response;
+    } catch (err) {
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+
+export const geteteenquirys = createAsyncThunk(
+  "enquiry/getenquiries2",
+  async(thunkAPI)=>{
+      try{
+return await authservice.getenquirys();
+      }catch(error){
+          return thunkAPI.rejectWithValue(error)
+      }
+  }
+)
+
+export const Up2 = createAsyncThunk(
+  "enquiry/up2",
+  async(data,thunkAPI)=>{
+      try{
+return await authservice.up2(data);
+      }catch(error){
+          return thunkAPI.rejectWithValue(error)
+      }
+  }
+)
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -187,7 +266,8 @@ export const authSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.message = action.payload;
-      toast.info("Success");
+      toast.success("Vous avez été inscrit avec succès");
+
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
@@ -195,7 +275,7 @@ export const authSlice = createSlice({
       state.isError = true;
       state.message = "";
 
-      toast.error("Error"); // Corrected toast type
+      toast.error("Désolé, il y a une erreur"); // Corrected toast type
     });
 
     builder.addCase(LoginUser.pending, (state) => {
@@ -210,7 +290,9 @@ export const authSlice = createSlice({
         state.isError = false;
         state.user = action.payload;
         localStorage.setItem("token",action.payload.token)
-        toast.info(" login Success");
+        
+
+        toast.info("Connexion réussie");
         setTimeout(() => {
           window.location.href = "/"; // Rediriger vers la page d'accueil
         }, 3000);
@@ -222,7 +304,7 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = "";
   
-        toast.error("Error"); // Corrected toast type
+        toast.error("Désolé, il y a une erreur"); // Corrected toast type
       });
       builder.addCase(CreeCart.pending, (state) => {
         state.isLoading = true;
@@ -235,14 +317,15 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Cart = action.payload;
-        toast.success("Cartfulfilled")
+        toast.success("Panier satisfait");
+
       });
       builder.addCase(CreeCart.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
         state.message = "";
-        toast.error("Error"); // Corrected toast type
+        toast.error("Désolé, il y a une erreur"); // Corrected toast type
       });
 
       builder.addCase(GetCart.pending, (state) => {
@@ -274,7 +357,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Delcartproduct = action.payload;
-        toast.success("del cart")
+        toast.success("Panier supprimé avec succès");
 
       });
       builder.addCase(DelCart.rejected, (state, action) => {
@@ -295,7 +378,8 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Updatequantite = action.payload;
-        toast.success("updated quantity")
+        toast.success("Quantité mise à jour avec succès");
+
 
       });
       builder.addCase(Updatequantite.rejected, (state, action) => {
@@ -316,7 +400,8 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.CreatOrder = action.payload;
-        toast.success("created successful ")
+        toast.success("Commande créée avec succès");
+
 
       });
       builder.addCase(CreatOrder.rejected, (state, action) => {
@@ -324,7 +409,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.message = "";
-        toast.error("created erreur ")
+        toast.error("Désolé, il y a une erreur")
 
       })
 
@@ -347,7 +432,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.message = "";
-        toast.error("impossible de trouver votre commande ")
+        toast.error("Impossible de trouver votre commande")
 
       })
 
@@ -386,7 +471,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.updated =action.payload
-        toast.success("updated successful ")
+        toast.success("Mise à jour effectuée avec succès");
       });
       builder.addCase(UpdateAuser.rejected, (state, action) => {
         state.isLoading = false;
@@ -407,16 +492,14 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Forgot_token =action.payload
-        toast.success("Email send Succesfully ")
+        toast.success("E-mail envoyé avec succès");
       });
       builder.addCase(ResetToken.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
         state.message = "";
-        toast.error("error ")
-
-
+        toast.error("Désolé, il y a une erreur ")
       })
 
 
@@ -431,7 +514,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Reset =action.payload
-        toast.success(" Nouveau mot de passe enregistrer")
+        toast.success(" Nouveau mot de passe enregistrer avec succès")
       });
       builder.addCase(Reset_password.rejected, (state, action) => {
         state.isLoading = false;
@@ -454,16 +537,161 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.Deleteaproduitpanier =action.payload
-        toast.success("delete successful")
+        toast.success("Produit supprimé avec succès");
       });
       builder.addCase(Deleteaproduitpanier.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
         state.message = "";
-        toast.error("ilya un erreur ")
+        toast.error("Désolé, il y a une erreur ")
 
 
+      })
+
+
+      
+      builder.addCase(Applycoupon.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(Applycoupon.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Applycoupon =action.payload
+        toast.success("Coupon appliqué avec succès");
+      });
+      builder.addCase(Applycoupon.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+        toast.error("Désolé, il y a une erreur")
+      })
+
+      builder.addCase(Getacoupon.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(Getacoupon.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Getacoupon =action.payload
+      });
+      builder.addCase(Getacoupon.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+      })
+
+
+      builder.addCase(GetAllcoupon.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(GetAllcoupon.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.GetAllcoupon =action.payload
+      });
+      builder.addCase(GetAllcoupon.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+      })
+
+      builder.addCase(Addenq.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(Addenq.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Addenq =action.payload
+        toast.success("Message envoyé avec succès");
+      });
+      builder.addCase(Addenq.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+        toast.error("Désolé, il y a une erreur ")
+      })
+
+      builder.addCase(geteteenquirys.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(geteteenquirys.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.geteteenquirys =action.payload
+      });
+      builder.addCase(geteteenquirys.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+        toast.error("Désolé, il y a une erreur ")
+      })
+
+
+      builder.addCase(payer.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(payer.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.payer =action.payload
+      });
+      builder.addCase(payer.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+        toast.error("Désolé, il y a une erreur ")
+      })
+
+
+      builder.addCase(Up2.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(Up2.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Up2 =action.payload
+      });
+      builder.addCase(Up2.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "";
+        toast.error("Désolé, il y a une erreur ")
       })
   },
 });

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { FrownOutlined, MehOutlined, SmileOutlined,brand ,totalrating} from "@ant-design/icons";
 import { Flex, Rate } from "antd";
-import {Link}  from "react-router-dom"
+import {Link, useNavigate}  from "react-router-dom"
 import { AddToLoves } from '../features/Product/productSlice';
 import { useDispatch } from 'react-redux';
 const customIcons= {
@@ -18,8 +18,9 @@ const customIcons= {
     5: <SmileOutlined />,
   };
   
-export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src,key,quatite} ) {
+export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src,description,quatite} ) {
     const dispatch =useDispatch()
+    const navigate =useNavigate()
     const addtowishlist = (id) => {
         dispatch(AddToLoves(id));
       };
@@ -31,6 +32,9 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
         alt="green iguana"
         height="auto"
         image={src}
+        onClick={()=>{
+          navigate(`/produit/${id}`) 
+        }}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -38,15 +42,14 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
         </Typography>
         <br/>
         <Typography variant="body2" color="text.secondary">
-        {brand}
+        {description}
         </Typography>
 
         <br/>
         <Typography variant="body2" color="text.secondary">
         
         <span className="red-p colores">
-                {price - solde}DT<span> au lieu de</span>
-                <strike> {price} DT</strike>
+                {price }DT
               </span>
         </Typography>
         <br/>
@@ -68,7 +71,7 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
               ></div>
             </div>
       <CardActions>
-        <Button onClick={() => addtowishlist(id)} size="small">Ajouter au panier</Button>
+        <Button onClick={() => addtowishlist(id)} size="small">ajouter aux Favoris</Button>
       </CardActions>
     </Card>
   );

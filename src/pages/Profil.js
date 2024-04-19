@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Getauser, UpdateAuser } from "../features/User/UserSlice";
 import { useFormik } from "formik";
 import { object, string, number } from "yup";
+import { CiEdit } from "react-icons/ci";
 
 const Profil = () => {
+  const [editable, setEditable] = useState(false);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(Getauser());
@@ -40,7 +43,7 @@ const Profil = () => {
 
       
   }})
- 
+  
   return (
     <>
       <PageHelmet title="Mon Profil" />
@@ -51,7 +54,13 @@ const Profil = () => {
             <div className="col-7">
               <div className="profile_card">
                 <form onSubmit={formik.handleSubmit}>
-                  <div>
+         
+                <CiEdit className="mb-4" style={{ display: 'block', margin: 'auto' }} onClick={() => setEditable(!editable)} />
+
+                {
+                  editable ?(
+                    <>
+                    <div>
                     <Flex vertical gap={12}>
                       <Input
                         placeholder="Prenom"
@@ -107,8 +116,77 @@ const Profil = () => {
                   </div>
                   <br/>
                   <Flex gap="small" wrap="wrap">
-                    <Button type="primary" variant="outline-success" htmlType="submit">Update</Button>
+                    <Button type="primary" variant="outline-success" htmlType="submit">Modifier</Button>
                   </Flex>
+                  </>
+                  ) : (
+                    <>
+                    <div>
+                    <Flex vertical gap={12}>
+                      <Input
+                      disabled
+                        placeholder="Prenom"
+                        type="text"
+                        name="lastname"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.lastname}
+                      />
+                    </Flex>
+                  </div>
+                  <br />
+                  <div>
+                    <Flex vertical gap={12}>
+                      <Input
+                      disabled
+
+                        placeholder="Nom"
+                        type="text"
+                        name="Secondname"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+
+                        value={formik.values.Secondname}
+                      />
+                    </Flex>
+                  </div>
+                  <br />
+                  <div>
+                    <Flex vertical gap={12}>
+                      <Input
+                      disabled
+
+                        placeholder="Email"
+                        type="email"
+                        name="email"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+
+                        value={formik.values.email}
+                      />
+                    </Flex>
+                  </div>
+                  <br />
+                  <div>
+                    <Flex vertical gap={12}>
+                      <Input
+                      disabled
+
+                        placeholder="Mobile"
+                        type="number"
+                        name="mobile"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+
+                        value={formik.values.mobile}
+                      />
+                    </Flex>
+                  </div>
+                  <br/>
+                  </>
+                  )
+                }
+                  
                 </form>
               </div>
             </div>

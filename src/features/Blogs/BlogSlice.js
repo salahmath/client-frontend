@@ -23,6 +23,16 @@ export const getBlog = createAsyncThunk(
       }
     }
   );
+  export const getBlogcategories = createAsyncThunk(
+    "blogs/getaBlogcat",
+    async (thunkAPI) => {
+      try {
+        return await Blogservice.GetABlogcat();
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+    }
+  );
 export const BlogSlice = createSlice({
   name: "GET-ALL-Blogs",
   initialState: {
@@ -71,7 +81,24 @@ export const BlogSlice = createSlice({
         state.isError = true;
         state.message = action.error;
       });
-    
+      builder.addCase(getBlogcategories.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(getBlogcategories.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Blogcat = action.payload;
+      });
+      builder.addCase(getBlogcategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.error;
+      });
   },
 });
 

@@ -1,149 +1,100 @@
-import React from "react";
-import { Card, Col, Row } from "antd";
+import React, { useEffect, useState } from "react";
+import {  message } from "antd";
 
-import BreadCump from "../conmponentes/BreadCump";
+import { IconButton } from "@mui/material"; // Importation de IconButton depuis MUI
+import { Fingerprint } from "@mui/icons-material"; import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
-import Color from "../conmponentes/Color";
-import { RxCross2 } from "react-icons/rx";
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useDispatch, useSelector } from "react-redux";
+import { GetAllcoupon } from "../features/User/UserSlice";
+
 const Compareproduct = () => {
+  const dispatch = useDispatch();
+  const [copiedId, setCopiedId] = useState(null); // État pour stocker l'ID copié
+
+  useEffect(() => {
+    dispatch(GetAllcoupon());
+  }, [dispatch]);
+
+  const couponState = useSelector((state) => state?.auth?.GetAllcoupon);
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+  function createData(nom, id, expiry, discount) {
+    return { nom, id, expiry, discount };
+  }
+
+  const rows = couponState?.map((item) => createData(item.name, item._id, item.expiry, item.discount));
+
+  const handleCopyId = (id) => {
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    message.success('ID copied to clipboard');
+  };
+
   return (
     <>
-      <PageHelmet title="Comparer produits" />
-      <BreadCump title="Comparer produits" />
-      <div className="compare-product-wrapper py-5 home-wrapper-2">
+      <PageHelmet title="Ganger coupon" />
+      <BreadCump title="Ganger coupon" />
+      <div className="cart-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-3">
-              <div className="compare-product-card">
-                <Row gutter={16}>
-                  <Col span={8}>
-                    <Card title="Produit 1 i7 ram 10 full hd" bordered={false}>
-                      <div className="product-content">
-                        <img
-                          className="img-fluid"
-                          src="https://media.wired.com/photos/6511aab1189c419c40374c92/4:3/w_1803,h_1352,c_limit/Apple-Watch-Ultra-2-Alt-Gear.jpg"
-                          alt=""
-                        />
-
-                        <div className="product-detail">
-                          <h4>type</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>taille</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>marque</h4>
-
-                          <div className="d-flex gap-15">
-                            <p>S</p>
-                            <p>M</p>
-                          </div>
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur:</h4>
-                          <Color />
-                        </div>
-                        <div className="product-detail">
-                          <h4>Avalability:</h4>
-                          <p> En stock</p>
-                        </div>
-                      </div>
-                      <div className="icon-top-right">
-                          <RxCross2 name="plus" />
-                        </div>
-                    </Card>
-                  </Col>
-                  <Col span={8}>
-                    <Card title="produit 2" bordered={false}>
-                      <div className="product-content">
-                        <img
-                          className="img-fluid"
-                          src="https://media.wired.com/photos/6511aab1189c419c40374c92/4:3/w_1803,h_1352,c_limit/Apple-Watch-Ultra-2-Alt-Gear.jpg"
-                          alt=""
-                        />
-                        <div className="product-detail">
-                          <h4>type</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>taille</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>marque</h4>
-                          <div className="d-flex gap-15">
-                            <p>S</p>
-                            <p>M</p>
-                          </div>
-                        </div>
-                        <div className="icon-top-right">
-                          <RxCross2 name="plus" />
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur:</h4>
-                          <Color />
-                        </div>
-                        <div className="product-detail">
-                          <h4>Avalability:</h4>
-                          <p> En stock</p>
-                        </div>
-                      </div>
-                    </Card>
-                  </Col>
-                  <Col span={8}>
-                    <Card title="produit 3" bordered={false}>
-                      <div className="product-content">
-                        <img
-                          className="img-fluid"
-                          src="https://media.wired.com/photos/6511aab1189c419c40374c92/4:3/w_1803,h_1352,c_limit/Apple-Watch-Ultra-2-Alt-Gear.jpg"
-                          alt=""
-                        />
-                        <div className="product-detail">
-                          <h4>type</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>taille</h4>
-                          <p>lenovo</p>
-                        </div>
-                        <div className="product-detail">
-                          <h4>marque</h4>
-
-                          <div className="d-flex gap-15">
-                            <p>S</p>
-                            <p>M</p>
-                          </div>
-                        </div>
-                        <div className="product-detail">
-                          <h4>coleur:</h4>
-                          <Color />
-                        </div>
-                        <div className="product-detail">
-                          <h4>Avalability:</h4>
-                          <p> En stock</p>
-                        </div>
-                        <div className="icon-top-right">
-                          <RxCross2 name="plus" />
-                        </div>
-                      </div>
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
+            <div className="col-12">
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="right">nom de coupon</StyledTableCell>
+                      <StyledTableCell align="right">Id de coupon</StyledTableCell>
+                      <StyledTableCell align="right">réduction</StyledTableCell>
+                      <StyledTableCell align="right">expirée</StyledTableCell>
+                      <StyledTableCell align="right">Actions</StyledTableCell> {/* Ajout de cette colonne pour les actions */}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows?.map((row, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell component="th" scope="row">
+                          {row.nom}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">{row.id}</StyledTableCell>
+                        <StyledTableCell align="right">{row.discount}%</StyledTableCell>
+                        <StyledTableCell align="right">{row.expiry}</StyledTableCell>
+                        <StyledTableCell align="right">
+                        <IconButton aria-label="fingerprint" color="secondary">
+  <Fingerprint onClick={() => handleCopyId(row.id)}/>
+</IconButton>{/*  */} 
+                          
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
         </div>

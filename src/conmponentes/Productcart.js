@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Card } from "antd";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
@@ -8,8 +8,9 @@ import { GrView } from "react-icons/gr";
 import { MdAddShoppingCart } from "react-icons/md";
 import { FaCodeCompare } from "react-icons/fa6";
 import { GiSelfLove } from "react-icons/gi";
-import { useDispatch } from 'react-redux'; // Add import for useDispatch
-import { AddToLoves } from "../features/Product/productSlice";
+import { useDispatch } from 'react-redux';
+import { AddToLoves, GetLoves } from "../features/Product/productSlice";
+import { IoHeartSharp,IoHeartOutline } from "react-icons/io5";
 
 const customIcons = {
   1: <FrownOutlined />,
@@ -20,15 +21,18 @@ const customIcons = {
 };
 const { Meta } = Card;
 const Productcart = ({ src, title, description, prix, totalrating, id }) => {
-  const dispatch = useDispatch(); // Get dispatch function from Redux
+  const dispatch = useDispatch();
 
-  const addtowishlist = (id) => {
+  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
+const navigate=useNavigate()
+  const addtowishlist = () => {
     dispatch(AddToLoves(id));
+    setIsAddedToWishlist(true);
   };
-
   return (
     <div className="position-relative">
       <Card
+      onClick={()=>{navigate(`/produit/${id}`)}}
         className="cardproduct"
         hoverable
         style={{
@@ -36,25 +40,16 @@ const Productcart = ({ src, title, description, prix, totalrating, id }) => {
         }}
         cover={<img alt="title" src={src} />}
       >
-        
-          <GiSelfLove  onClick={() => addtowishlist(id)} className="love d-flex flex-column text-darck position-obsolute"/>
-       
+        {isAddedToWishlist ? (
+          <IoHeartSharp className="love d-flex flex-column text-darck position-obsolute" />
+        ) : (
+          <IoHeartOutline onClick={addtowishlist} className="love d-flex flex-column text-darck position-obsolute" />
+        )}
+      
         <div className="icon-wrapper d-flex flex-column align-items-center">
-          <Link>
-            <IoIosNotificationsOutline />
-          </Link>
-          <Link to={`/produit/${id}`}>
-            <GrView />
-          </Link>
-          <Link>
-            <MdAddShoppingCart />
-          </Link>
-          <Link>
-            <FaCodeCompare />
-          </Link>
         </div>
         <h4>{title}</h4>
-        <Meta title={prix} description={description} />
+        <Meta title={prix +"DT"} description={description} />
         <br />
         <Rate
           value={totalrating}

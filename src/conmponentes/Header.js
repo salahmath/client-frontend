@@ -22,8 +22,8 @@ function Header() {
     }
     return total;
   }
-const navigate=useNavigate()
-/*   useEffect(() => {
+  const navigate = useNavigate();
+  /*   useEffect(() => {
     if (productstate && Array.isArray(productstate)) {
         const data = productstate.map((item, index) => ({
             
@@ -35,32 +35,29 @@ const navigate=useNavigate()
 }, [productstate]);
  */
 
-useEffect(() => {
-  // Assuming productstate is a state variable
-  if (productstate && Array.isArray(productstate)) {
-    const data = productstate.map((item) => ({
-      
-      prod: item ? item?._id : '',
-      url: item ? item?.images[0].url : '',
-      name: item ? item?.title : '',
-    }));
-    Setproduct(data);
-  }
-}, [productstate]);
-
-const handlePaginate = () => {
-  console.log("resultat pagin");
-  // Add your pagination logic here
-};
-  const totalProducts = cartstate ? cartstate.length : 0; // Nombre total de produits dans le
+  useEffect(() => {
+    // Assuming productstate is a state variable
+    if (productstate && Array.isArray(productstate)) {
+      const data = productstate.map((item) => ({
+        prod: item ? item?._id : "",
+        url: item ? item?.images[0].url : "",
+        name: item ? item?.title : "",
+      }));
+      Setproduct(data);
+    }
+  }, [productstate]);
+  const handlePaginate = () => {
+    console.log("resultat pagin");
+    // Add your pagination logic here
+  };
   useEffect(() => {
     dispatch(getproductss());
   }, [dispatch]);
-  const authState = useSelector((state) => state.auth);
+  const authState = useSelector((state) => state?.auth);
 
   return (
     <>
-      <header className="header-top-strip py-3">
+      {/* <header className="header-top-strip py-3">
         <div className="container-xxl">
           <div className="row">
             <div className="col-6">
@@ -76,7 +73,7 @@ const handlePaginate = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
       <header className="header-upper py-3">
         <div className="container-xxl">
           <div className="row align-items-center">
@@ -85,16 +82,16 @@ const handlePaginate = () => {
             </div>
             <div className="col-5">
               <div className="input-group ">
-              <Typeahead
-      onPaginate={handlePaginate}
-      id="labelkey-example"
-      labelKey={(option) => `${option?.name}`}
-      options={product}
-      onChange={(selected)=>{
-        navigate(`/produit/${selected[0]?.prod}`)
-      }}
-      placeholder="Who's the coolest cat?"
-    />
+                <Typeahead
+                  onPaginate={handlePaginate}
+                  id="labelkey-example"
+                  labelKey={(option) => `${option?.name}`}
+                  options={product}
+                  onChange={(selected) => {
+                    navigate(`/produit/${selected[0]?.prod}`);
+                  }}
+                  placeholder="Chercher un produit!"
+                />
                 <span className="input-group-text p-3" id="basic-addon2">
                   <CiSearch className="fs-6" />
                 </span>
@@ -107,13 +104,10 @@ const handlePaginate = () => {
                     to="/compare"
                     className="d-flex align-items-center gap-10 text-white"
                   >
-                    <img
-                      src="images/compare-removebg-preview.png"
-                      alt="compare"
-                    />
+                    <img src="images/coupon.png" alt="compare" />
                   </Link>
                   <p className="d-flex align-items-center gap-10  text-white">
-                    Comparer
+                    Coupon
                   </p>
                 </div>
                 <div>
@@ -151,9 +145,15 @@ const handlePaginate = () => {
                     <img src="images/panier.png" alt="panier" />
 
                     <div className="d-flex flex-column gap-10">
-                      <span className="badge bg-white text-dark">
-                        {cartstate ? totalProducts : 0}
-                      </span>
+                      {cartstate ? (
+                        <span className="badge bg-white text-dark">
+                          {cartstate?.length}
+                        </span>
+                      ) : (
+                        <span className="badge bg-danger">
+                         0
+                        </span>
+                      )}
                     </div>
                   </Link>
                   <p className="d-flex align-items-center gap-10  text-white">
@@ -180,35 +180,38 @@ const handlePaginate = () => {
                     aria-expanded="false"
                   >
                     <span className="me-5 d-inline-block">
-                      <TbCategory2 className="img1" /> shop categorie
+                      <TbCategory2 className="img1" />
+                      Mes actions
                     </span>
                   </button>
                   <ul
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuButton1"
                   >
-                    <li>
-                      <Link className="dropdown-item" to="/">
-                        Action
+                                      <li>
+                      <Link className="dropdown-item" to="/profil">
+                        Profil
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="/">
-                        Another action
+                      <Link className="dropdown-item" to="/Enquirymessage">
+                      Vérifier mon enquête
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="/">
-                        Something else here
+                      <Link className="dropdown-item" to="/contact">
+                        Contacter nous
                       </Link>
                     </li>
+                   
+
                   </ul>
                 </div>
                 <div className="menu-links">
                   <div className="d-flex align-items-center gap-15">
                     <NavLink to="/">Home</NavLink>
-                    <NavLink to="/store">Store</NavLink>
-                    <NavLink to="/blogs">blogs</NavLink>
+                    <NavLink to="/store">Boutique</NavLink>
+                    <NavLink to="/blogs">blog</NavLink>
                     <NavLink to="/contact">contact</NavLink>
                     <NavLink to="/order">Mon commande</NavLink>
                     <NavLink
@@ -217,7 +220,8 @@ const handlePaginate = () => {
                         window.location.reload();
                       }}
                     >
-                      Logout
+                      
+Se déconnecter
                     </NavLink>
                   </div>
                 </div>
