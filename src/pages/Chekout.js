@@ -11,8 +11,7 @@ import {
   CreatOrder,
   Deleteaproduitpanier,
   GetCart,
-  Up2,
-  payer,
+  Up2
 } from "../features/User/UserSlice";
 
 import { number, object, string } from "yup";
@@ -53,8 +52,8 @@ const Chekout = (props) => {
     Address: string().required("Il faut écrire votre adresse."),
     City: string().required("Il faut écrire votre ville."),
     State: string().required("Il faut écrire votre état."),
-    CodePin: number().required("Il faut écrire votre code PIN."),
-    Other: string().required("Il faut écrire votre Other."),
+    CodePin: number().required("Il faut écrire votre code postal."),
+    Other: string().required("Il faut écrire votre appartement."),
   });
 
   const formik = useFormik({
@@ -69,29 +68,27 @@ const Chekout = (props) => {
     },
     validationSchema: orderSchema,
     onSubmit: async (values) => {
+      
       try {
-        // Exécuter handlePayment en premier pour obtenir l'ID de paiement
-        const idPayment = await handlePayment(initials);
-    
-        // Exécuter setShippinginfo
+        //const idPayment = await handlePayment(initials);
         setShippinginfo(values);
-    
-        // Appeler CreatOrder avec les valeurs mises à jour
         dispatch(
           CreatOrder({
             totalPrice: initials,
             totalPriceAfterdiscount: initials,
             orderItems: Cardproduct,
             Shippinginfo: values,
-            IdPayment: idPayment, 
           })
         );
-       
+        setTimeout(() => {
+       dispatch(Deleteaproduitpanier());
+       navigate("/order");
+        }, 3000);
+
       } catch (err) {
         console.log(err);
       }
     }
-    
     })
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -105,14 +102,11 @@ const Chekout = (props) => {
         total += cartstate[i].quantite * cartstate[i].price;
       }
     }
-
     return total;
   }
-
   useEffect(() => {
-    // Appelez calculateTotal et mettez à jour l'état tot
     settot(calculateTotal(cartstate));
-  }, [cartstate]); // Utilisez cartstate comme dépendance pour que l'effet soit exécuté à chaque changement
+  }, [cartstate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,9 +158,7 @@ const Chekout = (props) => {
           },
         }
       );
-
       const authToken = tokenResponse.data.auth_token;
-
       const statesResponse = await axios.get(
         `https://www.universal-tutorial.com/api/states/${selectedCountryName}`,
         {
@@ -176,7 +168,6 @@ const Chekout = (props) => {
           },
         }
       );
-
       setStates(statesResponse.data);
     } catch (error) {
       console.error("Error fetching states:", error);
@@ -188,42 +179,30 @@ const Chekout = (props) => {
   const paystate = useSelector((state) => state?.auth?.payer?.responseData?.result?.payment_id);
   const link = useSelector((state) => state?.auth?.payer?.responseData?.result?.link);
   const createorder = useSelector((state) => state?.auth?.CreatOrder.order);
-console.log(paystate);
-const handlePayment = async (total) => {
+/* const handlePayment = async (total) => {
   try {
     const response = await axios.post(
       "http://127.0.0.1:5000/api/user/paymentsuccess",
       { amount: total * 1000 },
       headers
     );
-    
-
     setPaymentResult(response.data);
     const paymentId = response.data.responseData.result.payment_id;
     setidayent(paymentId);
-
-    
       setSalah(response.data.responseData.result.link)
-     if(paymentId !=="" && salah !=="" ){
-      window.location.href=response.data.responseData.result.link
-    }
-     
-    // Retourne l'ID de paiement
+    
     return paymentId;
   } catch (error) {
     console.error("Error during payment:", error);
     setPaymentResult(null);
     throw error; // Re-lancez l'erreur pour qu'elle soit gérée par l'appelant
   }
-};
-useEffect(()=>{
-
+}; */
+/* useEffect(()=>{
     if( createorder){
       window.location.href=salah
     }
-
-  
-},[salah,createorder]) 
+},[salah,createorder])  */
   useEffect(() => {
     let items = [];
     for (let index = 0; index < cartstate?.length; index++) {
@@ -238,12 +217,12 @@ useEffect(()=>{
   }, [cartstate]);
   const location = useLocation();
   const locationId = location.search.split("?payment_id=")[1];
-  const handlePayments = async () => {
+/*   const handlePayments = async () => {
     try {
       const response = await axios.post(
         `http://127.0.0.1:5000/api/user/paymentverif/${locationId}`, // Utilisez backticks pour incorporer la variable locationId
-        null, 
-        headers 
+        null,
+        headers
       );
       const data = response.data;
       if (data.data.result.status === "SUCCESS") {
@@ -254,24 +233,17 @@ useEffect(()=>{
             type: data.data.result.type,
             id: locationId
           };
-          
-          // Dispatch de l'action Up2 avec l'objet contenant à la fois l'id et le type
           dispatch(Up2(data1));
-          
-          // Dispatch de l'action Deleteaproduitpanier
           dispatch(Deleteaproduitpanier());
         }, 300);
       }
-      
     } catch (error) {
       console.error("Error during payment:", error);
     }
-  };
-  useEffect(() => {
-    // Utilisez useEffect pour exécuter handlePayment lorsque le composant est monté
-    handlePayments();
-  }, []);
-
+  }
+  useEffect(()=>{
+    handlePayments()
+  },[]) */
   const utiliserCoupon = () => {
     const data = { coupon: array, total: calculateTotal(cartstate) };
     dispatch(Applycoupon(data))
@@ -291,29 +263,23 @@ useEffect(()=>{
     <>
       <PageHelmet title=" Chekout " />
       <BreadCump title=" Chekout " />
-      <div className="chekout -wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-7">
-              
+      <div className="chekout-wrapper py-5 home-wrapper-2">
+  <div className="container-xxl">
+    <div className="row">
+      <div className="col-lg-7">
               <h3 className="website-name">Odoo Expert</h3>
-
               <nav
                 style={{ "--bs-breadcrumb-divider": "'>'" }} // Correction ici
                 aria-label="breadcrumb"
               >
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/cart">Cart</Link>
-                  </li>
+                  
                   <li className="breadcrumb-item active" aria-current="page">
                     Information
                   </li>
+                 
                   <li className="breadcrumb-item active" aria-current="page">
-                    shipping
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Payment
+                    Paiement
                   </li>
                 </ol>
               </nav>
@@ -360,7 +326,6 @@ useEffect(()=>{
                     {formik.touched.lastName && formik.errors.lastName}
                   </div>
                 </div>
-
                 <div className="flex-grow-1">
                   <input
                     type="text"
@@ -374,7 +339,6 @@ useEffect(()=>{
                     {formik.touched.firstName && formik.errors.firstName}
                   </div>
                 </div>
-
                 <div className="w-100">
                   <input
                     type="text"
@@ -409,7 +373,7 @@ useEffect(()=>{
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Pays"
+                    placeholder="Ville"
                     name="City"
                     onChange={formik.handleChange("City")}
                     onBlur={formik.handleBlur("City")}
@@ -459,16 +423,17 @@ useEffect(()=>{
                 <div className="w-100">
                   <div className="d-flex align-items-center justify-content-between">
                     <Link to="/carte">Retour a panier</Link>
-                    <Link className="button">contunie shipping</Link>
+                    <Link className="button">continue vos achats</Link>
                     <button type="submit" className="button">
-                      Acheter
+                      Crée une commande 
                     </button>
+                   
                   </div>
                 </div>
               </form>
             </div>
 
-            <div className="col-5">
+            <div className="col-lg-5 mt-4 mt-lg-0">
               <div className="border-bottom py-4">
                 {cartstate &&
                   cartstate.map((cart) => {

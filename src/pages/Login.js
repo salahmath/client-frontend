@@ -32,17 +32,11 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      dispatch(LoginUser(values))
-      .then(() => {
-        if (authState.isSuccess && authState.user.length !== 0) {
-          setTimeout(() => {
-          }, 100);
-        }
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la connexion:", error);
+      dispatch(LoginUser(values)).then(() => {
+        navigate("/");
       });
     },
+    
   });
 
   return (
@@ -90,7 +84,7 @@ const Login = () => {
                   <div className="error">
                     {formik.touched.password && formik.errors.password}
                   </div>
-                <a href="http://localhost:3000/forgot-password">oublier votre mot de passe?</a>
+                <Link to={"/forgot-password"}>oublier votre mot de passe?</Link>
 
                 </div>
                

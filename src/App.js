@@ -29,6 +29,8 @@ import Order from './pages/Order';
 import Profil from './pages/Profil';
 import GameComponent from './pages/Jeu';
 import Enquirymessage from './pages/enq+';
+import Succ from './pages/Successay';
+import FAileds from './pages/failedpay';
 function App() {
   return (
     <div className="">
@@ -50,20 +52,17 @@ function App() {
             <Route path='politique_dexpédition' element={<Shippingpolicy />} />
             <Route path='politique_de_remboursement' element={<RefundPolicy />} />
             <Route path='blog/:id' element={<Blogpage />} />
-            <Route path='chekout' element={<Chekout />} />
+            <Route path='chekout' element={<PrivateRoutes><Chekout /></PrivateRoutes>} />
             <Route path='forgot-password' element={<Forgotpassword />} />
-            <Route path='produit/:id' element={<Singleproduit />} />{/* 
-            <Route path='carte' element={<PrivateRoutes><Cartes /></PrivateRoutes>} /> */}
+            <Route path='produit/:id' element={<Singleproduit />} />
             <Route path="carte" element={<PrivateRoutes><Cartes /></PrivateRoutes>} />
             <Route path="order" element={<PrivateRoutes><Order /></PrivateRoutes>} />
             <Route path="profil" element={<PrivateRoutes><Profil /></PrivateRoutes>} />
-            <Route path="game" element={<GameComponent/>} />
-            <Route path="Enquirymessage" element={<Enquirymessage/>} />
-            
+            {/* <Route path="game" element={<GameComponent/>} /> */}
+            <Route path="Enquirymessage" element={<PrivateRoutes><Enquirymessage/></PrivateRoutes>} />
           </Route>
-          <Route path='erreur' element={<Error />} />
-          <Route path='success' element={<Success />} />
-
+          <Route path="Success" element={<Succ/>} />
+            <Route path="failed" element={<FAileds/>} />
         </Routes>
       </BrowserRouter>
     </div>

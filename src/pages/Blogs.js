@@ -71,7 +71,7 @@ console.log(filteredUsers);
       <div className="blog-wrapper home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-3">
+            <div className="col-12 col-sm-6 col-md-4 col-lg-3">
               <div className="filter-card mb-3">
                 <h3 className="filter-title">trouver par catégories</h3>
                 <div>

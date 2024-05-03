@@ -139,14 +139,60 @@ const up2 = async(data)=>{
 return response.data;
 }
 
+
+const updatquan2 = async(data)=>{
+  const response = await axios.put(`${url}user/updatequantite2/${data}`,"",Client)
+return response.data;
+}
+const udatestatus = async (data) => {
+  try {
+    const response = await axios.put(`${url}user/updateorder/${data.a}`,{status:data.b}, Client);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+const konnect = async (data) => {
+  try {
+    const response = await axios.put(`${url}user/konnect`,{nom:data.nom,prenom:data.prenom,email:data.email,amount:data.amount,mobile:data.mobile,oredrid:data.oredrid}, Client);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const chek = async (data) => {
+  try {
+    const response = await axios.put(`${url}user/check/${data}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+const getAllOrdersanspay = async (data) => {
+  try {
+    const response = await axios.get(`${url}user/getAllOrdersanspay`,Client);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const authservice = {
   register,
   loginuser,
+  konnect,
   getenquirys,
   Creecart,
   Getcart,
+  chek,
   Delcart,
   getAllcoupon,
+  getAllOrdersanspay,
   up2,
   UpdateQuantite,
   creeorder,
@@ -160,4 +206,7 @@ export const authservice = {
   apllycoupon,
   getacoupon,
   addenq,
+  updatquan2,
+  udatestatus
+
 };

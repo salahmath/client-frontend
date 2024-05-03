@@ -15,8 +15,14 @@ const GetABlogcat = async (id) => {
   return response.data;
 };
 
+const likeblog = async (id) => {
+  const response = await axios.put(`${url}blog/likeblog`,{blogid:id.blogid});
+  return response.data;
+};
+
 export const Blogservice = {
   GetAllBlogs,
   GetABlog,
-  GetABlogcat
+  GetABlogcat,
+  likeblog
 };

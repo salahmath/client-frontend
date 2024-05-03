@@ -13,17 +13,32 @@
     --color-4: #EEEEEE;
   }
   
-  /* Styles généraux du corps de la page */
+/* Utilisation d'une taille de police de base */
+body {
+  font-family: "Rubik", sans-serif;
+  font-size: 16px; /* Taille de police de base */
+}
+
+/* Media query pour les écrans plus petits */
+@media screen and (max-width: 768px) {
   body {
-    font-family: "Rubik", sans-serif;
+    font-size: 14px; /* Ajustez la taille de la police pour les écrans plus petits */
   }
-  
+}
+
+/* Media query pour les écrans encore plus petits */
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 12px; /* Ajustez la taille de la police pour les écrans encore plus petits */
+  }
+}
+
   /* Styles pour les liens */
   a {
     text-decoration: none;
     display: inline-block;
   }
-  main-banner-content
+  
   
   /* Styles spécifiques à la bande supérieure de l'en-tête */
   .header-top-strip {
@@ -48,23 +63,29 @@
       background-color: var(--color-2); /* Appliquer le fond à tous les liens à l'intérieur de .header-upper */
   }
   
-  /* Styles spécifiques pour les images dans la section d'en-tête */
+/* Styles spécifiques pour les images dans la section d'en-tête */
+.header-upper .header-upper-links img {
+  width: 35px;
+  height: 35px;
+}
+
+/* Media query pour les écrans de petite taille img13 */
+@media screen and (max-width: 768px) {
   .header-upper .header-upper-links img {
-    width: 35px;
-    height: 35px;
+    width: 25px; /* Ajustez la taille pour les écrans plus petits */
+    height: 25px; /* Ajustez la taille pour les écrans plus petits */
   }
-  
+}
+
   /* Media query pour les petits écrans (max-width: 768px) */
   @media (max-width: 768px) {
     .col-2,
     .col-5 {
       width: 100%;
       text-align: center;
+      padding-top: 40px;
     }
   
-    .header-upper-links {
-      flex-direction: column;
-    }
   
     .header-upper-links > div {
       margin-bottom: 20px;
@@ -74,6 +95,8 @@
     .header-upper .header-upper-links img {
       margin-right: 0;
       margin-bottom: 10px;
+      width: 40px;
+      height: 40px;
     }
   }
   
@@ -88,23 +111,48 @@
   .header-botton{
     background-color: var(--color-3);
   }
-  .menu-links a {
+
+/* Styles de base pour les liens de menu */
+.menu-links a,
+.header-botton .dropdown button {
    color: white;
    font-size: 14px;
    line-height: 18px;
    font-weight: 400;
-   letter-spacing: 0.3;
+   letter-spacing: 0.3px; /* Ajout de "px" après la valeur de l'espacement entre les lettres */
    text-transform: uppercase;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-links a{
+    font-size: 8px; /* Ajustez la taille de la police pour les écrans de petite taille */
+    line-height: 8px; /* Ajustez la hauteur de ligne pour les écrans de petite taille */
+    margin-top: 5px; /* Ajustez la marge supérieure pour déplacer l'élément vers le bas */
+    margin-bottom: 5px; /* Ajustez la marge inférieure pour déplacer l'élément vers le haut */
   }
- .header-botton .dropdown button{
-    color: white;
-   font-size: 14px;
-   line-height: 18px;
-   font-weight: 400;
-   letter-spacing: 0.3;
-   box-shadow: none;
-   text-transform: uppercase;
- }
+}
+
+
+@media screen and (max-width: 576px) {
+  .menu-links a,
+  .header-botton .dropdown button {
+    font-size: 8px; /* Ajustez la taille de la police pour les écrans de petite taille */
+    line-height: 10px; /* Ajustez la hauteur de ligne pour les écrans de petite taille */
+    gap: 0px;
+    line-height: 10px;
+   font-weight: 100;
+  }
+}
+@media screen and (max-width: 300px) {
+  .menu-links a,
+  .header-botton .dropdown button {
+    font-size: 8px; /* Ajustez la taille de la police pour les écrans de petite taille */
+    line-height: 10px; /* Ajustez la hauteur de ligne pour les écrans de petite taille */
+    gap: 0px;
+    line-height: 10px;
+   font-weight: 100;
+  }
+}
  .img1{
     width: 25px;
     height: 25px;
@@ -148,7 +196,7 @@
   
   .footer {
    
-    background-color:#76ABAE;
+    background-color:#bbbbbb;
   }
   
   .footer .container .main-foot .col .main-title {
@@ -320,8 +368,6 @@
     
   }
 
-  /* Default styles */
-
 .main-banner-content,
 .small-banner-content {
   position: absolute;
@@ -340,7 +386,14 @@
   text-transform: uppercase;
 }
 
-.main-banner-content p,
+.main-banner-content p{
+ 
+    text-shadow: -5px 6px 7px rgba(206,89,55,0.88);
+    font-size: 12em; /* Ajuster la taille de la police selon vos besoins */
+    text-align: center; /* Centrer le texte horizontalement */
+    margin-top: 50%; /* Ajuster la marge vers le bas selon vos besoins */
+  
+}
 .small-banner-content p {
   font-size: 18px;
   line-height: 28px;
@@ -357,7 +410,74 @@
   font-weight: 500;
   text-transform: none;
 }
+.main-banner-content .img-fluid {
+  /* max-width: 50%; */
+  height: 300px;
+}
+@media screen and (max-width: 760px) {
+  .main-banner-content,
+  .small-banner-content {
+    position: relative; 
+    left: auto;
+    text-align: center;
+    margin-bottom: 20px; 
+  }
+  .main-banner-content h4,
+  .small-banner-content h4 {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px;
+  }
+  .main-banner-content p{
+    font-size: 40px
+  }
+  .small-banner-content p {
+    font-size: 8px; 
+    line-height: 8px; 
+  }
 
+  .main-banner-content h5,
+  .small-banner-content h5 {
+    font-size: 28px; 
+    line-height: 48px; 
+  }
+  .img10{
+    height: 0;
+    width: 0;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .main-banner-content,
+  .small-banner-content {
+    position: relative; 
+    left: auto;
+    text-align: center;
+    margin-bottom: 20px; 
+  }
+
+  .main-banner-content h4,
+  .small-banner-content h4 {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px;
+  }
+  .main-banner-content p{
+    font-size: 20px;
+    margin-top: 80px;
+    margin-left: -10px;
+  }
+  .small-banner-content p {
+    font-size: 8px; 
+    line-height: 8px; 
+  }
+
+  .main-banner-content h5,
+  .small-banner-content h5 {
+    font-size: 28px; 
+    line-height: 48px; 
+  }
+}
 .img10 {
   height: 400px;
   width: 600px;
@@ -383,45 +503,7 @@
 
 /* Media queries for responsiveness */
 
-@media only screen and (max-width: 768px) {
-  .main-banner-content,
-  .small-banner-content {
-    top: 10%;
-    left: 2%;
-  }
 
-  .main-banner-content h5,
-  .small-banner-content h5 {
-    font-size: 32px;
-    line-height: 48px;
-  }
-
-  .img10 {
-    height: auto;
-    width: 100%;
-    max-width: 600px;
-  }
-
-  .img2 {
-    height: auto;
-    width: 100%;
-    max-width: 200px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .main-banner-content,
-  .small-banner-content {
-    top: 5%;
-    left: 2%;
-  }
-
-  .main-banner-content h5,
-  .small-banner-content h5 {
-    font-size: 24px;
-    line-height: 36px;
-  }
-}
 .icons{
   height:50px;
   width: 50px;
@@ -438,7 +520,25 @@
   box-shadow: 0 0 0px black;
   padding: 10px;
 }
+@media screen and (max-width: 450px) {
+  .home-wrapper-2  .ena{
+    display: flex !important;
+    flex-direction: column;
+    gap: 40px;
 
+  }
+  .align-items-center {
+    align-items: initial !important;
+  }
+  .home-wrapper-2 .services p{
+    margin-left: 5px;
+  }
+  .categories {
+    background-color: white;
+    box-shadow: 0 0 0px black;
+    padding: 10px;
+  }
+}
 .img12 {
   width: 90%;
   margin-right: 0px;
@@ -524,6 +624,23 @@
   flex: 1;
   padding: 0 15px; /* Ajoutez un espacement entre les colonnes */
   box-sizing: border-box; /* Assurez-vous que la taille inclut les bordures et le padding */
+}
+@media screen and (max-width: 768px) {
+  .text-responsive {
+    font-size: 14px; /* Taille du texte pour les écrans de moins de 768px */
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+  .text-responsive {
+    font-size: 16px; /* Taille du texte pour les écrans de 769px à 992px */
+  }
+}
+
+@media screen and (min-width: 993px) {
+  .text-responsive {
+    font-size: 18px; /* Taille du texte pour les écrans de plus de 993px */
+  }
 }
 
 .famous-card {
@@ -762,25 +879,31 @@ margin:  20px auto;
   height: 400px !important;
 
     }
-   .other-product-images > div{
-    padding: 20px !important;
-    width: 48% !important;
-   }
-  .other-product-images{
-    padding: 20px !important;
-  }
-   
-  .other-product-images img{
-    width: 100%;
-    height: auto;
-  }
-    .main-product-wrapper .js-image-zoom__zoomed-area{
-      left:100px !important;
-      
-      background-color: white;
-      border-radius: 10px;
+
+
+    .other-product-images > div {
+      padding: 10px;
+      width: 100%;
+      max-width: calc(50% - 20px); /* Pour garantir que deux éléments s'affichent côte à côte */
     }
- 
+    
+    .other-product-images img {
+      width: 100%;
+      height: auto;
+    }
+    
+
+
+    .main-product-wrapper .js-image-zoom__zoomed-area {
+      width: 200px; /* Largeur */
+      height: 500px; /* Hauteur */
+      background-color: white; /* Couleur de fond */
+      border-radius: 10px; /* Bordure arrondie */
+      border: 1px solid #ccc; /* Bordure */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Ombre portée */
+      z-index: 999; /* Index Z pour empiler au-dessus des autres éléments */
+    }
+    
     .main-product-detail{
       background-color: rgb(236, 233, 233);
 padding: 10px;
@@ -867,14 +990,40 @@ font-size: 14px;
     border-radius: 10px;
     }
 
-    .main-banner-content .dangerous {
-      text-shadow: -5px 6px 7px rgba(206,89,55,0.88);
-      font-size: 12em; /* Ajuster la taille de la police selon vos besoins */
-      text-align: center; /* Centrer le texte horizontalement */
-      margin-top: 50%; /* Ajuster la marge vers le bas selon vos besoins */
-    }
+   
      
     
     .spacer {
       width: 10px; /* Ajustez la largeur de l'espace selon vos besoins */
     }
+
+    @media screen and (max-width: 768px) {
+      .uls span a, .uls span {
+          font-size: 14px;
+      }
+  }
+  
+  /* Media query pour les petits écrans */
+  @media screen and (max-width: 576px) {
+      .uls span a, .uls span {
+          font-size: 10px;
+      }
+  }
+  .ic{
+    width: 50px;
+    height: 20px;
+  }
+  :where(.css-dev-only-do-not-override-1ae8k9u).ant-btn-primary {
+    
+    background: #76ABAE !important;
+    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+}
+
+.site-result-demo-error-icon {
+  color: red;
+}
+
+.img14 {
+  width: 40%;
+  height: 35%;
+}

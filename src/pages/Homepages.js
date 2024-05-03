@@ -70,7 +70,7 @@ const Homepages = () => {
   const Productstate = useSelector((state) => state?.Product?.Products);
   const getRandomItems = (arr, numItems) => {
     if (!arr) return [];
-    const shuffled = [...arr].sort(() => 0.5 - Math.random()); // Copier le tableau avec [...arr] pour ne pas modifier l'original
+    const shuffled = [...arr].sort(() => 0.5 - Math.random()); // Copier le tableau 
     return shuffled.slice(0, numItems);
   };
 
@@ -92,15 +92,14 @@ const Homepages = () => {
 
   // Récupérer les trois premiers éléments mélangés pour les images
   const images = shuffledProductState.slice(0, 3).map((item) => ({
-    url: item?.images[0]?.url, // Supposons que chaque élément de Productstate a un tableau d'images et vous prenez la première image de chaque élément
-    title: item?.title, // Utilisez un titre approprié pour chaque image
-    width: "30%", // Largeur fixe ou ajustez selon vos besoins
+    url: item?.images[0]?.url, //
+    title: item?.title, //
+    width: "30%", // 
     id: item?._id, //
   }));
   const images1 = Productstate.slice(0, 3).map((item) => ({
-    url: item?.images[0]?.url, // Suppose que chaque élément de Productstate a un tableau d'images et vous prenez la première image de chaque élément
-    title: item?.title, // Utilisez un titre approprié pour chaque image
-    width: "30%", // Largeur fixe ou ajustez selon vos besoins
+    url: item?.images[0]?.url, // 
+    width: "30%", //
     id: item?._id, //
   }));
 
@@ -208,6 +207,13 @@ const Homepages = () => {
   const [selectedProduct1, setSelectedProduct1] = useState([]);
   useEffect(() => {
     if (Productstate.length > 0) {
+      setSelectedProduct1(getRandomoulair1(Productstate));
+    }
+  }, [Productstate]);
+
+
+  useEffect(() => {
+    if (Productstate.length > 0) {
       setSelectedProduct2(getRandomoulair2(Productstate));
     }
   }, [Productstate]);
@@ -240,7 +246,8 @@ const Homepages = () => {
       <section className="home-wrapper1 py-5">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-6">
+          <div className="d-flex">
+            {/* <div className="col-3">
               <div className="main-banner position-relative p-3">
                 {randomOnSaleProduct ? (
                   <>
@@ -249,13 +256,13 @@ const Homepages = () => {
                         navigate(`/produit/${randomOnSaleProduct?._id}`);
                       }}
                       src={randomOnSaleProduct.images[0].url} // Utiliser la première image du produit
-                      className="img10 img-flud rounded-3"
+                      className=" img-fluid rounded-4"
                       alt={randomOnSaleProduct.title}
                     />
                     <div className="main-banner-content position-absolute">
                       <p onClick={() => {
                         navigate(`/produit/${randomOnSaleProduct?._id}`);
-                      }} className="dangerous">
+                      }} className="">
                         -{randomOnSaleProduct.solde}DT
                       </p>
                     </div>
@@ -269,8 +276,38 @@ const Homepages = () => {
           </div>
                 )}
               </div>
+            </div> <div className="col-3">
+              <div className="main-banner position-relative p-3">
+                {randomOnSaleProduct ? (
+                  <>
+                    <img
+                      onClick={() => {
+                        navigate(`/produit/${randomOnSaleProduct?._id}`);
+                      }}
+                      src={randomOnSaleProduct.images[0].url} // Utiliser la première image du produit
+                      className=" img-fluid rounded-4"
+                      alt={randomOnSaleProduct.title}
+                    />
+                    <div className="main-banner-content position-absolute">
+                      <p onClick={() => {
+                        navigate(`/produit/${randomOnSaleProduct?._id}`);
+                      }} className="">
+                        -{randomOnSaleProduct.solde}DT
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="card-body">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width={210} height={60} />
+            <Skeleton variant="rounded" width={210} height={60} />
+          </div>
+                )}
+              </div>
+            </div> */}
             </div>
-            <div className="col-6">
+            <div className=" thisiam">
               <div className="d-flex flex-wrap justify-content-between align-items-center">
                 <div className="small-banner position-relative p-1">
                   <img
@@ -306,15 +343,15 @@ const Homepages = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          
+        </div></div>
       </section>
 
       <section className="home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
-              <div className="services d-flex align-items-center justify-content-between">
+              <div className=" ena services d-flex align-items-center justify-content-between">
                 <div className="d-flex align-items-center gap-10">
                   <FaShippingFast className="icons" />
                   <div>
@@ -428,7 +465,6 @@ const Homepages = () => {
       </section>
       <section className="home-wrapper-2 py-5">
         <div className="container-xxl">
-          
           <div className="row">
             <div className="col-12">
               <Box
@@ -486,8 +522,9 @@ const Homepages = () => {
             </div>
           </div>
           <div className="row">
+  
     {selectedProduct.map((product, key) => (
-      <div className="col-3" key={key}>
+      <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
         <ImgMediaCard
           title={product.title}
           src={product?.images[0]?.url}
@@ -497,11 +534,12 @@ const Homepages = () => {
           totalrating={product.totalrating}
           quatite={product.quantite}
           id={product._id}
+          solde={product.solde}
         />
       </div>
     ))}
     {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
-      <div className="col-3" key={`skeleton-${index}`}>
+      <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={`skeleton-${index}`}>
         <div className="card">
           <div className="card-body">
             <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
@@ -513,8 +551,8 @@ const Homepages = () => {
       </div>
     ))}
   </div>
+</div>
 
-        </div>
       </section>
       <section className="special-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
@@ -525,7 +563,7 @@ const Homepages = () => {
           </div>
           <div className="row">
     {selectedProduct1.map((product, key) => (
-      <div className="col-3" key={key}>
+      <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
         <ImgMediaCard
           title={product.title}
           src={product?.images[0]?.url}
@@ -538,18 +576,7 @@ const Homepages = () => {
         />
       </div>
     ))}
-    {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
-      <div className="col-3" key={`skeleton-${index}`}>
-        <div className="card">
-          <div className="card-body">
-            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={210} height={60} />
-            <Skeleton variant="rounded" width={210} height={60} />
-          </div>
-        </div>
-      </div>
-    ))}
+    
   </div>
 
 
@@ -566,7 +593,7 @@ const Homepages = () => {
 
             <div className="row">
     {selectedProduct2.map((product, key) => (
-      <div className="col-3" key={key}>
+      <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
         <ImgMediaCard
           title={product.title}
           src={product?.images[0]?.url}
@@ -580,18 +607,7 @@ const Homepages = () => {
         />
       </div>
     ))}
-    {(selectedProduct.length < 4 ? Array.from({ length: 4 - selectedProduct.length }).fill(null) : []).map((_, index) => (
-      <div className="col-3" key={`skeleton-${index}`}>
-        <div className="card">
-          <div className="card-body">
-            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={210} height={60} />
-            <Skeleton variant="rounded" width={210} height={60} />
-          </div>
-        </div>
-      </div>
-    ))}
+   
   </div>
 
         </div>
@@ -605,7 +621,7 @@ const Homepages = () => {
             <br />
             <br />
             {selectedBlogs?.map((blog, key) => (
-              <div className="col-3" key={key}>
+              <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
                 <Blogcard
                   src={blog?.image?.map((image) => image?.url)}
                   description={<RenderHTML htmlContent={blog.description} />}

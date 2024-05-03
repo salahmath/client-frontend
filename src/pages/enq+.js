@@ -24,14 +24,9 @@ const Enquirymessage = () => {
 const enqstate=useSelector((state)=>state?.auth?.geteteenquirys)
   const columns1 = [
    
+    
     {
-      title: 'nom ',
-      dataIndex: 'lastname',
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.lastname.length - b.lastname.length,
-    },
-    {
-      title: 'email',
+      title: 'Votre message',
       dataIndex: 'email',
     },
     {
@@ -70,7 +65,6 @@ const enqstate=useSelector((state)=>state?.auth?.geteteenquirys)
   for (let i = 0; i < enqstate?.length; i++) {
     data1.push({
         key: i, 
-        lastname: enqstate[i]?.name,
         email: enqstate[i]?.comment,
         mobile: <RenderHTML htmlContent={enqstate[i]?.reponse} />,
         orderStatus:enqstate[i]?.status,
@@ -80,17 +74,19 @@ const enqstate=useSelector((state)=>state?.auth?.geteteenquirys)
     <>
       <PageHelmet title="Mon ENquiry_essage" />
       <BreadCump title="Mon ENquiry_essage" />
-      <div className="profile-product-wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row justify-content-center">
-            <div className="col-7">
-              <div className="profile_card">
-          <Table columns={columns1} dataSource={data1} size="middle" />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="row">
+     
+      <div className="col-1">
       </div>
+      <div className="col-10">
+      <Table columns={columns1} dataSource={data1} size="middle" scroll={{ x: '100%' }}  />
+
+      </div>
+      <div className="col-1">
+
+      </div>
+      </div>
+           
     </>
   );
 };

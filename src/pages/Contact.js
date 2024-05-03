@@ -47,7 +47,7 @@ const ajouter = () => {
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
-            <div className="col-12 mt-15 ">
+            <div className="col-12 col-sm-12 col-md-12 col-lg-12  mt-4 mt-md-0">
               <div className="contact-inner-wrapper d-flex justify-content-between">
                 <div>
                   <h3 className="contact-title">formulaire de Contact</h3>

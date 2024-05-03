@@ -60,16 +60,7 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
               />
             </Flex>
       </CardContent>
-      <div class="progress my-3">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                style={{ width: `${(quatite / (quatite + solde)) * 100}%` }}
-                aria-valuenow={(quatite / (quatite + solde)) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
+      
       <CardActions>
         <Button onClick={() => addtowishlist(id)} size="small">ajouter aux Favoris</Button>
       </CardActions>

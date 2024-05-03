@@ -28,12 +28,12 @@ const Cartes = () => {
     let total = 0;
     if (cartstate && cartstate.length > 0) {
       for (let i = 0; i < cartstate.length; i++) {
-        total += cartstate[i].totalCartPrice;
+        total +=cartstate[i].quantite * cartstate[i].totalCartPrice;
       }
     }
     return total;
   }
-
+  
   const Deletecart = async(id) => {
     await dispatch(DelCart(id));
      setTimeout(() => {
@@ -80,95 +80,87 @@ const Cartes = () => {
       <div className="cart-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-12">
-              <div className="cart-header py-3 d-flex justify-content-between">
-                <h4 className="cart-col-1">Produit</h4>
-                <h4 className="cart-col-2">Prix</h4>
-                <h4 className="cart-col-3">Quantité</h4>
-                <h4 className="cart-col-4">Total</h4>
-              </div>
+          <div className="col-12">
+  <div className="cart-header py-3 d-flex justify-content-between">
+    <h4 className="cart-col-1">Produit</h4>
+    <h4 className="cart-col-2">Prix</h4>
+    <h4 className="cart-col-3">Quantité</h4>
+    <h4 className="cart-col-4">Total</h4>
+  </div>
 
-              {cartstate ? (cartstate?.map((cart) => {
-                  return (
-                    <div
-                      key={cart._id}
-                      className="cart-data py-3 d-flex justify-content-between align-items-center"
-                    >
-                      <div className="cart-col-1 d-flex align-iteùs-center">
-                        <div className="w-25">
-                          <img
-                            className="img-fluid"
-                            src={cart?.productId?.images[0]?.url}
-                            alt={cart.productId.title}
-                          />
-                        </div>
-                        <div className="w-25">
-                          <p className="title">{cart.quantite} * {cart.productId.title} </p>
-                          <p className="color">
-                            couleur : {}
-                            <ul className="colors ps-0">
-                              <li
-                                style={{
-                                  backgroundColor: cart.color[0].name,
-                                }}
-                              ></li>
-                            </ul>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="cart-col-2">
-                        <p>{cart.price} DT</p>
-                      </div>
-                      <div className="cart-col-3 d-flex align-items-center gap-15">
-                        <>
-                        
-                        <Flex vertical gap="middle">
-                          <Radio.Group
-                            onChange={(e) =>
-                              updateProductQuantity(cart._id, e.target.value)
-                            }
-                            buttonStyle="solid"
-                            defaultValue={
-                              cart.quantite
-                            }
-                          >
-                            {cart.productId.quantite > 0 ? (
-                              Array.from(
-                                {
-                                  length: Math.min(cart.productId.quantite, 10),
-                                },
-                                (_, i) => (
-                                  <Radio.Button   key={i} value={i + 1}>
-                                    {i + 1}
-                                  </Radio.Button>
-                                )
-                              )
-                            ) : (
-                              <Radio.Button value="0" disabled>
-                                Hors de stock
-                              </Radio.Button>
-                            )}
-                          </Radio.Group>
-                          
-                           </Flex>
-                        </>
-                      </div>
-                      <div className="cart-col-4">
-                        <p>{cart.quantite * cart.price} DT</p>
-                      </div>
-                      <div>
-                        <AiFillDelete
-                          onClick={() => {
-                            Deletecart(cart._id);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                }))
-                : ""}
-                
+  {cartstate ? (
+    cartstate.map((cart) => (
+      <div key={cart._id} className="cart-data py-3">
+        <div className="row align-items-center">
+          <div className="col-md-3 col-lg-2">
+            <img
+              className="img-fluid"
+              src={cart?.productId?.images[0]?.url}
+              alt={cart?.productId?.title}
+              onClick={()=>{
+                navigate(`/produit/${cart?.productId?._id}`)
+              }}
+            />
+          </div>
+          <div className="col-md-6 col-lg-7">
+            <p className="title">{cart?.quantite} * {cart?.productId?.title} </p>
+            <p className="color">
+              Couleur :{' '}
+              <span
+                style={{
+                  backgroundColor: cart.color[0].name,
+                  width: '20px',
+                  height: '20px',
+                  display: 'inline-block',
+                  borderRadius: '50%',
+                  marginLeft: '5px',
+                }}
+              ></span>
+            </p>
+          </div>
+          <div className="col-md-3 col-lg-3">
+            <p>{cart.price} DT</p>
+            <div className="d-flex align-items-center gap-15">
+              <Radio.Group
+                onChange={(e) =>
+                  updateProductQuantity(cart._id, e.target.value)
+                }
+                buttonStyle="solid"
+                defaultValue={cart.quantite}
+              >
+                {cart.productId.quantite > 0 ? (
+                  Array.from(
+                    { length: Math.min(cart.productId.quantite, 10) },
+                    (_, i) => (
+                      <Radio.Button key={i} value={i + 1}>
+                        {i + 1}
+                      </Radio.Button>
+                    )
+                  )
+                ) : (
+                  <Radio.Button value="0" disabled>
+                    Hors de stock
+                  </Radio.Button>
+                )}
+              </Radio.Group>
             </div>
+          </div>
+          <div className="col-1">
+            <AiFillDelete
+              onClick={() => {
+                Deletecart(cart._id);
+              }}
+            />
+          </div>
+        </div>
+      
+      </div>
+    ))
+  ) : (
+    <p>Aucun produit dans le panier</p>
+  )}
+</div>
+
             <div className="col-12 py-2 mt-4">
               <div className="d-flex justify-content-between align-items-baseline">
                 <Link to="/store" className="button">
@@ -181,14 +173,14 @@ const Cartes = () => {
                   <p>Taxes et frais de livraison</p>
                   {initial !== 0 ? (
                     <button className="button" onClick={handleCheckout}>
-                      Check-out
+                    Vérifier
                     </button>
                   ) : (
                     <button
                       className="button"
                       onClick={() => toast.error("Votre panier est vide")}
                     >
-                      Check-out
+                      Vérifier
                     </button>
                   )}
                 </div>

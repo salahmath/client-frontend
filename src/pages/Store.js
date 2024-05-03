@@ -1,11 +1,14 @@
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
-import { Empty, Radio, Rate } from "antd";
+import { Button, Empty, Flex, Radio, Rate } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
 import Productcart from "../conmponentes/Productcart";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { IoIosRefresh } from "react-icons/io";
+
 import { getproductss } from "../features/Product/productSlice";
 const Store = () => {
   const dispatch = useDispatch();
@@ -46,6 +49,8 @@ const Store = () => {
   const [tag, setTag] = useState("");
   const [categorys, setCategorys] = useState("");
   const [marques, setMarques] = useState("");
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     let marqueArr = [];
     let tagsArr = [];
@@ -63,7 +68,7 @@ const Store = () => {
   }, [Productstate]);
   useEffect(() => {
     dispatch(getproductss());
-  }, [dispatch, marques, categorys, tag]);
+  }, [dispatch, marques, categorys, tag, page]);
 
   function getRandomProduct(Productstate) {
     const randomIndices = [];
@@ -87,42 +92,53 @@ const Store = () => {
   const [radio, setRadio] = useState("");
   const [categors, setCategors] = useState("");
   const [tages, settages] = useState("");
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [filteredUsers2, setFilteredUsers2] = useState([]);
   const [filteredUsers3, setFilteredUsers3] = useState([]);
-
+  const [filteredUsers4, setFilteredUsers4] = useState([]);
+  const [filteredUsers5, setFilteredUsers5] = useState([]);
+  const [filteredUsers6, setFilteredUsers6] = useState([]);
+  const [filteredUsers7, setFilteredUsers7] = useState([]);
   useEffect(() => {
-    if (!radio) {
-      const filteredByBrand = Productstate;
-      setFilteredUsers(filteredByBrand);
-    } else {
-      const filteredByBrand = Productstate.filter(
-        (product) => product.brand === radio
-      );
-      setFilteredUsers(filteredByBrand);
-    }
+    setFilteredUsers6(min);
+  }, [min]);
+  console.log(filteredUsers6);
+  useEffect(() => {
+    // Filtre par marque
+    const filteredByBrand = radio
+      ? Productstate.filter((product) => product.brand === radio)
+      : Productstate;
+    setFilteredUsers(filteredByBrand);
 
-    if (!categors) {
-      const filteredByCategory = Productstate;
-      setFilteredUsers2(filteredByCategory);
-    } else {
-      const filteredByCategory = Productstate.filter(
-        (product) => product.category === categors
-      );
+    // Filtre par catégorie
+    const filteredByCategory = categors
+      ? Productstate.filter((product) => product.category === categors)
+      : Productstate;
+    setFilteredUsers2(filteredByCategory);
 
-      setFilteredUsers2(filteredByCategory);
-    }
-    if (!tages) {
-      const filterbytags = Productstate;
-      setFilteredUsers3(filterbytags);
-    } else {
-      const filterbytags = Productstate.filter(
-        (product) => product.tags === tages
-      );
+    // Filtre par tags
+    const filterByTags = tages
+      ? Productstate.filter((product) => product.tags === tages)
+      : Productstate;
+    setFilteredUsers3(filterByTags);
 
-      setFilteredUsers3(filterbytags);
-    }
-  }, [radio, categors, Productstate, tages]);
+    // Filtre par prix minimum
+    const filterByMin = min
+      ? Productstate.filter(
+          (product) => parseFloat(product.price) >= parseFloat(min)
+        )
+      : Productstate;
+    setFilteredUsers4(filterByMin);
+
+    const filterByMax = max
+      ? Productstate.filter(
+          (product) => parseFloat(product.price) <= parseFloat(max)
+        )
+      : Productstate;
+    setFilteredUsers5(filterByMax);
+  }, [radio, categors, tages, min, max, Productstate]);
 
   const uniqueBrands = new Set();
   Productstate.forEach((product) => {
@@ -130,7 +146,9 @@ const Store = () => {
       uniqueBrands.add(product.brand);
     }
   });
-
+  const handleBrandChange = (value) => {
+    setRadio(value);
+  };
   const uniqueCategories = new Set();
   Productstate.forEach((product) => {
     if (product.category) {
@@ -144,10 +162,19 @@ const Store = () => {
     }
   });
 
-  const handleBrandChange = (value) => {
-    setRadio(value);
-  };
+  const uniqueMin = new Set();
+  Productstate.forEach((product) => {
+    if (product.price) {
+      uniqueMin.add(product.price);
+    }
+  });
 
+  const uniqueMax = new Set();
+  Productstate.forEach((product) => {
+    if (product.price) {
+      uniqueMax.add(product.price);
+    }
+  });
   const handleCategoryChange = (value) => {
     setCategors(value);
   };
@@ -155,14 +182,52 @@ const Store = () => {
   const handletagsChange = (value) => {
     settages(value);
   };
+  const handleMinChange = (value) => {
+    setMin(value);
+  };
+
+  const handleMaxChange = (value) => {
+    setMax(value);
+  };
+  // Fonction pour réinitialiser tous les filtres
+  const handleResetFilters = () => {
+    setRadio("");
+    setCategors("");
+    settages("");
+    setMin("");
+    setMax("");
+    setPage(1);
+  };
   const filteredProducts = Productstate.filter((product) => {
     const brandFilterPassed = radio ? product.brand === radio : true;
+    const minFilterPassed = min
+      ? parseFloat(product.price) >= parseFloat(min)
+      : true;
+    const maxFilterPassed = max
+      ? parseFloat(product.price) <= parseFloat(max)
+      : true;
     const categoryFilterPassed = categors
       ? product.category === categors
       : true;
-    const tagsFilterPassed = tags ? product.tags.includes(tages): true;
-    return brandFilterPassed && categoryFilterPassed && tagsFilterPassed;
+    const tagsFilterPassed = tags ? product.tags.includes(tages) : true;
+    return (
+      brandFilterPassed &&
+      categoryFilterPassed &&
+      tagsFilterPassed &&
+      minFilterPassed &&
+      maxFilterPassed
+    );
   });
+
+  const fetchMoreData = () => {
+    // Mettez à jour la page actuelle
+    setPage(page + 1);
+  };
+  useEffect(() => {
+    if (Productstate.length > 0) {
+      setProducts([...products, ...Productstate]); // Ajoutez les nouveaux produits à la liste existante
+    }
+  }, [Productstate]); // Mettre à jour la liste des produits lorsque Productstate change
 
   return (
     <>
@@ -171,7 +236,7 @@ const Store = () => {
       <div className="store-wrapper home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-3">
+            <div className="col-12 col-sm-12 col-md-12 col-lg-3">
               <div className="filter-card mb-3 ">
                 <h3 className="filter-title">Chercher par marque.</h3>
                 <div className="ps-0">
@@ -190,26 +255,47 @@ const Store = () => {
 
               <div className="filter-card mb-3">
                 <h3 className="filter-title">filter avec</h3>
-
                 <div>
                   <h5 className="sub-title">Prix</h5>
-                  {/* //hedhi */}
                   <div className="d-flex align-items-center gap-10">
                     <div class="form-floating mb-3">
                       <input
-                        type="Number"
-                        class="form-control"
+                        type="number"
+                        className="form-control"
                         id="floatingInput"
                         placeholder="0.0 DT"
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (!isNaN(value)) {
+                            // Vérifie si la valeur saisie est un nombre valide
+                            handleMinChange(value);
+                          } else {
+                            // Gérer le cas où la valeur saisie n'est pas un nombre valide
+                            // Par exemple, afficher un message d'erreur à l'utilisateur
+                          }
+                        }}
                       />
+
                       <label for="floatingInput">Prix min</label>
                     </div>
                     <div class="form-floating mb-3">
                       <input
-                        type="Number"
-                        class="form-control"
+                        type="number"
+                        className="form-control"
                         id="floatingInput"
                         placeholder="0.0 DT"
+                        min={filteredUsers6}
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (!isNaN(value) && value >= filteredUsers6) {
+                            // Vérifie si la valeur saisie est un nombre valide et supérieure ou égale à min
+                            handleMaxChange(value);
+                          } else {
+                            // Gérer le cas où la valeur saisie n'est pas un nombre valide ou est inférieure à min
+                            // Par exemple, afficher un message d'erreur à l'utilisateur
+                          }
+                        }}
+                        disabled={isNaN(filteredUsers6)}
                       />
                       <label for="floatingInput">Prix max</label>
                     </div>
@@ -253,7 +339,10 @@ const Store = () => {
                             <h6>{product.title}</h6>
                           </div>
                           <div className="w-50">
-                            <Rate allowHalf defaultValue={2.5} />
+                            <Rate
+                              allowHalf
+                              defaultValue={product.totalrating}
+                            />
                             <p>{product.price} DT</p>
                           </div>
                         </>
@@ -263,15 +352,24 @@ const Store = () => {
                 </div>
               </div>
             </div>
-            <div className="col-9">
-              <div className="filter-sort-grid d-flex justify-content-center">
-                <div className="d-flex align-items-center gap-10">
-                  <p className="mb-0">Trier par:</p>
+            <div className="col-9 ">
+              <div className="filter-sort-grid  d-flex justify-content-between align-items-center flex-wrap ">
+                <Flex gap="small" vertical>
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    onClick={handleResetFilters}
+                  >
+                    R
+                  </Button>
+                </Flex>
+
+                <div className=" d-flex align-items-center gap-10  mb-sm-0 ">
                   <select
                     className="form-select form-control"
                     aria-label="Default select example"
-                    value={tages} // Assurez-vous de lier la valeur sélectionnée à l'état 'tag'
-                    onChange={(e) => handletagsChange(e.target.value)} // Utilisez l'événement onChange sur le select lui-même
+                    value={tages}
+                    onChange={(e) => handletagsChange(e.target.value)}
                   >
                     <option value="" disabled>
                       chercher par tags
@@ -283,31 +381,50 @@ const Store = () => {
                     ))}
                   </select>
                 </div>
-                <p className="totalproducts mb-0" style={{ marginLeft: "50%" }}>
-                  {Productstate?.length} produits
+
+                <p className="totalproducts mb-0 text-center text-sm-start">
+                  {" "}
+                  {/* Utilisez des classes text-center et text-sm-start pour aligner le texte */}
+                  {filteredProducts?.length} produits
                 </p>
               </div>
               <div className="products-list gap-10 d-flex pb-5 mt-3">
-                <div className="row row-cols-1 row-cols-md-3 g-4">
-                  {filteredProducts.length > 0 ? (
-                    filteredProducts.map((product, key) => (
-                      <div key={key} className="col-6">
-                        <Productcart
-                          title={product.title}
-                          src={product.images[0].url}
-                          prix={product.price}
-                          description={
-                            <RenderHTML htmlContent={product.description} />
-                          }
-                          totalrating={product.totalrating}
-                          id={product._id}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <Empty className="img-fluid" />
-                  )}
-                </div>
+                <InfiniteScroll
+                  dataLength={8}
+                  style={{
+                    maxHeight: "1300px",
+                  }}
+                  inverse={false}
+                  next={fetchMoreData}
+                  hasMore={false}
+                  loader={<h4>Loading...</h4>}
+                  endMessage={
+                    <p style={{ textAlign: "center" }}>Yay! Tu as tout vu</p>
+                  }
+                >
+                  <div className="row">
+                    {filteredProducts.length > 0 ? (
+                      filteredProducts.map((product, key) => (
+                        <div
+                          key={key}
+                          className="col-12 col-sm-12 col-md-6 col-lg-6"
+                        >
+                          <Productcart
+                            title={product.title}
+                            src={product.images[0].url}
+                            prix={product.price}
+                            description={
+                              <RenderHTML htmlContent={product.description} />
+                            }
+                            id={product._id}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <Empty className="img-fluid" />
+                    )}
+                  </div>
+                </InfiniteScroll>
               </div>
             </div>
           </div>

@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { getBlog } from "../features/Blogs/BlogSlice";
+import { Likeblog, getBlog } from "../features/Blogs/BlogSlice";
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
 function RenderHTML({ htmlContent }) {
   return (
     <div
@@ -29,6 +32,33 @@ const Blogpage = () => {
       dispatch(getBlog(Blog_Id));
     }
   }, [dispatch, Blog_Id]);
+  const likestate = useSelector((state) => state?.Blog?.like);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const [lovesPresent, setLovesPresent] = useState(false);
+  useEffect(()=>{
+    setLovesPresent(BlogState.isliked)
+
+  },[BlogState])
+
+  const handleToggleLove = () => {
+    const data = { blogid: BlogState?._id };
+
+    setLovesPresent(!lovesPresent); // Inverser l'état actuel de lovesPresent
+
+    dispatch(Likeblog(data));
+    toast.success("Ce blog est aimé");
+  };
+
+  const handleToggleLove2 = () => {
+    const data = { blogid: BlogState?._id };
+
+    setLovesPresent(!lovesPresent); // Inverser l'état actuel de lovesPresent
+
+    dispatch(Likeblog(data));
+    toast.error("Oops! :(");
+  };
+console.log(lovesPresent);
   return (
     <>
       <PageHelmet title="blog" />
@@ -38,6 +68,7 @@ const Blogpage = () => {
           <div className="row">
             <div className="col-12">
               <div className="single-blog-card mb-3">
+              
                 {
                   <>
                     <h3 className="title text-center">{BlogState.title}</h3>
@@ -53,6 +84,15 @@ const Blogpage = () => {
                       className="img-fluid w-100 my-4"
                     />
                     <div className="row">
+                    <div className="col-md">
+                      <button className="border border-light bg-transparent text-dark" onClick={lovesPresent ? handleToggleLove2 : handleToggleLove}>
+        {lovesPresent ? (
+          <FaHeart className="icon" />
+        ) : (
+          <FaRegHeart className="icon" />
+        )}
+      </button>
+                      </div>
                       <div className="col-md">
                         <h3>Nombre de vues:{BlogState.numViews} </h3>
                       </div>
@@ -68,16 +108,16 @@ const Blogpage = () => {
                           {moment(BlogState.createdAt).format(
                             "MMMM Do YYYY"
                           )}{" "}
-                          Views
                         </h3>
                       </div>
+                      
                     </div>
 
                     <br />
                     <p>{<RenderHTML htmlContent={BlogState.description} />}</p>
                   </>
                 }
-
+              
                 <Link to="/blogs">
                   <IoIosArrowRoundBack className="icons" /> Go back
                 </Link>

@@ -49,14 +49,17 @@ const Singleproduit = () => {
   }, [dispatch, ProdId]);
   const ProdState = useSelector((state) => state?.Product?.produit);
   const image = ProdState?.images?.[0]?.url;
-
+  const [image1, setImage1] = useState(ProdState?.images?.[0]?.url );
+  useEffect(()=>{
+setImage1(ProdState?.images?.[0]?.url)
+  },[ProdState])
   const props = {
-    width: 400,
-    height: 250,
+    width: 800, // Largeur souhaitée
+    height: 400, // Hauteur souhaitée
     zoomWidth: 500,
-    img: image ? ProdState?.images?.[0].url : "a",
+    img: image1 ? image1 : "alt"
   };
-
+  
   const copytoclipboard = (text) => {
     var textField = document.createElement("textarea");
     textField.innerText = text;
@@ -70,7 +73,7 @@ const Singleproduit = () => {
   };
   const Addtocart = () => {
     if (colors === null) {
-      toast.error("Please set colors");
+      toast.error("Veuillez définir un couleur.");
     } else {
       dispatch(
         CreeCart({
@@ -102,25 +105,14 @@ const Singleproduit = () => {
 
   // Checking if the product is in the cart
   useEffect(() => {
-    if (Panierstate && Panierstate.length > 0) {
-      for (let i = 0; i < Panierstate.length; i++) {
-        if (Panierstate[i]?._id === ProdId) {
-          setLovesPresent(true);
-          return; // Exit the loop early once the product is found
-        }
-      }
-      // If the loop finishes without finding the product
-      setLovesPresent(false);
+    if (Panierstate?.wishlist?.some(item => item?._id === ProdId)) {
+      setLovesPresent(true); // Le produit est dans la wishlist
     } else {
-      setLovesPresent(false); // If the cart is empty
+      setLovesPresent(false); // Le produit n'est pas dans la wishlist
     }
-  }, [ProdId, Panierstate]);
-
-  // Toggle loves
+  }, [ProdId, Panierstate?.wishlist]);
   const handleToggleLove = () => {
-    // Add/remove from wishlist logic here
-    if (lovesPresent) {
-      // Remove from wishlist logic
+    if (lovesPresent===true) {
       setLovesPresent(false);
       addtowishlist(ProdId);
       toast.success("Ce produit est effacé de la liste");
@@ -155,7 +147,6 @@ const Singleproduit = () => {
   const Rating = () => {
     setTimeout(async () => {
       await dispatch(CommenteRproduct({ ProdId, rate, comment }));
-
       dispatch(GETproduct(ProdId));
     }, 300);
   };
@@ -164,7 +155,7 @@ function getRandomoulair2(Productstate) {
   const selectedProduct2 = [];
   const availableProducts = Productstate?.filter((product) => product?.tags === "populair");
 
-  while (selectedProduct2.length < 4 && availableProducts.length > 0) {
+  while (selectedProduct2.length < 4 && availableProducts?.length > 0) {
     const randomIndex = Math.floor(Math.random() * availableProducts.length);
     const randomProduct = availableProducts[randomIndex];
     selectedProduct2.push(randomProduct);
@@ -176,11 +167,11 @@ function getRandomoulair2(Productstate) {
 
 const [selectedProduct2, setSelectedProduct2] = useState([]);
 useEffect(() => {
-  if (Productstate.length > 0) {
+  if (Productstate?.length > 0) {
     setSelectedProduct2(getRandomoulair2(Productstate));
   }
 }, [Productstate]);
-
+console.log(image1);
   return (
     <>
       <PageHelmet title=" produit" />
@@ -188,8 +179,8 @@ useEffect(() => {
       <div className="main-product-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-6">
-              <div className="image-produit text-center">
+            <div className="col-12 col-sm-12 col-md-4 col-lg-6">
+              <div className="image-produit ">
                 <ReactImageZoom {...props} />
               </div>
 
@@ -202,6 +193,7 @@ useEffect(() => {
                       <img
                         src={ProdState.images[index].url}
                         alt={`img${index}`}
+                        onClick={() => {setImage1(ProdState?.images[index]?.url)}}
                       />
                     ) : (
                       <>
@@ -221,7 +213,7 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="col-6">
+            <div className="col-12 col-sm-12 col-md-8 col-lg-6">
               <div className="main-product-detail">
                 <div className="border-bottom">
                   <h3 className="title">{ProdState?.title}</h3>
@@ -359,9 +351,9 @@ useEffect(() => {
                   <div className="d-flex gap-10 flex-column my-3">
                     <h3 className="product-heading">shipping & returns </h3>
                     <p className="product-data">
-                      {Productstate?.map((i) => (
-                        <RenderHTML htmlContent={i.description} />
-                      ))}
+                    {
+                      <RenderHTML htmlContent={ProdState?.description} />
+                    }
                     </p>
                     <br />
                     <br />
@@ -388,12 +380,12 @@ useEffect(() => {
           <div className="description-product-wrapper py-5 home-wrapper-2">
             <div className="container-xxl">
               <div className="row">
-                <div className="col-12">
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12">
                   <h3>Description</h3>
                   <p>
-                    {Productstate?.map((i) => (
-                      <RenderHTML htmlContent={i.description} />
-                    ))}
+                    {
+                      <RenderHTML htmlContent={ProdState?.description} />
+                    }
                   </p>
                 </div>
               </div>
@@ -469,7 +461,7 @@ useEffect(() => {
                 <br />
                 <br />
                 {selectedProduct2.map((product, key) => (
-                  <div className="col-3">
+                  <div className="col-12 col-sm-12 col-md-4 col-lg-3">
                         <Productcart
                           title={product?.title}
                           src={product?.images[0].url}
@@ -477,8 +469,10 @@ useEffect(() => {
                           solde={product?.solde}
                           description=<RenderHTML
                             htmlContent={product?.description}
+                            
                           />
-                          id={product._id}
+                          totalrating={product?.totalrating}
+                            id={product._id}
                         />
                       </div>
     ))}

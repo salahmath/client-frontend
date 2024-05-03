@@ -133,7 +133,7 @@ function Header() {
                     {authState?.user === null ? (
                       <>S'inscrire</>
                     ) : (
-                      `Bienvenue ${authState?.user?.lastname}`
+                      ` ${authState?.user?.lastname}`
                     )}
                   </p>
                 </div>
@@ -150,9 +150,7 @@ function Header() {
                           {cartstate?.length}
                         </span>
                       ) : (
-                        <span className="badge bg-danger">
-                         0
-                        </span>
+                        <span className="badge bg-danger">0</span>
                       )}
                     </div>
                   </Link>
@@ -170,62 +168,61 @@ function Header() {
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
-              <div className="menu-bottom d-flex align-items-center gap-30">
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle bg-transparent border-0 gap-15 align-items-between"
-                    type="button"
-                    id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <span className="me-5 d-inline-block">
-                      <TbCategory2 className="img1" />
-                      Mes actions
-                    </span>
-                  </button>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton1"
-                  >
-                                      <li>
-                      <Link className="dropdown-item" to="/profil">
-                        Profil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/Enquirymessage">
-                      Vérifier mon enquête
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/contact">
-                        Contacter nous
-                      </Link>
-                    </li>
-                   
+              
+              <nav className="navbar navbar-expand-lg navbar-light bg-light col-12">
+        <div className="container-fluid col-12">
+          <Link className="navbar-brand" to="/">
+            <span className="me-5 d-inline-block">
+              {/* Ajoutez votre icône ici */}
+              Mes actions
+            </span>
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="navbar-nav ms-auto">
+              <Link className="nav-item nav-link active" to="/">
+                Home
+              </Link>
+              <Link className="nav-item nav-link" to="/store">
+                Boutique
+              </Link>
+              <Link className="nav-item nav-link" to="/blogs">
+                blog
+              </Link>
+              <Link className="nav-item nav-link" to="/contact">
+                contact
+              </Link>
+              <Link className="nav-item nav-link" to="/order">
+                Mon commande
+              </Link>
+              <Link className="nav-item nav-link" to="/Enquirymessage">
+                Mes enquétes
+              </Link>
+              <Link
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload();
+                }}
+                className="nav-item nav-link"
+                to="#"
+              >
+                Se déconnecter
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-                  </ul>
-                </div>
-                <div className="menu-links">
-                  <div className="d-flex align-items-center gap-15">
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/store">Boutique</NavLink>
-                    <NavLink to="/blogs">blog</NavLink>
-                    <NavLink to="/contact">contact</NavLink>
-                    <NavLink to="/order">Mon commande</NavLink>
-                    <NavLink
-                      onClick={() => {
-                        localStorage.clear();
-                        window.location.reload();
-                      }}
-                    >
-                      
-Se déconnecter
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

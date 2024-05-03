@@ -33,6 +33,17 @@ export const getBlog = createAsyncThunk(
       }
     }
   );
+
+  export const Likeblog = createAsyncThunk(
+    "blogs/like_Blog",
+    async (data,thunkAPI) => {
+      try {
+        return await Blogservice.likeblog(data);
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+    }
+  );
 export const BlogSlice = createSlice({
   name: "GET-ALL-Blogs",
   initialState: {
@@ -94,6 +105,26 @@ export const BlogSlice = createSlice({
         state.Blogcat = action.payload;
       });
       builder.addCase(getBlogcategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.error;
+      });
+
+
+      builder.addCase(Likeblog.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      });
+      builder.addCase(Likeblog.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Like = action.payload;
+      });
+      builder.addCase(Likeblog.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
