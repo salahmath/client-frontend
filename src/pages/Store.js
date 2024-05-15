@@ -8,10 +8,20 @@ import PageHelmet from "../conmponentes/Helmet";
 import Productcart from "../conmponentes/Productcart";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IoIosRefresh } from "react-icons/io";
-
+import { LoadingOutlined } from '@ant-design/icons';
 import { getproductss } from "../features/Product/productSlice";
+import { Alert, Spin } from "antd";
+const contentStyle = {
+  padding: 50,
+  background: "rgba(0, 0, 0, 0.05)",
+  borderRadius: 4,
+};
+const content = <div style={contentStyle} />;
 const Store = () => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true); // Nouvel état de chargement
+  const [loading1, setLoading1] = useState(true); // Nouvel état de chargement
+  const [loading2, setLoading2] = useState(true); // Nouvel état de chargement
 
   const customIcons = {
     1: <FrownOutlined />,
@@ -67,7 +77,9 @@ const Store = () => {
     setTags(tagsArr);
   }, [Productstate]);
   useEffect(() => {
-    dispatch(getproductss());
+    dispatch(getproductss()).then(()=>{
+      setLoading(false)
+    });
   }, [dispatch, marques, categorys, tag, page]);
 
   function getRandomProduct(Productstate) {
@@ -239,6 +251,18 @@ const Store = () => {
             <div className="col-12 col-sm-12 col-md-12 col-lg-3">
               <div className="filter-card mb-3 ">
                 <h3 className="filter-title">Chercher par marque.</h3>
+                {loading ? ( // Affiche l'animation de chargement si loading est vrai
+                <Spin
+    indicator={
+      <LoadingOutlined
+        style={{
+          fontSize: 24,
+        }}
+        spin
+      />
+    }
+  />
+        ) : (
                 <div className="ps-0">
                   {Array.from(uniqueBrands).map((brand) => (
                     <Radio
@@ -250,13 +274,25 @@ const Store = () => {
                       {brand}
                     </Radio>
                   ))}
-                </div>
+                </div>)}
               </div>
 
               <div className="filter-card mb-3">
                 <h3 className="filter-title">filter avec</h3>
                 <div>
                   <h5 className="sub-title">Prix</h5>
+                  {loading ? ( // Affiche l'animation de chargement si loading est vrai
+                <Spin
+    indicator={
+      <LoadingOutlined
+        style={{
+          fontSize: 24,
+        }}
+        spin
+      />
+    }
+  />
+        ) : (
                   <div className="d-flex align-items-center gap-10">
                     <div class="form-floating mb-3">
                       <input
@@ -299,12 +335,24 @@ const Store = () => {
                       />
                       <label for="floatingInput">Prix max</label>
                     </div>
-                  </div>
+                  </div>)}
                 </div>
               </div>
 
               <div className="filter-card mb-3 ">
                 <h3 className="filter-title ">Catégories de produits</h3>
+                {loading ? ( // Affiche l'animation de chargement si loading est vrai
+                <Spin
+    indicator={
+      <LoadingOutlined
+        style={{
+          fontSize: 24,
+        }}
+        spin
+      />
+    }
+  />
+        ) : (
                 <div>
                   <div className="Product-tags d-flex flex-wrap align-items-center gap-10">
                     {Array.from(uniqueCategories).map((cat) => (
@@ -318,10 +366,22 @@ const Store = () => {
                       </Radio>
                     ))}
                   </div>
-                </div>
+                </div>)}
               </div>
               <div className="filter-card mb-3">
                 <h3 className="filter-title">Produits aléatoires</h3>
+                {loading ? ( // Affiche l'animation de chargement si loading est vrai
+                <Spin
+    indicator={
+      <LoadingOutlined
+        style={{
+          fontSize: 24,
+        }}
+        spin
+      />
+    }
+  />
+        ) : (
                 <div>
                   <div className="random-products d-flex">
                     <div className="w-50">
@@ -349,7 +409,7 @@ const Store = () => {
                       ))}
                     </div>
                   </div>
-                </div>
+                </div>)}
               </div>
             </div>
             <div className="col-9 ">
@@ -388,6 +448,21 @@ const Store = () => {
                   {filteredProducts?.length} produits
                 </p>
               </div>
+              {loading ? ( // Affiche l'animation de chargement si loading est vrai
+          <div className="loading-container">
+            <Flex gap="small" vertical>
+              <Flex gap="small"></Flex>
+              <Spin tip="Chargement en cours...">
+  <Alert
+    message="Liste des Produits"
+    description="Consultez ci-dessous la liste de tous nos produits disponibles."
+    type="info"
+  />
+</Spin>
+
+            </Flex>
+          </div>
+        ) : (
               <div className="products-list gap-10 d-flex pb-5 mt-3">
                 <InfiniteScroll
                   dataLength={8}
@@ -425,7 +500,7 @@ const Store = () => {
                     )}
                   </div>
                 </InfiniteScroll>
-              </div>
+              </div>)}
             </div>
           </div>
         </div>

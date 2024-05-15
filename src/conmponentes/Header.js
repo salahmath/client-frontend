@@ -78,7 +78,7 @@ function Header() {
         <div className="container-xxl">
           <div className="row align-items-center">
             <div className="col-2">
-              <h2 className="text-white ">Odoo Expert</h2>
+              <h2 className="text-white ">MSI Consultants</h2>
             </div>
             <div className="col-5">
               <div className="input-group ">
@@ -119,7 +119,7 @@ function Header() {
                   </Link>
                   <p className="d-flex align-items-center gap-10  text-white">
                     {" "}
-                    favorite
+                    favoris
                   </p>
                 </div>
                 <div>
@@ -173,8 +173,7 @@ function Header() {
         <div className="container-fluid col-12">
           <Link className="navbar-brand" to="/">
             <span className="me-5 d-inline-block">
-              {/* Ajoutez votre icône ici */}
-              Mes actions
+              Home
             </span>
           </Link>
           <button
@@ -190,23 +189,21 @@ function Header() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav ms-auto">
-              <Link className="nav-item nav-link active" to="/">
-                Home
-              </Link>
+              
               <Link className="nav-item nav-link" to="/store">
                 Boutique
               </Link>
               <Link className="nav-item nav-link" to="/blogs">
-                blog
+                Blog
               </Link>
               <Link className="nav-item nav-link" to="/contact">
-                contact
+                Contact
               </Link>
               <Link className="nav-item nav-link" to="/order">
-                Mon commande
+                Commande
               </Link>
               <Link className="nav-item nav-link" to="/Enquirymessage">
-                Mes enquétes
+                 Enquéte
               </Link>
               <Link
                 onClick={() => {

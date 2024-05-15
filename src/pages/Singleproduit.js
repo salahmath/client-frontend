@@ -15,7 +15,6 @@ import { DiGitCompare } from "react-icons/di";
 import { useDispatch, useSelector } from "react-redux";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { CommentSection } from "react-comments-section";
 import { Radio } from "antd";
 
 import {

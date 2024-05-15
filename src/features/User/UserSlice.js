@@ -342,9 +342,9 @@ export const authSlice = createSlice({
       state.user = action.payload;
       localStorage.setItem("token", action.payload.token);
       toast.info("Connexion réussie");
-      /* setTimeout(() => {
+       setTimeout(() => {
         window.location.href = "/"; // Rediriger vers la page d'accueil
-      }, 3000); */
+      }, 3000); 
     });
     builder.addCase(LoginUser.rejected, (state, action) => {
       state.isLoading = false;

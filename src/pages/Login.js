@@ -32,9 +32,7 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      dispatch(LoginUser(values)).then(() => {
-        navigate("/");
-      });
+      dispatch(LoginUser(values))
     },
     
   });

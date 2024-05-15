@@ -11,7 +11,7 @@ function Footer() {
       <Container>
         <Row className='main-foot'>
           <Col className='col col-lg-4 col-md-12 col-12'>
-            <h2 className='text-lg-start text-md-center text-center mb-lg-0 mb-md-5 mb-2 main-title'>Odoo Expert.</h2>
+            <h2 className='text-lg-start text-md-center text-center mb-lg-0 mb-md-5 mb-2 main-title'>MSI Consultants</h2>
           </Col>
           
         

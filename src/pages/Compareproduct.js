@@ -14,13 +14,22 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllcoupon } from "../features/User/UserSlice";
-
+import { Alert, Flex, Spin } from "antd";
+const contentStyle = {
+  padding: 50,
+  background: "rgba(0, 0, 0, 0.05)",
+  borderRadius: 4,
+};
+const content = <div style={contentStyle} />;
 const Compareproduct = () => {
   const dispatch = useDispatch();
   const [copiedId, setCopiedId] = useState(null); // État pour stocker l'ID copié
+  const [loading, setLoading] = useState(true); // Nouvel état de chargement
 
   useEffect(() => {
-    dispatch(GetAllcoupon());
+    dispatch(GetAllcoupon()).then(()=>{
+      setLoading(false)
+    });
   }, [dispatch]);
 
   const couponState = useSelector((state) => state?.auth?.GetAllcoupon);
@@ -64,6 +73,21 @@ const Compareproduct = () => {
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
+            {loading ? ( // Affiche l'animation de chargement si loading est vrai
+          <div className="loading-container">
+            <Flex gap="small" vertical>
+              <Flex gap="small"></Flex>
+              <Spin tip="Chargement en cours...">
+  <Alert
+    message="Coupons disponibles"
+    description="Consultez ci-dessous les coupons disponibles pour bénéficier de réductions sur vos achats."
+    type="info"
+  />
+</Spin>
+
+            </Flex>
+          </div>
+        ) : (
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -94,7 +118,7 @@ const Compareproduct = () => {
                     ))}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </TableContainer>)}
             </div>
           </div>
         </div>
