@@ -13,17 +13,21 @@ import {
   GetCart,
   Up2
 } from "../features/User/UserSlice";
+import { Button, Divider, Flex, Radio, Space, Tooltip } from 'antd';
 
 import { number, object, string } from "yup";
 import { getClient } from "../utils/URL"; // Import des modules exportés depuis le fichier URL.js
 
 import axios from "axios";
+import {Input, Typography } from 'antd';
+
 import { toast } from "react-toastify";
+import Search from "antd/es/input/Search";
 const headers = getClient();
 
 const Chekout = (props) => {
   const cartstate = useSelector((state) => state.auth.Panier);
-
+  const { Title } = Typography;
   const [initials, setInitial] = useState(calculateTotal(cartstate));
   const [valeur, setvaleur] = useState("");
   const [array, setarray] = useState([]);
@@ -74,8 +78,8 @@ const Chekout = (props) => {
         setShippinginfo(values);
         dispatch(
           CreatOrder({
-            totalPrice: initials,
-            totalPriceAfterdiscount: initials,
+            totalPrice: initials > 300 ? initials : initials+7,
+            totalPriceAfterdiscount: initials > 300 ? initials : initials+7,
             orderItems: Cardproduct,
             Shippinginfo: values,
           })
@@ -104,6 +108,7 @@ const Chekout = (props) => {
     }
     return total;
   }
+  
   useEffect(() => {
     settot(calculateTotal(cartstate));
   }, [cartstate]);
@@ -143,6 +148,7 @@ const Chekout = (props) => {
 
     fetchData();
   }, []);
+  
   const handleCountryChange = async (event) => {
     const selectedCountryName = event.target.value;
     setSelectedCountry(selectedCountryName);
@@ -248,7 +254,7 @@ const Chekout = (props) => {
     const data = { coupon: array, total: calculateTotal(cartstate) };
     dispatch(Applycoupon(data))
       .then((response) => {
-        const couponAppliedValue = response.payload;
+        const couponAppliedValue = response?.payload?.updatedTotalCartPrice;
         if (couponAppliedValue) {
           setvaleur(couponAppliedValue);
         } else {
@@ -259,6 +265,7 @@ const Chekout = (props) => {
         console.error("Error applying coupon:", error);
       });
   };
+  
   return (
     <>
       <PageHelmet title=" Chekout " />
@@ -285,7 +292,7 @@ const Chekout = (props) => {
               </nav>
               <h4 className="title">Information de client</h4>
               <p className="user-details total">
-              {loginstate?.lastname}{loginstate?.Secondname}({loginstate?.email}) vous avais une coupon! <RiCoupon3Fill onClick={() => setapparait(true)} />
+              {loginstate?.lastname}{loginstate?.Secondname}({loginstate?.email}) 
               </p>
               <form
                 onSubmit={formik.handleSubmit}
@@ -476,34 +483,56 @@ const Chekout = (props) => {
               <div className="border-bottom py-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <p className="total">SubTotal</p>
-                    <p className="total">shipping</p>
+                    <p className="total">Total</p>
+                  
+                    <p className="total">
+                    <Flex gap="small" vertical>
+        <Flex wrap gap="small">
+          <Tooltip title="coupon!">
+            <Button type="primary" onClick={() => setapparait(true)} shape="circle" icon={<RiCoupon3Fill />} />
+          </Tooltip>
+          
+          </Flex>
+          </Flex>
+                    </p>
+                    <p>Taxes et frais de livraison </p>
                   </div>
                   <div>
-                    <p className="total-rice">Total :{initials}DT</p>
-                    <p className="total-rice">Free</p>
+                    <p className="total-rice">Total :{initials > 300 ? initials+"DT +livraision gratuit " : initials+"+"+"7DT"}</p>
+                    <p className="total-rice">Utiliser une coupon</p>
                     {apparait ? (
                       <>
-                        <input
+      
+                      <Space direction="vertical" suffix={<RiCoupon3Fill />}>
+                      <Search
+      placeholder="Ecriver votre id coupon"
+      allowClear
+      onSearch={utiliserCoupon}
+      style={{
+        width: 304,
+      }}
+      value={array}
+      onChange={(e) => setarray(e.target.value)}
+    />
+                      </Space>
+                       {/*  <input
                           type="text"
                           placeholder="ecriver votre id coupon"
                           value={array}
                           onChange={(e) => setarray(e.target.value)}
-                        />
-                        <button className="button" onClick={utiliserCoupon}>
-                          utiliser coupon
-                        </button>
+                        /> */}
+                        
                       </>
                     ) : (
                       ""
                     )}
-                    <div></div>
+                    <p>{initials > 300 ? "gratuit"  : "7DT"}</p>
                   </div>
                 </div>
               </div>
               <div className="d-flex justify-content-between align-items-center border-bottom py-4">
                 <h3 className="total">Total</h3>
-                <p className="total-price">{initials}DT</p>
+                <p className="total-price">{initials > 300 ? initials : initials+7}DT</p>
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ import { CiEdit } from "react-icons/ci";
 
 const Profil = () => {
   const [editable, setEditable] = useState(false);
+  const [data, setData] = useState();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,16 +35,24 @@ const Profil = () => {
       mobile: UserState?.mobile ,
     },
     onSubmit: (values) => {
-      dispatch(UpdateAuser(values))
-      .then(() => 
-      setTimeout(() => {
-        window.location.reload();
-        
-      }, 1000))
-
+      setData(values)
+      console.log(values);
+     // dispatch(UpdateAuser(values))
       
   }})
-  
+
+
+  const handelchang=()=>{
+    const data={
+     lastname:formik.values.lastname,
+     Secondname:formik.values.Secondname,
+     email:formik.values.email,
+     mobile:formik.values.mobile,
+    }
+    dispatch(UpdateAuser(data)).then(()=>{
+     window.location.reload();
+    })
+  }
   return (
     <>
       <PageHelmet title="Mon Profil" />
@@ -53,13 +62,14 @@ const Profil = () => {
           <div className="row justify-content-center">
             <div className="col-7">
               <div className="profile_card">
-                <form onSubmit={formik.handleSubmit}>
+               
          
                 <CiEdit className="mb-4" style={{ display: 'block', margin: 'auto' }} onClick={() => setEditable(!editable)} />
 
                 {
                   editable ?(
                     <>
+                    <form onSubmit={formik.handleSubmit}>
                     <div>
                     <Flex vertical gap={12}>
                       <Input
@@ -116,8 +126,9 @@ const Profil = () => {
                   </div>
                   <br/>
                   <Flex gap="small" wrap="wrap">
-                    <Button type="primary" variant="outline-success" htmlType="submit">Modifier</Button>
+                    <Button onClick={handelchang} type="primary" variant="outline-success">Modifier</Button>
                   </Flex>
+                  </form>
                   </>
                   ) : (
                     <>
@@ -187,7 +198,7 @@ const Profil = () => {
                   )
                 }
                   
-                </form>
+                
               </div>
             </div>
           </div>

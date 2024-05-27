@@ -13,19 +13,27 @@ const Contact = () => {
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
   const [message, setmessage] = useState("");
-console.log();
 const dispatch=useDispatch()
 const ajouter = () => {
-  if (mobile.length === 8) {
-    if (name !== "" && email !== "" && mobile !== "" && message !== "") {
-      dispatch(Addenq({ name, email, mobile, message }));
-    } else {
-      toast.error("Merci de remplir tous les champs.");
-    }
-  } else {
+  const mobileRegex = /^[2-3579]\d{7}$/; // Expression régulière pour vérifier si le numéro commence par 2, 3, 4, 5, 7 ou 9 et comporte 8 chiffres au total
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!mobileRegex.test(mobile)) {
     toast.error("Merci de vérifier votre numéro de mobile.");
+    return;
+  }
+  if (!emailRegex.test(email)) {
+    toast.error("Merci de vérifier votre email.");
+    return;
+  }
+  
+  if (name !== "" && email !== "" && mobile !== "" && message !== "") {
+    dispatch(Addenq({ name, email, mobile, message }));
+  } else {
+    toast.error("Merci de remplir tous les champs.");
   }
 };
+
 
   
 
@@ -64,16 +72,8 @@ const ajouter = () => {
                         }}
                       />
                       <br />
-                      <input
-                        type="email"
-                        class="form-control"
-                        placeholder="Email"
-                        aria-label="Username"
-                        aria-describedby="basic-addon1"
-                        onChange={(e) => {
-                          setemail(e.target.value);
-                        }}
-                      />
+                      <input type="email" class="form-control" placeholder="Email" onChange={(e) => { setemail(e.target.value); }} />
+
                       <br />
 
                       <input

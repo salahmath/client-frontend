@@ -181,9 +181,15 @@ const getAllOrdersanspay = async (data) => {
     throw error;
   }
 };
+const Getauser = async (userData) => {
+  const response = await axios.get(`${url}user/getauser`, Client);
+  return response.data;
+};
+
 
 export const authservice = {
   register,
+  Getauser,
   loginuser,
   konnect,
   getenquirys,

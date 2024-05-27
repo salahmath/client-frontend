@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Radio } from "antd";
+import { Divider, Flex, Tag } from 'antd';
 
 import {
   AddToLoves,
@@ -25,7 +26,8 @@ import {
   getproductss,
 } from "../features/Product/productSlice";
 import { toast } from "react-toastify";
-import { CreeCart, GetCart } from "../features/User/UserSlice";
+import { CreeCart, GetAuser, GetCart } from "../features/User/UserSlice";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const { TextArea } = Input;
 const Singleproduit = () => {
@@ -39,9 +41,10 @@ const Singleproduit = () => {
   const location = useLocation();
   useEffect(() => {
     dispatch(GetCart());
+    dispatch(GetAuser());
   }, [dispatch]);
   const cartstate = useSelector((state) => state?.auth?.Panier);
-
+  const Auser = useSelector((state) => state?.auth?.GetAuser?.aUser);
   const ProdId = location.pathname.split("/")[2];
   useEffect(() => {
     dispatch(GETproduct(ProdId));
@@ -170,7 +173,30 @@ useEffect(() => {
     setSelectedProduct2(getRandomoulair2(Productstate));
   }
 }, [Productstate]);
-console.log(image1);
+const chaine =[
+  "magenta",
+"red",
+"volcano",
+"orange",
+"gold",
+"lime",
+"green",
+"cyan",
+"blue",
+"geekblue",
+"purple"
+]
+function lireValeurAleatoire(tableau) {
+  // Générer un index aléatoire entre 0 et la longueur du tableau - 1
+  const index = Math.floor(Math.random() * tableau.length);
+  
+  // Retourner la valeur correspondante à cet index
+  return tableau[index];
+}
+
+// Lire une valeur aléatoire à partir du tableau 'chaine'
+const valeurAleatoire = lireValeurAleatoire(chaine);
+
   return (
     <>
       <PageHelmet title=" produit" />
@@ -318,17 +344,21 @@ console.log(image1);
                       className="button signup"
                       style={{ marginRight: "10px" }}
                       onClick={() => {
-                        navigate("/panier")
+                        navigate("/carte")
                       }}
                     >Passer au panier
                        </button> : <button
-                      className="button signup"
+                      className={Auser?.isblocked === true ? "button signup bg-danger" : "button signup"}
+
                       style={{ marginRight: "10px" }}
                       onClick={() => {
                         
                         Addtocart();
                       }}
-                    >Ajouter au panier
+                     disabled={Auser?.isblocked===true} 
+                    >
+                    {Auser?.isblocked===true ? ("Vous été bloquer d'un raison de sécuritée"):("Ajouter au panier")}
+                    
                        </button>}
                       {/* Ajoutez une marge droite en utilisant des styles en ligne */}
                     
@@ -443,11 +473,26 @@ console.log(image1);
                   </button>
                   <div className="col-12">
                     <h3>Commentaires des utilisateurs</h3>
+                    <InfiniteScroll
+                  dataLength={8}
+                  style={{
+                    maxHeight: "1300px",
+                  }}
+                  inverse={false}
+                  hasMore={false}
+                  loader={<h4>Loading...</h4>}
+                  endMessage={
+                    <p style={{ textAlign: "center" }}>Yay! Tu as tout vu</p>
+                  }
+                >
                     {ProdState?.rating?.map((product, key) => (
-                      <div key={key}>
-                        <p>{product?.comment}</p>
-                      </div>
-                    ))}
+  <div key={key} style={{ marginBottom: '10px' }}>
+    <Flex gap="4px 0" wrap>
+      <Tag color={valeurAleatoire}>{product?.comment}</Tag>
+    </Flex>
+  </div>
+))}
+</InfiniteScroll>
                   </div>
                 </div>
               </div>

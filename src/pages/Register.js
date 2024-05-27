@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 
-import { object, string } from "yup";
+import { object, string,number } from "yup";
 import { registerUser } from "../features/User/UserSlice";
 const Register = () => {
   const RegisterSchema = object({
@@ -15,7 +15,19 @@ const Register = () => {
     email: string()
       .email("L'email doit être valide")
       .required("L'email doit être obligatoire"),
-    mobile: string().required("Le numéro de téléphone est obligatoire"),
+    mobile:
+    number().required("Le mobile est obligatoire").typeError('Doit être un nombre')
+    .positive('Doit être un nombre positif')
+    .integer('Doit être un nombre entier')
+    .test(
+      'len',
+      'Doit comporter exactement 8 chiffres',
+      val => val.toString().length === 8
+    ).test(
+      'startsWith',
+      'Le numéro de mobile doit commencer par 2, 3, 4, 5, 7 ou 9',
+      val => /^[2-3579]/.test(val.toString())
+    ),
     password: string().required("Le mot de passe est obligatoire"),
   });
 
@@ -48,7 +60,7 @@ const Register = () => {
                 <div>
                   <InputGroup className="mb-3">
                     <Form.Control
-                      placeholder="lastname"
+                      placeholder="Nom"
                       type="text"
                       name="lastname"
                       aria-label="lastname"
@@ -68,7 +80,7 @@ const Register = () => {
                 <div>
                   <InputGroup className="mb-3">
                     <Form.Control
-                      placeholder="Secondname"
+                      placeholder="Prénom"
                       name="Secondname"
                       type="text"
                       aria-label="Secondname"
@@ -126,7 +138,7 @@ const Register = () => {
                 <div>
                   <InputGroup className="mb-3">
                     <Form.Control
-                      placeholder="mot de passe"
+                      placeholder="Mot de passe"
                       type="Password"
                       aria-label="Password"
                       name="password"

@@ -70,7 +70,7 @@ dispatch(GetLoves())
                 <h4>
                   <RenderHTML htmlContent={item?.description} />
                 </h4>
-                <h5>{item?.price}</h5>
+                <h5>{item?.price}DT</h5>
               </div>
               <div className="icon-top-right">
                 <RxCross2 onClick={() => {

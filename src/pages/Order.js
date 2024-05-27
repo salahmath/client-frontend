@@ -83,7 +83,7 @@ const Order = () => {
   const expandedRowRender = (record) => {
     const columns1 = [
       {
-        title: "key",
+        title: "Num",
         dataIndex: "key",
         key: "key",
       },
@@ -98,7 +98,7 @@ const Order = () => {
         key: "quantity",
       },
       {
-        title: "coleur",
+        title: "Coleur",
         dataIndex: "color",
         key: "color",
       },
@@ -114,24 +114,24 @@ const Order = () => {
 
   const columns = [
     {
-      title: "Id de commande",
+      title: "Id ",
       dataIndex: "OrderId",
       key: "OrderId",
     },
 
     {
-      title: "Prix ​​total après remise",
+      title: "Prix ​​total",
       dataIndex: "totalPriceAfterdiscount",
       key: "totalPriceAfterdiscount",
     },
     {
-      title: "Date de commande",
+      title: "Date ",
       dataIndex: "Date",
       key: "Date",
     },
 
     {
-      title: "Statut de commande",
+      title: "Statut ",
       dataIndex: "orderStatus",
       key: "orderStatus",
       render: (_, { orderStatus }) => {
@@ -160,17 +160,17 @@ const Order = () => {
       },
     },
     {
-      title: "STATUS",
+      title: "STATUT",
       dataIndex: "STATUS",
       key: "STATUS",
     },
     {
-      title: "Payer",
+      title: "Payement",
       dataIndex: "Payer",
       key: "Payer",
     },
     {
-      title: "chronométre",
+      title: "Chronométre",
       dataIndex: "chronométre",
       key: "chronométre",
     },

@@ -412,7 +412,8 @@ const Store = () => {
                 </div>)}
               </div>
             </div>
-            <div className="col-9 ">
+            <div className="col-12 col-sm-12 col-md-12 col-lg-9">
+
               <div className="filter-sort-grid  d-flex justify-content-between align-items-center flex-wrap ">
                 <Flex gap="small" vertical>
                   <Button
@@ -482,7 +483,7 @@ const Store = () => {
                       filteredProducts.map((product, key) => (
                         <div
                           key={key}
-                          className="col-12 col-sm-12 col-md-6 col-lg-6"
+                          className="col-12 col-sm-6 col-md-6 col-lg-6"
                         >
                           <Productcart
                             title={product.title}

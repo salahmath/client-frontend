@@ -7,25 +7,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { Flex, Radio } from "antd";
 import { toast } from "react-toastify";
 
-import { DelCart, GetCart, Updatequantite } from "../features/User/UserSlice";
+import {
+  DelCart,
+  Deleteaproduitpanier,
+  GetAuser,
+  GetCart,
+  Updatequantite,
+} from "../features/User/UserSlice";
 import { Alert, Spin } from "antd";
 const contentStyle = {
   padding: 50,
   background: "rgba(0, 0, 0, 0.05)",
   borderRadius: 4,
 };
+
 const content = <div style={contentStyle} />;
 const Cartes = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true); // Nouvel état de chargement
-
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(GetAuser());
     dispatch(GetCart()).then(() => {
       setLoading(false);
     });
   }, [dispatch]);
-
+  const Auser = useSelector((state) => state?.auth?.GetAuser?.aUser);
   const cartstate = useSelector((state) => state.auth.Panier);
   const [initial, setInitial] = useState(calculateTotal(cartstate));
   const [productQuantities, setProductQuantities] = useState({});
@@ -36,8 +43,8 @@ const Cartes = () => {
 
   function calculateTotal(cartstate) {
     let total = 0;
-    if (cartstate && cartstate.length > 0) {
-      for (let i = 0; i < cartstate.length; i++) {
+    if (cartstate && cartstate?.length > 0) {
+      for (let i = 0; i < cartstate?.length; i++) {
         total += cartstate[i].quantite * cartstate[i].totalCartPrice;
       }
     }
@@ -82,6 +89,11 @@ const Cartes = () => {
       [id]: newQuantity,
     }));
   };
+  useEffect(() => {
+    if (cartstate?.length > 0 && Auser?.isblocked === true) {
+      dispatch(Deleteaproduitpanier());
+    }
+  }, [cartstate, Auser?.isblocked]);
 
   return (
     <>
@@ -106,10 +118,7 @@ const Cartes = () => {
             <div className="row">
               <div className="col-12">
                 <div className="cart-header py-3 d-flex justify-content-between">
-                  <h4 className="cart-col-1">Produit</h4>
-                  <h4 className="cart-col-2">Prix</h4>
-                  <h4 className="cart-col-3">Quantité</h4>
-                  <h4 className="cart-col-4">Total</h4>
+                  <h4 className="cart-col-1">liste de Produits</h4>
                 </div>
 
                 {cartstate ? (
@@ -175,15 +184,17 @@ const Cartes = () => {
                               )}
                             </Radio.Group>
                           </div>
+                          
                         </div>
-                        <div className="col-1">
+                      
+                      </div>
+                      <div className="col-1">
                           <AiFillDelete
                             onClick={() => {
                               Deletecart(cart._id);
                             }}
                           />
                         </div>
-                      </div>
                     </div>
                   ))
                 ) : (
@@ -200,8 +211,13 @@ const Cartes = () => {
                   <div className="d-flex flex-column align-items-end">
                     <h4>Total :{initial}</h4>
 
-                    <p>Taxes et frais de livraison</p>
-                    {initial !== 0 ? (
+                    <p>
+                      Livraison et taxes gratuites pour toute commande de plus
+                      de 300 DT.
+                    </p>
+                    {Auser?.isblocked === true ? (
+                      "Vous êtes bloqué pour des raisons de sécurité"
+                    ) : initial !== 0 ? (
                       <button className="button" onClick={handleCheckout}>
                         Vérifier
                       </button>

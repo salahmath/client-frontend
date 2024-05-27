@@ -167,6 +167,7 @@ export const Getauser = createAsyncThunk(
     }
   }
 );
+
 export const UpdateAuser = createAsyncThunk(
   "auth/UPDT_a_user",
 
@@ -292,6 +293,19 @@ export const GetAllOrdersanspay = createAsyncThunk(
   }
 );
 
+
+export const GetAuser = createAsyncThunk(
+  "products/GetAuser",
+  async (Data, thunkAPI) => {
+    try {
+      return await authservice.Getauser();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+
 export const exporState = createAction("Reset_all");
 export const authSlice = createSlice({
   name: "auth",
@@ -325,7 +339,6 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.message = "";
-
       toast.error("Désolé, il y a une erreur"); // Corrected toast type
     });
 
@@ -343,7 +356,7 @@ export const authSlice = createSlice({
       localStorage.setItem("token", action.payload.token);
       toast.info("Connexion réussie");
        setTimeout(() => {
-        window.location.href = "/"; // Rediriger vers la page d'accueil
+         window.location.href = "/"; // Rediriger vers la page d'accueil */
       }, 3000); 
     });
     builder.addCase(LoginUser.rejected, (state, action) => {
@@ -803,7 +816,23 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.error;
       })
-      
+
+      .addCase(GetAuser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(GetAuser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.isupdated = false;
+        state.GetAuser = action.payload;
+      })
+      .addCase(GetAuser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.error;
+      })
       .addCase(exporState, () => authSlice);
   },
 });

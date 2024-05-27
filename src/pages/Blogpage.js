@@ -119,7 +119,7 @@ console.log(lovesPresent);
                 }
               
                 <Link to="/blogs">
-                  <IoIosArrowRoundBack className="icons" /> Go back
+                  <IoIosArrowRoundBack className="icons" /> Retour
                 </Link>
               </div>
             </div>

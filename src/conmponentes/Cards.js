@@ -10,6 +10,7 @@ import { Flex, Rate } from "antd";
 import {Link, useNavigate}  from "react-router-dom"
 import { AddToLoves } from '../features/Product/productSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 const customIcons= {
     1: <FrownOutlined />,
     2: <FrownOutlined />,
@@ -22,8 +23,13 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
     const dispatch =useDispatch()
     const navigate =useNavigate()
     const addtowishlist = (id) => {
-        dispatch(AddToLoves(id));
-      };
+        dispatch(AddToLoves(id)).then(() => {
+          toast.success("Vérifiez vos favoris.");
+        })
+        .catch((error) => {
+          toast.error("Erreur lors de l'ajout aux favoris : " + error.message);
+        })};
+     
       
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -62,7 +68,11 @@ export default function ImgMediaCard({id,solde,price,brand,totalrating,title,src
       </CardContent>
       
       <CardActions>
-        <Button onClick={() => addtowishlist(id)} size="small">ajouter aux Favoris</Button>
+      <Button onClick={() => addtowishlist(id)}>
+  Ajouter aux favoris
+</Button>
+
+       
       </CardActions>
     </Card>
   );
