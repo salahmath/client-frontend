@@ -128,7 +128,7 @@ if(states){
       </Steps></div>
       <div className="col-3"></div>
          
-      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mx-auto">
       {current === 0 ? (
           <>
         

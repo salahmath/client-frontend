@@ -307,87 +307,95 @@ const Homepages = () => {
               </div>
             </div> */}
             </div>
-            <div className=" thisiam">
-              <div className="d-flex flex-wrap justify-content-between align-items-center">
-                <div className="small-banner position-relative p-1">
-                  <img
-                    src="https://cdnfr.africanmanager.com/wp-content/uploads/2023/07/solde.jpg"
-                    className="img2 img-flud rounded-3"
-                    alt="small binner"
-                  />
-                  <div className="small-banner-content position-absolute"></div>
-                </div>
-                <div className="small-banner position-relative p-1">
-                  <img
-                    src="https://www.moneyvox.fr/i/media/08l/008683l70a.jpg"
-                    className="img2 img-flud rounded-3"
-                    alt="small binner"
-                  />
-                  <div className="small-banner-content position-absolute"></div>
-                </div>
-                <div className="small-banner position-relative p-1">
-                  <img
-                    src="https://www.macapflag.com/blog/wp-content/uploads/2023/11/Offre-speciale-soldes-dhiver.jpg"
-                    className="img2 img-flud rounded-3"
-                    alt="small binner"
-                  />
-                  <div className="small-banner-content position-absolute"></div>
-                </div>
-                <div className="small-banner position-relative p-1">
-                  <img
-                    src="https://images.frandroid.com/wp-content/uploads/2023/07/selection-apple-soldes-ete-2023.jpg"
-                    className="img2 img-flud rounded-3"
-                    alt="small binner"
-                  />
-                  <div className="small-banner-content position-absolute"></div>
-                </div>
-              </div>
-            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
+  <div className="thisiam">
+    <div className="row">
+      <div className="col-12 col-sm-6 col-lg-6mb-2">
+        <div className="small-banner position-relative p-1">
+          <img
+            src="https://cdnfr.africanmanager.com/wp-content/uploads/2023/07/solde.jpg"
+            className="img-fluid"
+            alt="small binner"
+          />
+          <div className="small-banner-content position-absolute"></div>
+        </div>
+      </div>
+      <div className="col-12 col-sm-6 col-lg-6 mb-2">
+        <div className="small-banner position-relative p-1">
+          <img
+            src="https://www.moneyvox.fr/i/media/08l/008683l70a.jpg"
+            className="img-fluid"
+            alt="small binner"
+          />
+          <div className="small-banner-content position-absolute"></div>
+        </div>
+      </div>
+      <div className="col-12 col-sm-6 col-lg-6 mb-2">
+        <div className="small-banner position-relative p-1">
+          <img
+            src="https://www.macapflag.com/blog/wp-content/uploads/2023/11/Offre-speciale-soldes-dhiver.jpg"
+            className="img-fluid"
+            alt="small binner"
+          />
+          <div className="small-banner-content position-absolute"></div>
+        </div>
+      </div>
+      <div className="col-12 col-sm-6 col-lg-6 mb-2">
+        <div className="small-banner position-relative p-1">
+          <img
+            src="https://images.frandroid.com/wp-content/uploads/2023/07/selection-apple-soldes-ete-2023.jpg"
+            className="img-fluid"
+            alt="small binner"
+          />
+          <div className="small-banner-content position-absolute"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
           
         </div></div>
       </section>
-
       <section className="home-wrapper-2 py-5">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12">
-              <div className=" ena services d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center gap-10">
-                  <FaShippingFast className="icons" />
-                  <div>
-                    <h4>livraison gratuite</h4>
-                    <p className="p mb-0">
-                      {" "}
-                      De toute commande supérieure à 300dt
-                    </p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-10">
-                  <MdLocalOffer className="icons" />
-                  <div>
-                    <h4>Offres surprises quotidiennes</h4>
-                    <p className="p mb-0">Économisez jusqu'à 25%</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-10">
-                  <MdOutlineSupportAgent className="icons" />
-                  <div>
-                    <h4>Assistance 24/7</h4>
-                    <p className="p mb-0">Achetez avec un expert</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-10">
-                  <GiPriceTag className="icons" />
-                  <div>
-                    <h4>Prix abordables</h4>
-                    <p className="p mb-0">Obtenez un prix direct d'usine</p>
-                  </div>
-                </div>
-              </div>
+  <div className="container-xxl">
+    <div className="row">
+      <div className="col-12">
+        <div className="ena services d-flex flex-wrap align-items-center justify-content-between">
+          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
+            <FaShippingFast className="icons" />
+            <div>
+              <h4>livraison gratuite</h4>
+              <p className="p mb-0">De toute commande supérieure à 300dt</p>
+            </div>
+          </div>
+          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
+            <MdLocalOffer className="icons" />
+            <div>
+              <h4>Offres surprises quotidiennes</h4>
+              <p className="p mb-0">Économisez jusqu'à 25%</p>
+            </div>
+          </div>
+          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
+            <MdOutlineSupportAgent className="icons" />
+            <div>
+              <h4>Assistance 24/7</h4>
+              <p className="p mb-0">Achetez avec un expert</p>
+            </div>
+          </div>
+          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
+            <GiPriceTag className="icons" />
+            <div>
+              <h4>Prix abordables</h4>
+              <p className="p mb-0">Obtenez un prix direct d'usine</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+
       <section className="marque-warpper py-5">
         <div className="container-xxl">
           <div className="row">
@@ -620,11 +628,11 @@ const Homepages = () => {
       <section className="blog-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
-            <h1>Liste de nouveaux blogs</h1>
+            <h1>Liste de blogs</h1>
             <br />
             <br />
             {selectedBlogs?.map((blog, key) => (
-              <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
+              <div className=" col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
                 <Blogcard
                   src={blog?.image?.map((image) => image?.url)}
                   description={<RenderHTML htmlContent={blog.description} />}
