@@ -7,10 +7,11 @@ const Shippingpolicy = () => {
     <>
       <PageHelmet title="Politique d'expédition" />
       <BreadCump title="Politique d'expédition" />
+      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
       <div className="cr7">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-12">
+         
                <p>
                   Bienvenue sur notre page de politique d'expédition. Cette politique définit les conditions et les procédures relatives à l'expédition de nos produits vers nos clients.
                 </p>

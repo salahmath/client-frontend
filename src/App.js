@@ -27,10 +27,10 @@ import { PrivateRoutes } from './pages/routing/privateRoutes';
 import { OpenRoutes } from './pages/routing/OpenRoutes';
 import Order from './pages/Order';
 import Profil from './pages/Profil';
-import GameComponent from './pages/Jeu';
 import Enquirymessage from './pages/enq+';
 import Succ from './pages/Successay';
 import FAileds from './pages/failedpay';
+import SendMessageForm from './pages/Jeu';
 function App() {
   return (
     <div className="">
@@ -42,7 +42,7 @@ function App() {
             <Route path='contact' element={<PrivateRoutes><Contact /></PrivateRoutes>} />
             <Route path='store' element={<Store />} />
             <Route path='blogs' element={<Blogs />} />
-            <Route path='compare' element={<Compareproduct />} />
+            <Route path='coupon' element={<Compareproduct />} />
             <Route path='Panier' element={<PrivateRoutes><ListLove /></PrivateRoutes>} />
             <Route path='Login' element={<Login />} />
             <Route path='reset-password/:token' element={<Resetpassword />} />
@@ -58,7 +58,7 @@ function App() {
             <Route path="carte" element={<PrivateRoutes><Cartes /></PrivateRoutes>} />
             <Route path="order" element={<PrivateRoutes><Order /></PrivateRoutes>} />
             <Route path="profil" element={<PrivateRoutes><Profil /></PrivateRoutes>} />
-            {/* <Route path="game" element={<GameComponent/>} /> */}
+             <Route path="test" element={<SendMessageForm/>} /> 
             <Route path="Enquirymessage" element={<PrivateRoutes><Enquirymessage/></PrivateRoutes>} />
           </Route>
           <Route path="Success" element={<Succ/>} />

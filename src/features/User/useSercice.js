@@ -125,7 +125,7 @@ const addenq = async (userData) => {
   );
   return response.data;
 };
-const getenquirys = async(data)=>{
+const getenquirys = async()=>{
   const response = await axios.get(`${url}eqr/getenqbyuser`,Client)
 return response.data;
 }
@@ -186,6 +186,10 @@ const Getauser = async (userData) => {
   return response.data;
 };
 
+const Sendes = async (userData) => {
+  const response = await axios.post(`${url}user/sendes`,{body:userData.body,number:userData.number}, Client);
+  return response.data;
+};
 
 export const authservice = {
   register,
@@ -213,6 +217,7 @@ export const authservice = {
   getacoupon,
   addenq,
   updatquan2,
+  Sendes,
   udatestatus
 
 };

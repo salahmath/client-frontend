@@ -7,10 +7,11 @@ const RefundPolicy = () => {
     <>
       <PageHelmet title="Politique de remboursement" />
       <BreadCump title="Politique de remboursement" />
+      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
+
       <div className="cr7">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-12">
                <p>
                   Bienvenue sur notre page de politique de remboursement. Cette politique explique les conditions dans lesquelles les remboursements sont accordés pour les produits achetés sur notre site.
                 </p>

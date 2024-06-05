@@ -101,7 +101,7 @@ function Header() {
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
                   <Link
-                    to="/compare"
+                    to="/coupon"
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src="images/coupon.png" alt="compare" />
@@ -203,7 +203,7 @@ function Header() {
                 Commande
               </Link>
               <Link className="nav-item nav-link" to="/Enquirymessage">
-                 Enquéte
+                 Enquête
               </Link>
               <Link
                 onClick={() => {

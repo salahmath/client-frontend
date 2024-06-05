@@ -25,6 +25,7 @@ body {
     font-size: 14px; /* Ajustez la taille de la police pour les écrans plus petits */
   }
 }
+/* login-card */
 
 /* Media query pour les écrans encore plus petits */
 @media screen and (max-width: 480px) {
@@ -482,10 +483,28 @@ body {
   height: 400px;
   width: 600px;
 }
-
 .img2 {
   height:200px;
+  width: 300px;
+}
+@media (min-width: 600px) {
+  .img2 {
+    height:200px;
   width: 250px;
+  }
+}
+
+@media (min-width: 900px) {
+  .img2 {
+    height:200px;
+  width: 200px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .img2 { height:200px;
+    width: 250px;
+  }
 }
 
 .button {
@@ -815,7 +834,7 @@ border-radius: 10px;
     .login-card{
       padding: 20px;
       background-color: rgb(236, 233, 233);
-width: 500px;
+
 margin: 50px auto;
     }
     .login-card h3{
@@ -850,8 +869,8 @@ margin: 50px auto;
     .cr7 {
       padding: 20px;
       background-color: rgb(236, 233, 233);
-      width: 800px;
-      height: 300px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+     
+     /* Vous pouvez ajuster la hauteur selon vos besoins */
       margin: 50px auto;
       overflow: auto; /* Permet le défilement si le contenu dépasse la hauteur spécifiée */
     }
@@ -991,7 +1010,7 @@ font-size: 14px;
     }
 
    
-     
+     /* img2 */
     
     .spacer {
       width: 10px; /* Ajustez la largeur de l'espace selon vos besoins */
@@ -1067,3 +1086,4 @@ ul, ul li {
  align-items: center;
  font-weight: 700;
 }
+/* cr7 */

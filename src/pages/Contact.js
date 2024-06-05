@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
@@ -6,14 +6,20 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import BreadCump from "../conmponentes/BreadCump";
 import PageHelmet from "../conmponentes/Helmet";
-import { Addenq } from "../features/User/UserSlice";
+import { Addenq, GetAuser } from "../features/User/UserSlice";
 import { toast } from "react-toastify";
 const Contact = () => {
   const [name, setNom] = useState("");
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
   const [message, setmessage] = useState("");
+  const [ProductPresent, SetProductPresent] = useState(false);
 const dispatch=useDispatch()
+useEffect(() => {
+  dispatch(GetAuser());
+}, [dispatch]);
+const Auser = useSelector((state) => state?.auth?.GetAuser?.aUser);
+
 const ajouter = () => {
   const mobileRegex = /^[2-3579]\d{7}$/; // Expression régulière pour vérifier si le numéro commence par 2, 3, 4, 5, 7 ou 9 et comporte 8 chiffres au total
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -97,8 +103,9 @@ const ajouter = () => {
                         }}
                       ></textarea>
                       <br />
-                      <button type="button" class="btn btn-outline-dark" onClick={ajouter}>
-                        Envoyer
+                      <button disabled={Auser?.isblocked===true}  type="button" class="btn btn-outline-dark" onClick={ajouter}>
+                      {Auser?.isblocked===true ? ("Vous été bloquer d'un raison de sécuritée"):("Envoyer")}
+                    
                       </button>
                     </div>
                   </form>

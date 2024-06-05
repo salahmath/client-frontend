@@ -67,8 +67,8 @@ const Compareproduct = () => {
 
   return (
     <>
-      <PageHelmet title="Ganger coupon" />
-      <BreadCump title="Ganger coupon" />
+      <PageHelmet title="Coupon" />
+      <BreadCump title="Coupon" />
       <div className="cart-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">

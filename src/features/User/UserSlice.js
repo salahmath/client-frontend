@@ -3,6 +3,7 @@ import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authservice } from "./useSercice"; // Corrected spelling
 import { toast } from "react-toastify"; // Importing ToastContainer and toast from react-toastify
 import { useNavigate } from "react-router-dom";
+
 const getclientlocalstorage = localStorage.getItem("Client")
   ? JSON.parse(localStorage.getItem("Client"))
   : null;
@@ -304,7 +305,16 @@ export const GetAuser = createAsyncThunk(
     }
   }
 );
-
+export const Send = createAsyncThunk(
+  "products/Send-ail",
+  async (Data, thunkAPI) => {
+    try {
+      return await authservice.Sendes(Data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const exporState = createAction("Reset_all");
 export const authSlice = createSlice({
@@ -331,9 +341,9 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
-      state.message = action.payload;
+      state.message1 = action.payload;
       toast.success("Vous avez été inscrit avec succès");
-    });
+    })
     builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
       state.isSuccess = false;
@@ -832,6 +842,24 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.message = action.error;
+      })
+      .addCase(Send.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(Send.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.isupdated = false;
+        state.Send = action.payload;
+        toast.success("verifier votre téléphone")
+      })
+      .addCase(Send.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.error;
+        toast.error("Ce numéro est déjà inscrit... essayez avec un autre numéro ou vérifier votre connexion")
       })
       .addCase(exporState, () => authSlice);
   },

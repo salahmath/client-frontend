@@ -148,8 +148,13 @@ setImage1(ProdState?.images?.[0]?.url)
   const [rate, setRate] = useState(0);
   const Rating = () => {
     setTimeout(async () => {
-      await dispatch(CommenteRproduct({ ProdId, rate, comment }));
-      dispatch(GETproduct(ProdId));
+      if(Auser?.isblocked!==true){
+        await dispatch(CommenteRproduct({ ProdId, rate, comment }));
+        dispatch(GETproduct(ProdId));
+      }else{
+        toast.error("Vous été bloquer d'un raison de sécuritée ")
+      }
+      
     }, 300);
   };
 const navigate=useNavigate()
@@ -378,18 +383,11 @@ const valeurAleatoire = lireValeurAleatoire(chaine);
                   <div className="d-flex"></div>
 
                   <div className="d-flex gap-10 flex-column my-3">
-                    <h3 className="product-heading">shipping & returns </h3>
-                    <p className="product-data">
-                    {
-                      <RenderHTML htmlContent={ProdState?.description} />
-                    }
-                    </p>
                     <br />
                     <br />
                   </div>
-
                   <div className="d-flex gap-10 align-items-center my-3">
-                    <h3 className="product-heading">product link : </h3>
+                    <h3 className="product-heading">Lien de produit: </h3>
                     <a
                       onClick={() => {
                         copytoclipboard(ProdState?.images?.[0]?.url);
@@ -405,7 +403,6 @@ const valeurAleatoire = lireValeurAleatoire(chaine);
               </div>
             </div>
           </div>
-
           <div className="description-product-wrapper py-5 home-wrapper-2">
             <div className="container-xxl">
               <div className="row">
@@ -430,16 +427,7 @@ const valeurAleatoire = lireValeurAleatoire(chaine);
                   >
                     <div>
                       <h3 className="mb-2 ">Revoir</h3>
-                      <div className="d-flex align-items-center gap-10">
-                        <Rate
-                          className="fs-2"
-                          allowHalf
-                          value={ProdState?.totalrating}
-                        />
-                        <p className="mb-0 fs-4">
-                          Basé sur {ProdState?.rating?.length} avis
-                        </p>
-                      </div>
+                     
                     </div>
 
                     {/* Utilisez orderdproduct pour conditionner l'affichage */}

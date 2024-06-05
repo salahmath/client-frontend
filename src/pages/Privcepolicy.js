@@ -7,10 +7,11 @@ const Privcepolicy = () => {
     <>
       <PageHelmet title="Politique de confidentialité" />
       <BreadCump title="Politique de confidentialité" />
+      <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
+
       <div className="cr7">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-12">
                 <p>
                   Bienvenue sur notre page de politique de confidentialité. Cette politique décrit la manière dont nous collectons, utilisons et protégeons vos informations personnelles lorsque vous utilisez notre site web.
                 </p>

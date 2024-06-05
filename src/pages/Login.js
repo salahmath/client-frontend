@@ -43,7 +43,7 @@ const Login = () => {
       <BreadCump title="Login" />
       <div className="login-wrapper py-5 home-wrapper-2">
         <div className="row">
-          <div className="col-12">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-12 col-xl-12 mx-auto">
             <div className="login-card ">
             <h3 className="text-center">Se connecter</h3>
 

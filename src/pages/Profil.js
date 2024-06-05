@@ -7,6 +7,7 @@ import { Getauser, UpdateAuser } from "../features/User/UserSlice";
 import { useFormik } from "formik";
 import { object, string, number } from "yup";
 import { CiEdit } from "react-icons/ci";
+import { toast } from "react-toastify";
 
 const Profil = () => {
   const [editable, setEditable] = useState(false);
@@ -21,8 +22,21 @@ const Profil = () => {
   let userSchema = object({
     lastname: string().required(),
     Secondname: string().required(),
-    email: string().email().required(),
-    mobile: number().required(),
+     email: string()
+      .email("L'email doit être valide")
+      .required("L'email doit être obligatoire"),
+    mobile:  number().required("Le mobile est obligatoire").typeError('Doit être un nombre')
+    .positive('Doit être un nombre positif')
+    .integer('Doit être un nombre entier')
+    .test(
+      'len',
+      'Doit comporter exactement 8 chiffres',
+      val => val.toString().length === 8
+    ).test(
+      'startsWith',
+      'Le numéro de mobile doit commencer par 2, 3, 4, 5, 7 ou 9',
+      val => /^[2-3579]/.test(val.toString())
+    ),
   });
   
   const formik = useFormik({
@@ -34,6 +48,7 @@ const Profil = () => {
       email: UserState?.email ,
       mobile: UserState?.mobile ,
     },
+
     onSubmit: (values) => {
       setData(values)
       console.log(values);
@@ -42,17 +57,42 @@ const Profil = () => {
   }})
 
 
-  const handelchang=()=>{
-    const data={
-     lastname:formik.values.lastname,
-     Secondname:formik.values.Secondname,
-     email:formik.values.email,
-     mobile:formik.values.mobile,
+  const handelchang = () => {
+    const { lastname, Secondname, email, mobile } = formik.values;
+  
+    const mobileRegex = /^[2-3579]\d{7}$/; // Expression régulière pour vérifier si le numéro commence par 2, 3, 4, 5, 7 ou 9 et comporte 8 chiffres au total
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Validation du numéro de mobile
+    if (!mobileRegex.test(mobile)) {
+      toast.error("Merci de vérifier votre numéro de mobile.");
+      return;
     }
-    dispatch(UpdateAuser(data)).then(()=>{
+  
+    // Validation de l'email
+    if (!emailRegex.test(email)) {
+      toast.error("Merci de vérifier votre email.");
+      return;
+    }
+  
+    // Vérification que tous les champs requis sont remplis
+    if (lastname === "" || Secondname === "" || email === "" || mobile === "") {
+      toast.error("Tous les champs sont obligatoires.");
+      return;
+    }
+  
+    const data = {
+      lastname,
+      Secondname,
+      email,
+      mobile,
+    };
+  
+    dispatch(UpdateAuser(data)).then(() => {
      window.location.reload();
-    })
-  }
+    });
+  };
+  
   return (
     <>
       <PageHelmet title="Mon Profil" />

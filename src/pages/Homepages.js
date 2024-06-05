@@ -397,7 +397,7 @@ const Homepages = () => {
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://www.tunisienumerique.com/wp-content/uploads/2023/12/Zara_Logo.png"
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Zara_Logo.svg/1280px-Zara_Logo.svg.png"
                       alt="zara"
                     />
                   </div>
@@ -418,42 +418,42 @@ const Homepages = () => {
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://logo-marque.com/wp-content/uploads/2020/04/Apple-Logo.png"
                       alt="huawi"
                     />
                   </div>
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/1000px-Samsung_Logo.svg.png"
                       alt="huawi"
                     />
                   </div>
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://logo-marque.com/wp-content/uploads/2020/09/Nokia-Logo.png"
                       alt="huawi"
                     />
                   </div>
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://1000logos.net/wp-content/uploads/2022/12/POCO-Emblem.png"
                       alt="huawi"
                     />
                   </div>
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://www.thd.tn/wp-content/uploads/2020/11/oppo-logo-e1604398366388.png"
                       alt="huawi"
                     />
                   </div>
                   <div>
                     <img
                       className="img11 mx-4 ww-25"
-                      src="https://drpciyuuf9kdh.cloudfront.net/save/media/2018/02/huawei-logo-.jpg"
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Itel-mobile-logo-vector.svg/1024px-Itel-mobile-logo-vector.svg.png"
                       alt="huawi"
                     />
                   </div>
@@ -463,16 +463,18 @@ const Homepages = () => {
           </div>
         </div>
       </section>
-      <section className="home-wrapper-2 py-5">
-        <div className="container-xxl">
+      <section className="home-wrapper-2">
+        <div className="container-fluid">
           <div className="row">
-            <div className="col-12">
+          <div className="col-1">
+          </div> 
+            <div className="col-11">
               <Box
                 sx={{
                   display: "flex",
-                  flexWrap: "wrap",
-                  minWidth: 300,
-                  width: "100%",
+                //  flexWrap: "wrap",
+                ///  minWidth: 300,
+                 // width: "100%",
                 }}
               >
                 {images.map((image) => (
@@ -510,6 +512,7 @@ const Homepages = () => {
                 ))}
               </Box>
             </div>
+         
           </div>
         </div>
       </section>
