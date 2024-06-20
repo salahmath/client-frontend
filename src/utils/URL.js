@@ -1,4 +1,5 @@
-export const url="http://localhost:5000/api/"
+/* export const url="http://localhost:5000/api/"https://pfe-backend-14.onrender.com/ */
+export const url="https://pfe-backend-14.onrender.com/api/"
 export const getClient = () => {
     const Client = JSON.parse(localStorage.getItem("Client"));
     if (!Client || !Client.token) {
