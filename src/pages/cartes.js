@@ -203,35 +203,37 @@ const Cartes = () => {
               </div>
 
               <div className="col-12 py-2 mt-4">
-                <div className="d-flex justify-content-between align-items-baseline">
-                  <Link to="/store" className="button">
-                    Continuer vos achats
-                  </Link>
+  <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+    <div>
+      <h4>Total : {initial}</h4>
+      <p>
+        Livraison et taxes gratuites pour toute commande de plus de 300 DT.
+      </p>
+      {Auser?.isblocked === true ? (
+        <p>Vous êtes bloqué pour des raisons de sécurité</p>
+      ) : (
+        <>
+          {initial !== 0 ? (
+            <button className="button me-2 mb-2 mb-sm-0" onClick={handleCheckout}>
+              Vérifier
+            </button>
+          ) : (
+            <button
+              className="button me-2 mb-2 mb-sm-0"
+              onClick={() => toast.error("Votre panier est vide")}
+            >
+              Vérifier
+            </button>
+          )}
+          <Link to="/store" className="button">
+            Continuer vos achats
+          </Link>
+        </>
+      )}
+    </div>
+  </div>
+</div>
 
-                  <div className="d-flex flex-column align-items-end">
-                    <h4>Total :{initial}</h4>
-
-                    <p>
-                      Livraison et taxes gratuites pour toute commande de plus
-                      de 300 DT.
-                    </p>
-                    {Auser?.isblocked === true ? (
-                      "Vous êtes bloqué pour des raisons de sécurité"
-                    ) : initial !== 0 ? (
-                      <button className="button" onClick={handleCheckout}>
-                        Vérifier
-                      </button>
-                    ) : (
-                      <button
-                        className="button"
-                        onClick={() => toast.error("Votre panier est vide")}
-                      >
-                        Vérifier
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

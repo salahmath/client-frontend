@@ -82,103 +82,76 @@ const uniqueCategories = new Set();
       <PageHelmet title="Blogs" />
       <BreadCump title="Blogs" />
       <div className="blog-wrapper home-wrapper-2 py-5">
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-              <div className="filter-card mb-3">
-                <h3 className="filter-title">trouver par catégories</h3>
-                {loading ? ( // Affiche l'animation de chargement si loading est vrai
-                <Spin
-    indicator={
-      <LoadingOutlined
-        style={{
-          fontSize: 24,
-        }}
-        spin
-      />
-    }
-  />
-        ) : (
-                <div>
-                  <ul className="ps-0">
-                  {Array.from(uniqueCategories).map((cat) => (
-                    <>
-                      <Radio
-                        key={cat}
-                        value={cat}
-                        checked={radio === cat}
-                        onChange={(e) => handleCategoryChange(e.target.value)}
-                      >
-                        {cat}
-                      </Radio>
-                      <br/>
-                      </>
-                    ))}
-                  </ul>
-                </div>)}
-              </div>
-            </div>
-
-
-            <div className="col-9">
-            {loading ? ( // Affiche l'animation de chargement si loading est vrai
-          <div className="loading-container">
-            <Flex gap="small" vertical>
-              <Flex gap="small"></Flex>
-              <Spin tip="Chargement...">
-  <Alert
-    message="Liste des Blogs"
-    description="Découvrez ci-dessous une liste de tous nos blogs récents."
-    type="info"
-  />
-</Spin>
-
-            </Flex>
-          </div>
-        ) : (
-              <div className="row">
-                {filteredUsers ===""?(
-                  blogState.map((blog, key) => {
-                    return (
-                      <div className="col-md-6 mb-4">
-                        <Blogcard
-                          src={blog.image.map((image) => {
-                            return image.url;
-                          })}
-                          description={
-                            <RenderHTML htmlContent={blog.description} />
-                          }
-                          date={moment(blog.createdAt).format("MMMM Do YYYY")} // Formatage de la date ici
-                          title={blog.title}
-                          key={key}
-                          id={blog._id}
-                        />
-                      </div>
-                    );
-                  })):(
-                  filteredUsers.map((blog, key) => {
-                    return (
-                      <div className="col-md-6 mb-4">
-                        <Blogcard
-                          src={blog.image.map((image) => {
-                            return image.url;
-                          })}
-                          description={
-                            <RenderHTML htmlContent={blog.description} />
-                          }
-                          date={moment(blog.createdAt).format("MMMM Do YYYY")} // Formatage de la date ici
-                          title={blog.title}
-                          key={key}
-                          id={blog._id}
-                        />
-                      </div>
-                    );
-                  }))}
-              </div>)}
-            </div>
-          </div>
+  <div className="container-xxl">
+    <div className="row">
+      <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div className="filter-card mb-3">
+          <h3 className="filter-title">Trouver par catégories</h3>
+          {loading ? ( // Affiche l'animation de chargement si loading est vrai
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+          ) : (
+            <ul className="ps-0">
+              {Array.from(uniqueCategories).map((cat, index) => (
+                <li key={index}>
+                  <Radio
+                    value={cat}
+                    checked={radio === cat}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
+                  >
+                    {cat}
+                  </Radio>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
+
+      <div className="col-12 col-sm-6 col-md-8">
+        {loading ? ( // Affiche l'animation de chargement si loading est vrai
+          <div className="loading-container">
+            <Spin tip="Chargement...">
+              <Alert
+                message="Liste des Blogs"
+                description="Découvrez ci-dessous une liste de tous nos blogs récents."
+                type="info"
+              />
+            </Spin>
+          </div>
+        ) : (
+          <div className="row">
+            {filteredUsers.length === 0 ? (
+              blogState.map((blog, key) => (
+                <div className="col-md-6 mb-4" key={key}>
+                  <Blogcard
+                    src={blog.image.map((image) => image.url)}
+                    description={<RenderHTML htmlContent={blog.description} />}
+                    date={moment(blog.createdAt).format("MMMM Do YYYY")}
+                    title={blog.title}
+                    id={blog._id}
+                  />
+                </div>
+              ))
+            ) : (
+              filteredUsers.map((blog, key) => (
+                <div className="col-md-6 mb-4" key={key}>
+                  <Blogcard
+                    src={blog.image.map((image) => image.url)}
+                    description={<RenderHTML htmlContent={blog.description} />}
+                    date={moment(blog.createdAt).format("MMMM Do YYYY")}
+                    title={blog.title}
+                    id={blog._id}
+                  />
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
     </>
   );
 };

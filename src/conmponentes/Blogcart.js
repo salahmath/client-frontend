@@ -8,7 +8,7 @@ const Blogcard = ({ src, title, description,date,id }) => (
   <Card
     hoverable
     style={{
-      width: 240,
+     
     }}
     cover={<img alt="title" src={src} />}
   >

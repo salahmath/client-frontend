@@ -300,7 +300,7 @@ const slideImages = [
         </div>
       </div>
     </section>
-      <section className="home-wrapper-2 py-5">
+   {/*    <section className="home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ml-3">
@@ -340,7 +340,7 @@ const slideImages = [
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <section className="marque-warpper py-5">
         <div className="container-xxl">
           <div className="row">
@@ -539,15 +539,15 @@ const slideImages = [
 
         </div>
       </section>
-      <section className="populair-wrapper py-5 home-wrapper-2">
+
+      <section className="special-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
-              <h3 className="section-heading">produit populaire</h3>
+              <h3 className="section-heading">produit populair</h3>
             </div>
-          
-
-            <div className="row">
+          </div>
+          <div className="row">
     {selectedProduct2.map((product, key) => (
       <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
         <ImgMediaCard
@@ -559,37 +559,36 @@ const slideImages = [
           totalrating={product.totalrating}
           quatite={product.quantite}
           id={product._id}
-          
         />
       </div>
     ))}
-   
+    
   </div>
 
-        </div>
-        </div>
-      </section>
 
-      <section className="blog-wrapper py-5 home-wrapper-2">
-        <div className="container-xxl">
-          <div className="row">
-            <h1>Liste de blogs</h1>
-            <br />
-            <br />
-            {selectedBlogs?.map((blog, key) => (
-              <div className=" col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
-                <Blogcard
-                  src={blog?.image?.map((image) => image?.url)}
-                  description={<RenderHTML htmlContent={blog.description} />}
-                  date={moment(blog.createdAt).format("MMMM Do YYYY")}
-                  title={blog.title}
-                  id={blog._id}
-                />
-              </div>
-            ))}
-          </div>
+
         </div>
       </section>
+      <section className="blog-wrapper py-5 home-wrapper-2">
+<div className="container-xxl">
+<div className="row">
+<h1>Liste de blogs</h1>
+<br />
+<br />
+{selectedBlogs?.map((blog, key) => (
+<div className=" col-12 col-sm-6 col-md-4 col-lg-3" key={key}>
+<Blogcard
+src={blog?.image?.map((image) => image?.url)}
+description={<RenderHTML htmlContent={blog.description} />}
+date={moment(blog.createdAt).format("MMMM Do YYYY")}
+title={blog.title}
+id={blog._id}
+/>
+</div>
+))}
+</div>
+</div>
+</section>
     </>
   );
 };
