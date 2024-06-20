@@ -70,7 +70,7 @@ const ajouter = () => {
                       <input
                         type="text"
                         class="form-control"
-                        placeholder="name"
+                        placeholder="Nom"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
                         onChange={(e) => {

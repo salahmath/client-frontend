@@ -1086,4 +1086,25 @@ ul, ul li {
  align-items: center;
  font-weight: 700;
 }
-/* cr7 */
+/* cr7 services*/
+.small-banner img {
+  max-width: 80%;
+  max-height: 80%;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  .small-banner img {
+    width: 75%; /* Ajustez ce pourcentage selon la taille souhaitée */
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .small-banner img {
+    width: 60%; /* Ajustez ce pourcentage selon la taille souhaitée */
+  max-height: 80%;
+
+    margin: 0 auto;
+  }
+}

@@ -56,7 +56,7 @@ const Order = () => {
         nom: order?.user?.lastname,
         prenom: order?.user?.lastname,
         email: order?.user?.lastname,
-        amount: order?.totalPriceAfterdiscount * 1000,
+        amount : Math.round(order?.totalPriceAfterdiscount * 1000),
         mobile: order?.user?.mobile,
         oredrid: order?._id,
       };
@@ -76,10 +76,9 @@ const Order = () => {
 
   useEffect(() => {
     if (konnectState) {
-      window.location.href = konnectState.payUrl;
+       window.location.href = konnectState.payUrl;
     }
   }, [konnectState, dispatch]);
-
   const expandedRowRender = (record) => {
     const columns1 = [
       {
@@ -264,7 +263,7 @@ const Order = () => {
     const dates = new Date(order?.createdAt);
     return {
       OrderId: order?._id,
-      totalPriceAfterdiscount: order?.totalPriceAfterdiscount * 1000 + "DT",
+      totalPriceAfterdiscount: order?.totalPriceAfterdiscount + "DT",
       Date: dates.toLocaleString("en-US", { timeZone: "Africa/Tunis" }),
       paymentStatus: order?.type,
       orderStatus: order?.orderStatus,

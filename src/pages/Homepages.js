@@ -20,7 +20,45 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Skeleton from '@mui/material/Skeleton'
 
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
+import { Carousel } from 'react-bootstrap';
+
 const Homepages = () => {
+
+  const divStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundSize: 'cover',
+    height: '50vh', // Use viewport height for responsiveness
+  };
+  
+  const spanStyle = {
+    background: 'rgba(0, 0, 0, 0.5)',
+    color: 'white',
+    padding: '10px',
+    borderRadius: '5px',
+  };
+const slideImages = [
+  {
+    url: 'https://payu.in/blog/wp-content/uploads/2018/07/Blog-Cover1-1.png',
+    caption: 'Paiements en ligne sécurisés pour votre entreprise'
+  },
+  {
+    url: 'https://www.digitaloutlook.com.au/wp-content/uploads/2017/09/future_payment_methods-compressor-1.jpg',
+    caption: 'Méthodes de paiement innovantes du futur'
+  },
+  {
+    url: 'https://letemps.news/wp-content/uploads/2022/07/soldes.png',
+    caption: 'Offres et soldes saisonnières exclusives'
+  },
+  {
+    url: 'https://www.evoluflor.fr/wp-content/uploads/2021/04/suivi_commande.png',
+    caption: "Suivi votre commande "
+  },
+];
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBlogs());
@@ -244,158 +282,65 @@ const Homepages = () => {
     <>
       <PageHelmet title="Home" />
       <section className="home-wrapper1 py-5">
+      <div className="container-xxl">
+        <div className="row">
+          <div className="col-12">
+          <Carousel interval={5000}>
+              {slideImages.map((slideImage, index) => (
+                <Carousel.Item key={index}>
+                  <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh', backgroundImage: `url(${slideImage.url})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <Carousel.Caption>
+                      <span style={{ background: 'rgba(0, 0, 0, 0.5)', color: 'white', padding: '10px', borderRadius: '5px' }}>{slideImage.caption}</span>
+                    </Carousel.Caption>
+                  </div>
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          </div>
+        </div>
+      </div>
+    </section>
+      <section className="home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
-          <div className="d-flex">
-            {/* <div className="col-3">
-              <div className="main-banner position-relative p-3">
-                {randomOnSaleProduct ? (
-                  <>
-                    <img
-                      onClick={() => {
-                        navigate(`/produit/${randomOnSaleProduct?._id}`);
-                      }}
-                      src={randomOnSaleProduct.images[0].url} // Utiliser la première image du produit
-                      className=" img-fluid rounded-4"
-                      alt={randomOnSaleProduct.title}
-                    />
-                    <div className="main-banner-content position-absolute">
-                      <p onClick={() => {
-                        navigate(`/produit/${randomOnSaleProduct?._id}`);
-                      }} className="">
-                        -{randomOnSaleProduct.solde}DT
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <div className="card-body">
-            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={210} height={60} />
-            <Skeleton variant="rounded" width={210} height={60} />
-          </div>
-                )}
+          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ml-3">
+              <div className=" ena services d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-10">
+                  <FaShippingFast className="icons" />
+                  <div>
+                    <h4>livraison gratuite</h4>
+                    <p className="p mb-0">
+                      {" "}
+                      De toute commande supérieure à 300dt
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center gap-10">
+                  <MdLocalOffer className="icons" />
+                  <div>
+                    <h4>Offres surprises quotidiennes</h4>
+                    <p className="p mb-0">Économisez jusqu'à 25%</p>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center gap-10">
+                  <MdOutlineSupportAgent className="icons" />
+                  <div>
+                    <h4>Assistance 24/7</h4>
+                    <p className="p mb-0">Achetez avec un expert</p>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center gap-10">
+                  <GiPriceTag className="icons" />
+                  <div>
+                    <h4>Prix abordables</h4>
+                    <p className="p mb-0">Obtenez un prix direct d'usine</p>
+                  </div>
+                </div>
               </div>
-            </div> <div className="col-3">
-              <div className="main-banner position-relative p-3">
-                {randomOnSaleProduct ? (
-                  <>
-                    <img
-                      onClick={() => {
-                        navigate(`/produit/${randomOnSaleProduct?._id}`);
-                      }}
-                      src={randomOnSaleProduct.images[0].url} // Utiliser la première image du produit
-                      className=" img-fluid rounded-4"
-                      alt={randomOnSaleProduct.title}
-                    />
-                    <div className="main-banner-content position-absolute">
-                      <p onClick={() => {
-                        navigate(`/produit/${randomOnSaleProduct?._id}`);
-                      }} className="">
-                        -{randomOnSaleProduct.solde}DT
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <div className="card-body">
-            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={210} height={60} />
-            <Skeleton variant="rounded" width={210} height={60} />
-          </div>
-                )}
-              </div>
-            </div> */}
             </div>
-            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mx-auto">
-  <div className="thisiam">
-    <div className="row">
-      <div className="col-12 col-sm-6 col-lg-6mb-2">
-        <div className="small-banner position-relative p-1">
-          <img
-            src="https://cdnfr.africanmanager.com/wp-content/uploads/2023/07/solde.jpg"
-            className="img-fluid"
-            alt="small binner"
-          />
-          <div className="small-banner-content position-absolute"></div>
+          </div>
         </div>
-      </div>
-      <div className="col-12 col-sm-6 col-lg-6 mb-2">
-        <div className="small-banner position-relative p-1">
-          <img
-            src="https://www.moneyvox.fr/i/media/08l/008683l70a.jpg"
-            className="img-fluid"
-            alt="small binner"
-          />
-          <div className="small-banner-content position-absolute"></div>
-        </div>
-      </div>
-      <div className="col-12 col-sm-6 col-lg-6 mb-2">
-        <div className="small-banner position-relative p-1">
-          <img
-            src="https://www.macapflag.com/blog/wp-content/uploads/2023/11/Offre-speciale-soldes-dhiver.jpg"
-            className="img-fluid"
-            alt="small binner"
-          />
-          <div className="small-banner-content position-absolute"></div>
-        </div>
-      </div>
-      <div className="col-12 col-sm-6 col-lg-6 mb-2">
-        <div className="small-banner position-relative p-1">
-          <img
-            src="https://images.frandroid.com/wp-content/uploads/2023/07/selection-apple-soldes-ete-2023.jpg"
-            className="img-fluid"
-            alt="small binner"
-          />
-          <div className="small-banner-content position-absolute"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-          
-        </div></div>
       </section>
-      <section className="home-wrapper-2 py-5">
-  <div className="container-xxl">
-    <div className="row">
-      <div className="col-12">
-        <div className="ena services d-flex flex-wrap align-items-center justify-content-between">
-          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
-            <FaShippingFast className="icons" />
-            <div>
-              <h4>livraison gratuite</h4>
-              <p className="p mb-0">De toute commande supérieure à 300dt</p>
-            </div>
-          </div>
-          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
-            <MdLocalOffer className="icons" />
-            <div>
-              <h4>Offres surprises quotidiennes</h4>
-              <p className="p mb-0">Économisez jusqu'à 25%</p>
-            </div>
-          </div>
-          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
-            <MdOutlineSupportAgent className="icons" />
-            <div>
-              <h4>Assistance 24/7</h4>
-              <p className="p mb-0">Achetez avec un expert</p>
-            </div>
-          </div>
-          <div className="col-12 col-lg-6 col-xl-6 d-flex align-items-center gap-10 mb-4">
-            <GiPriceTag className="icons" />
-            <div>
-              <h4>Prix abordables</h4>
-              <p className="p mb-0">Obtenez un prix direct d'usine</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
       <section className="marque-warpper py-5">
         <div className="container-xxl">
           <div className="row">

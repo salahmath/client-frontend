@@ -1,23 +1,17 @@
-import { Button, Input, InputNumber, Rate } from "antd";
+import Skeleton from "@mui/material/Skeleton";
+import { Button, Input, Radio, Rate } from "antd";
 import React, { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import { CiHeart } from "react-icons/ci";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReactImageZoom from "react-image-zoom";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import BreadCump from "../conmponentes/BreadCump";
 import Color from "../conmponentes/Color";
 import PageHelmet from "../conmponentes/Helmet";
 import Productcart from "../conmponentes/Productcart";
-import { message } from "antd";
-import Skeleton from "@mui/material/Skeleton";
-import { DiGitCompare } from "react-icons/di";
-import { useDispatch, useSelector } from "react-redux";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { Radio } from "antd";
-import { Divider, Flex, Tag } from 'antd';
-
+/* Rate */
+import { toast } from "react-toastify";
+import Basic from "../conmponentes/Comment";
 import {
   AddToLoves,
   CommenteRproduct,
@@ -25,9 +19,7 @@ import {
   GetLoves,
   getproductss,
 } from "../features/Product/productSlice";
-import { toast } from "react-toastify";
 import { CreeCart, GetAuser, GetCart } from "../features/User/UserSlice";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 const { TextArea } = Input;
 const Singleproduit = () => {
@@ -148,15 +140,15 @@ setImage1(ProdState?.images?.[0]?.url)
   const [rate, setRate] = useState(0);
   const Rating = () => {
     setTimeout(async () => {
-      if(Auser?.isblocked!==true){
+      if ( Auser?.isblocked !== true) {
         await dispatch(CommenteRproduct({ ProdId, rate, comment }));
         dispatch(GETproduct(ProdId));
-      }else{
-        toast.error("Vous été bloquer d'un raison de sécuritée ")
+      } else {
+        toast.error("Vous êtes bloqué pour une raison de sécurité");
       }
-      
     }, 300);
   };
+  
 const navigate=useNavigate()
 function getRandomoulair2(Productstate) {
   const selectedProduct2 = [];
@@ -288,8 +280,7 @@ const valeurAleatoire = lireValeurAleatoire(chaine);
                   </div>
                   {ProductPresent !== true && (
                     <div className="d-flex gap-10 align-items-center">
-                      <h3 className="product-heading">coleur : </h3>
-                      <br />
+                     
                       <p className="product-data mt-3">
                         <Color
                           color={ProdState && ProdState.color}
@@ -456,32 +447,18 @@ const valeurAleatoire = lireValeurAleatoire(chaine);
                   <br />
                   <br />
 
-                  <button type="primary" className="button" onClick={Rating}>
-                    Soumettre
+                  <button type="primary" className="button" onClick={Rating}   disabled={!Auser}>
+                    Ajouter un commentaire
                   </button>
                   <div className="col-12">
-                    <h3>Commentaires des utilisateurs</h3>
-                    <InfiniteScroll
-                  dataLength={8}
-                  style={{
-                    maxHeight: "1300px",
-                  }}
-                  inverse={false}
-                  hasMore={false}
-                  loader={<h4>Loading...</h4>}
-                  endMessage={
-                    <p style={{ textAlign: "center" }}>Yay! Tu as tout vu</p>
-                  }
-                >
-                    {ProdState?.rating?.map((product, key) => (
-  <div key={key} style={{ marginBottom: '10px' }}>
-    <Flex gap="4px 0" wrap>
-      <Tag color={valeurAleatoire}>{product?.comment}</Tag>
-    </Flex>
-  </div>
-))}
-</InfiniteScroll>
-                  </div>
+  {ProdState?.rating?.map((product, key) => (
+    <div key={key} style={{ marginBottom: '10px' }}>
+      {/* Assumant que "Basic" est un composant de votre application */}
+      <Basic rate={product?.comment} nom={`${product?.UserId?.lastname} ${product?.UserId?.Secondname} `} ret={product?.star}/>
+    </div>
+  ))}
+</div>
+
                 </div>
               </div>
             </div>
